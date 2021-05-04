@@ -9,9 +9,11 @@ public class Tag2Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    //TODO Ссылка на Post Id
     @Column(name="post_id", nullable = false)
     private int postId;
 
+    //TODO Ссылка на Tag Id
     @Column(name="tag_id", nullable = false)
     private int tagId;
 

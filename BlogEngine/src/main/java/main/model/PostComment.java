@@ -11,12 +11,15 @@ public class PostComment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    //TODO Ссылка на PostComment Id
     @Column(name="parent_id")
     private int parentId;
 
+    //TODO Ссылка на Post Id
     @Column(name="post_id", nullable = false)
     private int postId;
 
+    //TODO Ссылка на UserEntity Id
     @Column(name="user_id", nullable = false)
     private int userId;
 

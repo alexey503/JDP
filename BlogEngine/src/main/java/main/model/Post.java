@@ -14,14 +14,16 @@ public class Post
     @Column(name="is_active", nullable = false)
     private byte isActive;
 
-    //@Column(name="moderation_status", nullable = false)
     @Enumerated(EnumType.STRING)
     @Column(name="moderation_status", length = 8, nullable = false)
     private ModerationStatus moderationStatus = ModerationStatus.NEW;
 
+    //TODO Ссылка на user Id
+    @ManyToOne
     @Column(name="moderator_id")
     private int moderatorId;
 
+    //TODO Ссылка на user Id
     @Column(name="user_id", nullable = false)
     private int userId;
 

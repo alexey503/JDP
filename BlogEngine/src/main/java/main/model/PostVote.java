@@ -11,9 +11,11 @@ public class PostVote
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    //TODO Ссылка на UserEntity Id
     @Column(name="user_id", nullable = false)
     private int userId;
 
+    //TODO Ссылка на Post Id
     @Column(name="post_id", nullable = false)
     private int postId;
 
