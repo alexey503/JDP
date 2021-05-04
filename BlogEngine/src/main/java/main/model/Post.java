@@ -1,5 +1,7 @@
 package main.model;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,14 +20,14 @@ public class Post
     @Column(name="moderation_status", length = 8, nullable = false)
     private ModerationStatus moderationStatus = ModerationStatus.NEW;
 
-    //TODO Ссылка на user Id
-    @ManyToOne
-    @Column(name="moderator_id")
-    private int moderatorId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="moderator_id", referencedColumnName="id", nullable = true)
+    @Where(clause = "is_moderator > 0")
+    private User moderator;
 
-    //TODO Ссылка на user Id
-    @Column(name="user_id", nullable = false)
-    private int userId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private Date time;
@@ -63,20 +65,20 @@ public class Post
         this.moderationStatus = moderationStatus;
     }
 
-    public int getModeratorId() {
-        return moderatorId;
+    public User getModerator() {
+        return moderator;
     }
 
-    public void setModeratorId(int moderatorId) {
-        this.moderatorId = moderatorId;
+    public void setModerator(User moderator) {
+        this.moderator = moderator;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Date getTime() {
