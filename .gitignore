@@ -1,3 +1,5 @@
+/BlogEngine/target/*
+/BlogEngine/target/**/
 # Compiled class file
 *.class
 
