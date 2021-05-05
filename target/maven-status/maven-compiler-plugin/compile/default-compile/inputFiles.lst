@@ -1,0 +1,16 @@
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/Tag.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/User.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/controllers/ApiAuthController.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/GlobalSetting.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/ModerationStatus.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/controllers/ApiGeneralController.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/Post.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/PostVote.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/Main.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/controllers/ApiPostController.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/PostComment.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/controllers/DefaultController.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/Tag2Post.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/BlogRepository.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/GlobalParams.java
+/home/alexey/Skillbox/Diplom/JDP/src/main/java/main/model/Captcha.java

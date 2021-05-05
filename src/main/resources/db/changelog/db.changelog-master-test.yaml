@@ -1,0 +1,21 @@
+- changeSet:
+    id: 2
+    author: testUser
+    comment: "testInsert"
+    changes:
+      - insert:
+          tableName: users
+          columns:
+            - column:
+                name: username
+                value: "adminUser"
+            - column:
+                name: password
+                value: "adminPassword"
+            - column:
+                name: email
+                value: "admin@server.com"
+    rollback:
+      - delete:
+          tableName: users
+          where: username in ('adminUser', 'guest')
