@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TagResponse {
     private String name;
-    private double weight;
+    private String weight;
 
     public String getName() {
         return name;
@@ -15,11 +15,11 @@ public class TagResponse {
         this.name = name;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 }

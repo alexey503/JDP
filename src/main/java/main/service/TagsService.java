@@ -34,12 +34,12 @@ public class TagsService {
     private TagResponse getTagResponse(Tag tag){
         TagResponse tagResponse = new TagResponse();
         tagResponse.setName(tag.getName());
-        tagResponse.setWeight(getTagWeight(tag.getName()));
+        tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
         return tagResponse;
     }
 
     private double getTagWeight(String tagName){
-        long count = postsRepository.count();
+
         Map<String, Long> tagsCount = new HashMap<>();
 
         Iterable<Tag2Post> tag2PostIterable = tag2PostRepository.findAll();
@@ -48,24 +48,20 @@ public class TagsService {
             if (tagsCount.containsKey(tag2Post.getTag().getName())) {
                 tagsCount.put(tag2Post.getTag().getName(),
                         tagsCount.get(tag2Post.getTag().getName()) + 1);
+            }else{
+                tagsCount.put(tag2Post.getTag().getName(), 1L);
             }
         }
 
+        long maxRatingTag = 0;
         for (Map.Entry<String, Long> entry : tagsCount.entrySet()) {
-
+            if(entry.getValue() > maxRatingTag){
+                maxRatingTag = entry.getValue();
+            }
         }
-//tagsCount.
-
-        return 0.1;
+        if(maxRatingTag == 0 || !tagsCount.containsKey(tagName)){
+            return 0;
+        }
+        return tagsCount.get(tagName).doubleValue() / ((double)maxRatingTag);
     }
-    /*
-    * количество постов всего: count = 20
-    * количество постов с искомым тегом tagPostCount = 4
-    * ненормированный вес:
-    *   dWeightHibernate = tagPostCount / count = 4 / 20 = 0.20
-    * K для нормализации:
-    *   K = 1 / ненорм вес самого популярного тэга = 1.11
-    *
-    *
-    * */
 }
