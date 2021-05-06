@@ -17,16 +17,18 @@ public class TagsService {
     @Autowired
     private Tag2PostRepository tag2PostRepository;
 
-    public List<TagResponse> getTags(){
+    public List<TagResponse> getTags(String tagRequest){
 
         if(tagResponses == null){
             tagResponses = new ArrayList<>();
             Iterable<Tag> tagIterable = tagsRepository.findAll();
             for (Tag tag : tagIterable) {
-                TagResponse tagResponse = new TagResponse();
-                tagResponse.setName(tag.getName());
-                tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
-                tagResponses.add(tagResponse);
+                if(tagRequest.length() == 0 || tag.getName().startsWith(tagRequest)) {
+                    TagResponse tagResponse = new TagResponse();
+                    tagResponse.setName(tag.getName());
+                    tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
+                    tagResponses.add(tagResponse);
+                }
             }
         }
         return tagResponses;
