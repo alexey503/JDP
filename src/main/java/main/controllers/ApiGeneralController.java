@@ -1,25 +1,38 @@
 package main.controllers;
 
+import main.api.response.InitResponse;
+import main.api.response.SettingsResponse;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
+@RequestMapping("/api")
 public class ApiGeneralController {
     //для прочих запросов к API.
 
-    @GetMapping("/api/init")
-    public String apiInit()
-    {
-        return "@GetMapping(\"/api/init\")";
+    private final InitResponse initResponse;
+    private final SettingsResponse settingsResponse;
+
+    public ApiGeneralController(InitResponse initResponse, SettingsResponse settingsResponse) {
+        this.initResponse = initResponse;
+        this.settingsResponse = settingsResponse;
     }
 
-    @GetMapping("/api/settings")
-    public String apiSettings()
-    {
-        return "@GetMapping(\"/api/settings\")";
+    @GetMapping("/init")
+    private InitResponse init(){
+        return this.initResponse;
     }
 
-    @GetMapping("/api/tag")
+    @GetMapping("/settings")
+    private Map<String, Boolean> settings(){
+        return settingsResponse.getGlobalSettings();
+    }
+
+    //TODO GET /api/tag
+    @GetMapping("/tag")
     public String apiTag()
     {
         return "@GetMapping(\"/api/tag\")";
