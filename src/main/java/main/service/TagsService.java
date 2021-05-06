@@ -10,32 +10,26 @@ import java.util.*;
 @Service
 public class TagsService {
 
-    private List<TagResponse> listTagResponse;
+    private List<TagResponse> tagResponses;
 
     @Autowired
     private TagsRepository tagsRepository;
     @Autowired
     private Tag2PostRepository tag2PostRepository;
-    @Autowired
-    private PostsRepository postsRepository;
 
     public List<TagResponse> getTags(){
 
-        if(listTagResponse == null){
-            listTagResponse = new ArrayList<>();
+        if(tagResponses == null){
+            tagResponses = new ArrayList<>();
             Iterable<Tag> tagIterable = tagsRepository.findAll();
             for (Tag tag : tagIterable) {
-                listTagResponse.add(getTagResponse(tag));
+                TagResponse tagResponse = new TagResponse();
+                tagResponse.setName(tag.getName());
+                tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
+                tagResponses.add(tagResponse);
             }
         }
-        return listTagResponse;
-    }
-
-    private TagResponse getTagResponse(Tag tag){
-        TagResponse tagResponse = new TagResponse();
-        tagResponse.setName(tag.getName());
-        tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
-        return tagResponse;
+        return tagResponses;
     }
 
     private double getTagWeight(String tagName){
