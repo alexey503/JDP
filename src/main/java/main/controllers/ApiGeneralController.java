@@ -1,11 +1,14 @@
 package main.controllers;
 
 import main.api.response.InitResponse;
-import main.api.response.SettingsResponse;
+import main.api.response.TagResponse;
+import main.service.SettingsService;
+import main.service.TagsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -14,11 +17,13 @@ public class ApiGeneralController {
     //для прочих запросов к API.
 
     private final InitResponse initResponse;
-    private final SettingsResponse settingsResponse;
+    private final SettingsService settingsService;
+    private final TagsService tagsService;
 
-    public ApiGeneralController(InitResponse initResponse, SettingsResponse settingsResponse) {
+    public ApiGeneralController(InitResponse initResponse, SettingsService settingsService, TagsService tagsService) {
         this.initResponse = initResponse;
-        this.settingsResponse = settingsResponse;
+        this.settingsService = settingsService;
+        this.tagsService = tagsService;
     }
 
     @GetMapping("/init")
@@ -28,14 +33,14 @@ public class ApiGeneralController {
 
     @GetMapping("/settings")
     private Map<String, Boolean> settings(){
-        return settingsResponse.getGlobalSettings();
+        return settingsService.getGlobalSettings();
     }
 
     //TODO GET /api/tag
     @GetMapping("/tag")
-    public String apiTag()
+    public List<TagResponse> tags()
     {
-        return "@GetMapping(\"/api/tag\")";
+        return tagsService.getTags();
     }
 
 }

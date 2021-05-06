@@ -1,4 +1,4 @@
-package main.api.response;
+package main.service;
 
 import main.model.GlobalSetting;
 import main.model.SettingsRepository;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class SettingsResponse {
+public class SettingsService {
     private Map<String, Boolean> settings;
 
     @Autowired
