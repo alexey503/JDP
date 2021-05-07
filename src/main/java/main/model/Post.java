@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="posts")
@@ -48,6 +49,54 @@ public class Post
     
     @Column(name="view_count", nullable = false)
     private int viewCount;
+
+    @Transient
+    private int likeCount;
+    @Transient
+    private int dislikeCount;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "post_comments",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "id")}
+    )
+    private List<PostComment> postComments;
+
+    public int getCommentCount() {
+        return postComments.size();
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    @Transient
+    private int commentCount;
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public int getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(int dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    public List<PostComment> getPostComments() {
+        return postComments;
+    }
+
+    public void setPostComments(List<PostComment> postComments) {
+        this.postComments = postComments;
+    }
 
     public int getId() {
         return id;

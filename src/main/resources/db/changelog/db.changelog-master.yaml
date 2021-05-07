@@ -1742,4 +1742,112 @@ databaseChangeLog:
               - column:
                   name: tag_id
                   value: 10
+  - changeSet:
+      id: 17
+      author: superuser
+      comment: "Create post_comments"
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 1"
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 2"
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 3"
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+      rollback:
+        - delete:
+            tableName: post_comments
+            where: id in (0, 3)
 
+  - changeSet:
+      id: 18
+      author: superuser
+      comment: "Create post_comments"
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 4-1"
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 4-2"
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 4-3"
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+      rollback:
+        - delete:
+            tableName: post_comments
+            where: id in (0, 3)
