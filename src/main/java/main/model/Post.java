@@ -1,5 +1,6 @@
 package main.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
@@ -17,12 +18,14 @@ public class Post
     @Column(name="is_active", nullable = false)
     private byte isActive;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name="moderation_status", length = 8, nullable = false)
     private ModerationStatus moderationStatus = ModerationStatus.NEW;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="moderator_id", referencedColumnName="id", nullable = true)
+    @JoinColumn(name="moderator_id", referencedColumnName="id")
     @Where(clause = "is_moderator > 0")
     private User moderator;
 
@@ -31,6 +34,8 @@ public class Post
     private User user;
 
     @JsonProperty("timestamp")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "")
     @Column(nullable = false)
     private Date time;
 
@@ -84,8 +89,8 @@ public class Post
         this.user = user;
     }
 
-    public Date getTime() {
-        return time;
+    public long getTime() {
+        return time.getTime()/1000;
     }
 
     public void setTime(Date time) {

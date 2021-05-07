@@ -1435,7 +1435,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1444,7 +1444,7 @@ databaseChangeLog:
                   value: 4
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1453,7 +1453,7 @@ databaseChangeLog:
                   value: 5
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1462,7 +1462,7 @@ databaseChangeLog:
                   value: 6
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1471,7 +1471,7 @@ databaseChangeLog:
                   value: 7
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1480,7 +1480,7 @@ databaseChangeLog:
                   value: 8
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1489,7 +1489,7 @@ databaseChangeLog:
                   value: 9
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1498,7 +1498,97 @@ databaseChangeLog:
                   value: 10
               - column:
                   name: tag_id
-                  value: 8
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 11
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 12
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 15
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 16
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 17
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 18
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 19
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 20
+              - column:
+                  name: tag_id
+                  value: 7
         - insert:
             tableName: tag2post
             columns:
@@ -1594,60 +1684,6 @@ databaseChangeLog:
             columns:
               - column:
                   name: post_id
-                  value: 11
-              - column:
-                  name: tag_id
-                  value: 9
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 12
-              - column:
-                  name: tag_id
-                  value: 9
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 13
-              - column:
-                  name: tag_id
-                  value: 9
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 14
-              - column:
-                  name: tag_id
-                  value: 9
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 15
-              - column:
-                  name: tag_id
-                  value: 9
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 16
-              - column:
-                  name: tag_id
-                  value: 9
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
                   value: 17
               - column:
                   name: tag_id
@@ -1684,15 +1720,6 @@ databaseChangeLog:
             columns:
               - column:
                   name: post_id
-                  value: 17
-              - column:
-                  name: tag_id
-                  value: 10
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
                   value: 18
               - column:
                   name: tag_id
@@ -1715,31 +1742,4 @@ databaseChangeLog:
               - column:
                   name: tag_id
                   value: 10
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 18
-              - column:
-                  name: tag_id
-                  value: 11
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 19
-              - column:
-                  name: tag_id
-                  value: 11
-        - insert:
-            tableName: tag2post
-            columns:
-              - column:
-                  name: post_id
-                  value: 20
-              - column:
-                  name: tag_id
-                  value: 11
 

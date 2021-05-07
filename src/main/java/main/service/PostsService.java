@@ -31,10 +31,9 @@ public class PostsService {
 
         long counter = 0;
         for (Post post : this.posts) {
-
             if(post.isActive() == 1 &&
                     post.getModerationStatus() == ModerationStatus.ACCEPTED &&
-                    post.getTime().before(new Date())) {
+                    post.getTime() < (new Date().getTime())) {
 
                 counter++;
                 if (counter >= offset && counter < limit) {
