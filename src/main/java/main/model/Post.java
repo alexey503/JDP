@@ -1,5 +1,6 @@
 package main.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -29,12 +30,14 @@ public class Post
     @JoinColumn(nullable = false)
     private User user;
 
+    @JsonProperty("timestamp")
     @Column(nullable = false)
     private Date time;
 
     @Column(nullable = false)
     private String title;
 
+    @JsonProperty("announce")
     @Column(length = 65535,columnDefinition="Text", nullable = false)
     private String text;
     
