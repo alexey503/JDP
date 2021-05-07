@@ -35,8 +35,6 @@ public class Post
     private User user;
 
     @JsonProperty("timestamp")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "")
     @Column(nullable = false)
     private Date time;
 
@@ -50,18 +48,26 @@ public class Post
     @Column(name="view_count", nullable = false)
     private int viewCount;
 
-    @Transient
-    private int likeCount;
-    @Transient
-    private int dislikeCount;
-
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "post_comments",
             joinColumns = {@JoinColumn(name = "post_id")},
-            inverseJoinColumns = {@JoinColumn(name = "id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "id")} )
     private List<PostComment> postComments;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "post_votes",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "id")} )
+    private List<PostVote> postVotes;
+
+    @Transient
+    private int commentCount;
+    @Transient
+    private int likeCount;
+    @Transient
+    private int dislikeCount;
 
     public int getCommentCount() {
         return postComments.size();
@@ -71,10 +77,22 @@ public class Post
         this.commentCount = commentCount;
     }
 
-    @Transient
-    private int commentCount;
+    public List<PostVote> getPostVotes() {
+        return postVotes;
+    }
+
+    public void setPostVotes(List<PostVote> postVotes) {
+        this.postVotes = postVotes;
+    }
 
     public int getLikeCount() {
+        int count = 0;
+        for (PostVote postVote : postVotes) {
+            if(postVote.getValue() > 0){
+                count++;
+            }
+        }
+        likeCount = count;
         return likeCount;
     }
 
@@ -83,6 +101,14 @@ public class Post
     }
 
     public int getDislikeCount() {
+        int count = 0;
+        for (PostVote postVote : postVotes) {
+            if(postVote.getValue() < 0){
+                count++;
+            }
+        }
+        dislikeCount = count;
+
         return dislikeCount;
     }
 

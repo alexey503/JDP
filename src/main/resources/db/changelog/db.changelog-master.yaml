@@ -1851,3 +1851,69 @@ databaseChangeLog:
         - delete:
             tableName: post_comments
             where: id in (0, 3)
+
+  - changeSet:
+      id: 19
+      author: superuser
+      comment: "Add post_votes"
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: -1
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: -1
+              - column:
+                  name: post_id
+                  value: 6
+              - column:
+                  name: user_id
+                  value: 2
