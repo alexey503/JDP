@@ -873,3 +873,1077 @@ databaseChangeLog:
         - delete:
             tableName: tag2post
             where: tag_id in ('1', '2')
+  - changeSet:
+      id: 13
+      author: superuser
+      comment: "Create tag2post"
+      changes:
+        - delete:
+            tableName: tag2post
+            where: tag_id in ('1', '2')
+
+  - changeSet:
+      id: 14
+      author: superuser
+      comment: "Create 20 posts "
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 1"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 1 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 2"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 2 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 3"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 3 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 4"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 4 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 5"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 5 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 6"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 6 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 7"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 7 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 8"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 8 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 9"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 9 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 10"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 10 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 11"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 11 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 12"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 12 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 13"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 13 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 14"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 14 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 15"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 15 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 16"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 16 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 17"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 17 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 18"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 18 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 19"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 19 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 20"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 20 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Post 21"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 21 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
+
+
+  - changeSet:
+      id: 15
+      author: superuser
+      comment: "Create tags for test /api/tag"
+      changes:
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: "Java"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: "Spring"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: "Hibernate"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: "Hadoop"
+  - changeSet:
+      id: 16
+      author: superuser
+      comment: "Create tag2post for test /api/tag"
+      changes:
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 3
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 5
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 6
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 7
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 8
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 9
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 10
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 11
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 12
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 15
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 16
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 17
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 18
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 19
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 20
+              - column:
+                  name: tag_id
+                  value: 7
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 11
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 12
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 15
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 16
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 17
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 18
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 19
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 20
+              - column:
+                  name: tag_id
+                  value: 8
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 17
+              - column:
+                  name: tag_id
+                  value: 9
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 18
+              - column:
+                  name: tag_id
+                  value: 9
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 19
+              - column:
+                  name: tag_id
+                  value: 9
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 20
+              - column:
+                  name: tag_id
+                  value: 9
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 18
+              - column:
+                  name: tag_id
+                  value: 10
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 19
+              - column:
+                  name: tag_id
+                  value: 10
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: post_id
+                  value: 20
+              - column:
+                  name: tag_id
+                  value: 10
+  - changeSet:
+      id: 17
+      author: superuser
+      comment: "Create post_comments"
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 1"
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 2"
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 3"
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+      rollback:
+        - delete:
+            tableName: post_comments
+            where: id in (0, 3)
+
+  - changeSet:
+      id: 18
+      author: superuser
+      comment: "Create post_comments"
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 4-1"
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 4-2"
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: text
+                  value: "Post Comment 4-3"
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+      rollback:
+        - delete:
+            tableName: post_comments
+            where: id in (0, 3)
+
+  - changeSet:
+      id: 19
+      author: superuser
+      comment: "Add post_votes"
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: -1
+              - column:
+                  name: post_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 1
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: value
+                  value: -1
+              - column:
+                  name: post_id
+                  value: 6
+              - column:
+                  name: user_id
+                  value: 2
+
+  - changeSet:
+      id: 20
+      author: superuser
+      comment: "Create Long with tags "
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Будучи <tag1>преподавателем на курсе «Full-stack Web-development», <tag2>я работал <tag3> <tag4>со многими программистами-новичками. Хорошая новость в том, что мне редко встречались студенты, End"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 1 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2
