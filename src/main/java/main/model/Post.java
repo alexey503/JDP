@@ -7,26 +7,26 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Entity
-@Table(name="posts")
-public class Post
-{
+@Table(name = "posts")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="is_active", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private byte isActive;
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)
-    @Column(name="moderation_status", length = 8, nullable = false)
+    @Column(name = "moderation_status", length = 8, nullable = false)
     private ModerationStatus moderationStatus = ModerationStatus.NEW;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="moderator_id", referencedColumnName="id")
+    @JoinColumn(name = "moderator_id", referencedColumnName = "id")
     @Where(clause = "is_moderator > 0")
     private User moderator;
 
@@ -41,25 +41,29 @@ public class Post
     @Column(nullable = false)
     private String title;
 
-    @JsonProperty("announce")
-    @Column(length = 65535,columnDefinition="Text", nullable = false)
+    //@JsonProperty("announce")
+    @JsonIgnore
+    @Column(length = 65535, columnDefinition = "Text", nullable = false)
     private String text;
-    
-    @Column(name="view_count", nullable = false)
+
+    @Transient
+    private String announce;
+
+    @Column(name = "view_count", nullable = false)
     private int viewCount;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "post_comments",
             joinColumns = {@JoinColumn(name = "post_id")},
-            inverseJoinColumns = {@JoinColumn(name = "id")} )
+            inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostComment> postComments;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "post_votes",
             joinColumns = {@JoinColumn(name = "post_id")},
-            inverseJoinColumns = {@JoinColumn(name = "id")} )
+            inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostVote> postVotes;
 
     @Transient
@@ -68,6 +72,23 @@ public class Post
     private int likeCount;
     @Transient
     private int dislikeCount;
+
+
+    public String getAnnounce() {
+        String textWithOutTags = Pattern.compile("(<[^>]*>)")
+                .matcher(text)
+                .replaceAll("");
+        if (text.length() > 150) {
+            return textWithOutTags.substring(0, 150) + "...";
+        } else {
+            return textWithOutTags;
+        }
+    }
+
+    public void setAnnounce(String announce) {
+        this.announce = announce;
+    }
+
 
     public int getCommentCount() {
         return postComments.size();
@@ -88,7 +109,7 @@ public class Post
     public int getLikeCount() {
         int count = 0;
         for (PostVote postVote : postVotes) {
-            if(postVote.getValue() > 0){
+            if (postVote.getValue() > 0) {
                 count++;
             }
         }
@@ -103,7 +124,7 @@ public class Post
     public int getDislikeCount() {
         int count = 0;
         for (PostVote postVote : postVotes) {
-            if(postVote.getValue() < 0){
+            if (postVote.getValue() < 0) {
                 count++;
             }
         }
@@ -165,7 +186,7 @@ public class Post
     }
 
     public long getTime() {
-        return time.getTime()/1000;
+        return time.getTime() / 1000;
     }
 
     public void setTime(Date time) {

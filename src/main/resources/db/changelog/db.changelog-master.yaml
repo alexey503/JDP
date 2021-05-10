@@ -1917,3 +1917,33 @@ databaseChangeLog:
               - column:
                   name: user_id
                   value: 2
+
+  - changeSet:
+      id: 20
+      author: superuser
+      comment: "Create Long with tags "
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: text
+                  value: "Будучи <tag1>преподавателем на курсе «Full-stack Web-development», <tag2>я работал <tag3> <tag4>со многими программистами-новичками. Хорошая новость в том, что мне редко встречались студенты, End"
+              - column:
+                  name: time
+                  value: now()
+              - column:
+                  name: title
+                  value: "Post 1 title"
+              - column:
+                  name: view_count
+                  value: 3
+              - column:
+                  name: user_id
+                  value: 2

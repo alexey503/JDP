@@ -1,12 +1,9 @@
 package main.controllers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import main.api.response.InitResponse;
 import main.api.response.TagResponse;
 import main.service.SettingsService;
 import main.service.TagsService;
-import org.hibernate.annotations.Parameter;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,22 +29,20 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/init")
-    private InitResponse init(){
+    private InitResponse init() {
         return this.initResponse;
     }
 
     @GetMapping("/settings")
-    private Map<String, Boolean> settings(){
+    private Map<String, Boolean> settings() {
         return settingsService.getGlobalSettings();
     }
 
     @GetMapping("/tag")
-    public HashMap<String, List<TagResponse>> tags(@RequestParam(name = "query", required = false) String tagRequest)
-    {
+    public HashMap<String, List<TagResponse>> tags(@RequestParam(name = "query", required = false) String tagRequest) {
 
         HashMap<String, List<TagResponse>> response = new HashMap<>();
         response.put("tags", tagsService.getTags(tagRequest != null ? tagRequest : ""));
         return response;
     }
-
 }

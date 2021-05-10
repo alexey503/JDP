@@ -16,12 +16,12 @@ public class PostsService {
     @Autowired
     private PostsRepository repository;
 
-    private List<Post>posts;
+    private List<Post> posts;
 
-    public PostResponse getPostResponse(int offset, int limit, String mode){
+    public PostResponse getPostResponse(int offset, int limit, String mode) {
         PostResponse postResponse = new PostResponse();
-        List<Post>posts = new ArrayList<>();
-        if(this.posts == null){
+        List<Post> posts = new ArrayList<>();
+        if (this.posts == null) {
             this.posts = new ArrayList<>();
             Iterable<Post> postIterable = repository.findAll();
             for (Post post : postIterable) {
@@ -31,7 +31,7 @@ public class PostsService {
 
         long counter = 0;
         for (Post post : this.posts) {
-            if(post.isActive() == 1 &&
+            if (post.isActive() == 1 &&
                     post.getModerationStatus() == ModerationStatus.ACCEPTED &&
                     post.getTime() < (new Date().getTime())) {
 
