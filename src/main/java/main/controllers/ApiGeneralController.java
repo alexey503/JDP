@@ -39,9 +39,9 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/tag")
-    public HashMap<String, List<TagResponse>> tags(@RequestParam(name = "query", required = false) String tagRequest) {
+    public Map<String, List<TagResponse>> tags(@RequestParam(name = "query", required = false) String tagRequest) {
 
-        HashMap<String, List<TagResponse>> response = new HashMap<>();
+        Map<String, List<TagResponse>> response = new HashMap<>();
         response.put("tags", tagsService.getTags(tagRequest != null ? tagRequest : ""));
         return response;
     }

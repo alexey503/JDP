@@ -32,7 +32,8 @@ public class Post {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
-    private User user;
+    //private User user;
+    private PostResponseUser user;
 
     @JsonProperty("timestamp")
     @Column(nullable = false)
@@ -73,6 +74,9 @@ public class Post {
     @Transient
     private int dislikeCount;
 
+    public PostResponseUser getUser() {
+        return user;
+    }
 
     public String getAnnounce() {
         String textWithOutTags = Pattern.compile("(<[^>]*>)")
@@ -175,14 +179,6 @@ public class Post {
 
     public void setModerator(User moderator) {
         this.moderator = moderator;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public long getTime() {
