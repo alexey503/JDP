@@ -1,8 +1,6 @@
 package main.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jdk.jfr.Unsigned;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,29 +13,23 @@ public class User
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JsonIgnore
     @Column(name="is_moderator", nullable = false)
     private byte isModerator;
 
-    @JsonIgnore
     @Column(nullable = false)
     private Date reg_time;
 
     @Column(nullable = false)
     private String name;
 
-    @JsonIgnore
     @Column(nullable = false)
     private String email;
 
-    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
-    @JsonIgnore
     private String code;
 
-    @JsonIgnore
     @Column(length = 65535,columnDefinition="Text")
     private String photo;
 

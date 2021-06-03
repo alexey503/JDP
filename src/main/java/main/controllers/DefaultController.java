@@ -1,15 +1,17 @@
 package main.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class DefaultController {
-    //для обычных запросов не через API (главная страница - /, в частности)
 
-    @GetMapping("/a")
+    //для остальных запросов не через API (главная страница - /, в частности)
+    @RequestMapping(value="/**", method= RequestMethod.GET)
     public String index()
     {
-        return "/a";
+        return "index";
     }
+
 }

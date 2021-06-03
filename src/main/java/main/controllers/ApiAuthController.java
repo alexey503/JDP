@@ -18,4 +18,8 @@ public class ApiAuthController {
     public AuthCheckResponse authCheck() {
         return authService.getAuthCheckResponse();
     }
+
+    //TODO @GetMapping("/api/auth/captcha) page 10
+
+    //TODO @PostMapping("/api/auth/register") 11
 }
