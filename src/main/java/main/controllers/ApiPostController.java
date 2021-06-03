@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiPostController {
 
     public static final String MODE_RECENT = "recent";
-    public static final String MODE_POPULAR = "polular";
+    public static final String MODE_POPULAR = "popular";
     public static final String MODE_BEST = "best";
     public static final String MODE_EARLY = "early";
 
