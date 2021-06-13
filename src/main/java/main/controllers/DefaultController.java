@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.*;
 public class DefaultController {
 
     //для остальных запросов не через API (главная страница - /, в частности)
-    @RequestMapping(value="/**", method= RequestMethod.GET)
-    public String index()
-    {
-        return "index";
+
+    @RequestMapping(value="/**/{path:[^\\\\.]*}")
+
+    public String redirectToIndex() {
+        return "forward:/";
     }
 
 }
