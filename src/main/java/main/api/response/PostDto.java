@@ -1,29 +1,24 @@
 package main.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import main.model.PostVote;
 
 import java.util.Date;
+import java.util.List;
 
 public class PostDto {
 
         private int id;
-
         private PostUserEntity user;
-
         private long timestamp;
-
         private String title;
-
         private String announce;
-
         private int viewCount;
-
-
         private int commentCount;
         private int likeCount;
         private int dislikeCount;
 
-        public PostDto(int id, PostUserEntity user, long timestamp, String title, String announce, int viewCount, int commentCount, int likeCount, int dislikeCount) {
+        public PostDto(int id, PostUserEntity user, long timestamp, String title, String announce, int viewCount, int commentCount, List<PostVote> postVotes) {
                 this.id = id;
                 this.user = user;
                 this.timestamp = timestamp;
@@ -31,8 +26,18 @@ public class PostDto {
                 this.announce = announce;
                 this.viewCount = viewCount;
                 this.commentCount = commentCount;
-                this.likeCount = likeCount;
-                this.dislikeCount = dislikeCount;
+
+                this.likeCount = 0;
+                this.dislikeCount = 0;
+
+                for (PostVote postVote : postVotes) {
+                        if (postVote.getValue() > 0) {
+                                this.likeCount++;
+                        }
+                        if (postVote.getValue() < 0) {
+                                this.dislikeCount++;
+                        }
+                }
         }
 
         public int getId() {
