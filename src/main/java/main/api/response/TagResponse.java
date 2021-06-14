@@ -1,7 +1,5 @@
 package main.api.response;
 
-import org.springframework.stereotype.Component;
-
 public class TagResponse {
     private String name;
     private String weight;
