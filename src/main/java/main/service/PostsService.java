@@ -5,6 +5,7 @@ import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
 import main.model.ModerationStatus;
 import main.model.Post;
+import main.model.PostVote;
 import main.model.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 public class PostsService {
@@ -58,11 +60,11 @@ public class PostsService {
                     post.getUser(),
                     post.getTime()/1000,
                     post.getTitle(),
-                    post.getText(),
+                    getAnnounce(post.getText()),
                     post.getViewCount(),
-                    post.getCommentCount(),
-                    post.getLikeCount(),
-                    post.getDislikeCount()
+                    post.getPostComments().size(),
+                    getLikeCount(post.getPostVotes()),
+                    getDislikeCount(post.getPostVotes())
                     );
 
             posts.add(postDto);
@@ -72,6 +74,37 @@ public class PostsService {
         postResponse.setPosts(posts);
 
         return postResponse;
+    }
+
+    public static String getAnnounce(String text) {
+        String textWithOutTags = Pattern.compile("(<[^>]*>)")
+                .matcher(text)
+                .replaceAll("");
+        if (text.length() > 150) {
+            return textWithOutTags.substring(0, 150) + "...";
+        } else {
+            return textWithOutTags;
+        }
+    }
+
+    public static int getLikeCount(List<PostVote> postVotes) {
+        int count = 0;
+        for (PostVote postVote : postVotes) {
+            if (postVote.getValue() > 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int getDislikeCount(List<PostVote> postVotes) {
+        int count = 0;
+        for (PostVote postVote : postVotes) {
+            if (postVote.getValue() < 0) {
+                count++;
+            }
+        }
+        return count;
     }
 
 

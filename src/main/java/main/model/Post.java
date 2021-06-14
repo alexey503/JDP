@@ -20,88 +20,47 @@ public class Post {
     @Column(name = "is_active", nullable = false)
     private byte isActive;
 
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "moderation_status", length = 8, nullable = false)
     private ModerationStatus moderationStatus = ModerationStatus.NEW;
 
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "moderator_id", referencedColumnName = "id")
     @Where(clause = "is_moderator > 0")
     private UserEntity moderator;
 
-    @JsonProperty("user")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private PostUserEntity user;
 
-
-    @JsonProperty("timestamp")
     @Column(nullable = false)
     private Date time;
 
     @Column(nullable = false)
     private String title;
 
-    //@JsonProperty("announce")
-    @JsonIgnore
     @Column(length = 65535, columnDefinition = "Text", nullable = false)
     private String text;
-
-    @Transient
-    private String announce;
 
     @Column(name = "view_count", nullable = false)
     private int viewCount;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "post_comments",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostComment> postComments;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "post_votes",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostVote> postVotes;
 
-    @Transient
-    private int commentCount;
-    @Transient
-    private int likeCount;
-    @Transient
-    private int dislikeCount;
+
 
     public PostUserEntity getUser() {
         return user;
-    }
-
-    public String getAnnounce() {
-        String textWithOutTags = Pattern.compile("(<[^>]*>)")
-                .matcher(text)
-                .replaceAll("");
-        if (text.length() > 150) {
-            return textWithOutTags.substring(0, 150) + "...";
-        } else {
-            return textWithOutTags;
-        }
-    }
-
-    public void setAnnounce(String announce) {
-        this.announce = announce;
-    }
-
-
-    public int getCommentCount() {
-        return postComments.size();
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
     }
 
     public List<PostVote> getPostVotes() {
@@ -110,37 +69,6 @@ public class Post {
 
     public void setPostVotes(List<PostVote> postVotes) {
         this.postVotes = postVotes;
-    }
-
-    public int getLikeCount() {
-        int count = 0;
-        for (PostVote postVote : postVotes) {
-            if (postVote.getValue() > 0) {
-                count++;
-            }
-        }
-        likeCount = count;
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public int getDislikeCount() {
-        int count = 0;
-        for (PostVote postVote : postVotes) {
-            if (postVote.getValue() < 0) {
-                count++;
-            }
-        }
-        dislikeCount = count;
-
-        return dislikeCount;
-    }
-
-    public void setDislikeCount(int dislikeCount) {
-        this.dislikeCount = dislikeCount;
     }
 
     public List<PostComment> getPostComments() {
