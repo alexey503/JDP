@@ -41,6 +41,20 @@ public class ApiPostController {
     }
 
     //TODO @GetMapping(/api/post/search) page 5
+    @GetMapping("/api/post/search")
+    public PostResponse postSearch(
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "query", required = false, defaultValue = "") String query) {
+
+        if(query == null || query.trim().length() == 0){
+            return postsService.getPostResponseSortByDate(offset, limit, ApiPostController.MODE_RECENT);
+
+        } else {
+            return postsService.getPostSearch(offset, limit, query);
+        }
+    }
+
 
     //TODO @GetMapping(/api/calendar) page 6
 

@@ -132,4 +132,38 @@ public class PostsService {
         return postResponse;
 
     }
+
+    public PostResponse getPostSearch(int offset, int limit, String query) {
+        PostResponse postResponse = new PostResponse();
+
+        List <Post> postList = repository.findByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date());
+        postResponse.setCount(postList.size());
+
+        if(limit == 0 || offset/limit >= postList.size()) {
+            return postResponse;
+        }
+
+        List<PostDto> posts = new ArrayList<>();
+
+        for (int i = offset/limit; (i < limit) && (i < postList.size()) ; i++) {
+            Post post = postList.get(i);
+            if(post.getText().contains(query)) {
+                PostDto postDto = new PostDto(post.getId(),
+                        post.getUser(),
+                        post.getTime() / 1000,
+                        post.getTitle(),
+                        getAnnounce(post.getText()),
+                        post.getViewCount(),
+                        post.getPostComments().size(),
+                        post.getPostVotes()
+                );
+                posts.add(postDto);
+            }
+        }
+
+        postResponse.setPosts(posts);
+        postResponse.setCount(posts.size());
+
+        return postResponse;
+    }
 }
