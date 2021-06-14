@@ -13,7 +13,7 @@ public class PostVote
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", nullable = false)
-    private User user;
+    private UserEntity userEntity;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="post_id", nullable = false)
@@ -33,12 +33,12 @@ public class PostVote
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public Post getPost() {

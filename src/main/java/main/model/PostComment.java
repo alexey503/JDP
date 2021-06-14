@@ -21,7 +21,7 @@ public class PostComment
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", nullable = false)
-    private User user;
+    private UserEntity userEntity;
 
     @Column(nullable = false)
     private Date time;
@@ -53,12 +53,12 @@ public class PostComment
         this.post = post;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public Date getTime() {

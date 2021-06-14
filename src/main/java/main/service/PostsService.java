@@ -1,5 +1,6 @@
 package main.service;
 
+import main.api.response.PostDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
 import main.model.ModerationStatus;
@@ -22,7 +23,6 @@ public class PostsService {
 
     public PostResponse getPostResponse(int offset, int limit, String mode) {
         PostResponse postResponse = new PostResponse();
-        List<Post> posts = new ArrayList<>();
 
         Pageable pageable;
         if(mode.equals(ApiPostController.MODE_POPULAR)){
@@ -41,6 +41,7 @@ public class PostsService {
 
         postIterable = repository.findAllByIsActiveAndModerationStatus((byte)1, ModerationStatus.ACCEPTED, pageable);
 
+        List<PostDto> posts = new ArrayList<>();
         for (Post post : postIterable) {
 /*
             System.out.println("Id = " + post.getId() +
@@ -53,7 +54,18 @@ public class PostsService {
                     );
 
  */
-            posts.add(post);
+            PostDto postDto = new PostDto(post.getId(),
+                    post.getUser(),
+                    post.getTime()/1000,
+                    post.getTitle(),
+                    post.getText(),
+                    post.getViewCount(),
+                    post.getCommentCount(),
+                    post.getLikeCount(),
+                    post.getDislikeCount()
+                    );
+
+            posts.add(postDto);
         }
 
         postResponse.setCount(repository.count());
@@ -61,4 +73,6 @@ public class PostsService {
 
         return postResponse;
     }
+
+
 }

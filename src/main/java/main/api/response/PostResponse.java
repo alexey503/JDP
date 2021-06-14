@@ -6,14 +6,15 @@ import java.util.List;
 
 public class PostResponse {
     private long count;
+    private List<PostDto> posts;
 
-    private List<Post> posts;
 
-    public List<Post> getPosts() {
+
+    public List<PostDto> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<PostDto> posts) {
         this.posts = posts;
     }
 

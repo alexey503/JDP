@@ -2,6 +2,7 @@ package main.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import main.api.response.PostUserEntity;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -28,12 +29,13 @@ public class Post {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "moderator_id", referencedColumnName = "id")
     @Where(clause = "is_moderator > 0")
-    private User moderator;
+    private UserEntity moderator;
 
+    @JsonProperty("user")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
-    //private User user;
-    private PostResponseUser user;
+    private PostUserEntity user;
+
 
     @JsonProperty("timestamp")
     @Column(nullable = false)
@@ -74,7 +76,7 @@ public class Post {
     @Transient
     private int dislikeCount;
 
-    public PostResponseUser getUser() {
+    public PostUserEntity getUser() {
         return user;
     }
 
@@ -173,16 +175,16 @@ public class Post {
         this.moderationStatus = moderationStatus;
     }
 
-    public User getModerator() {
+    public UserEntity getModerator() {
         return moderator;
     }
 
-    public void setModerator(User moderator) {
+    public void setModerator(UserEntity moderator) {
         this.moderator = moderator;
     }
 
     public long getTime() {
-        return time.getTime() / 1000;
+        return time.getTime();
     }
 
     public void setTime(Date time) {
