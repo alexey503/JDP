@@ -111,4 +111,5 @@ public class PostDto {
         public void setDislikeCount(int dislikeCount) {
                 this.dislikeCount = dislikeCount;
         }
+
 }

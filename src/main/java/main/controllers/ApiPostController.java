@@ -2,6 +2,8 @@ package main.controllers;
 
 import main.api.response.PostResponse;
 import main.service.PostsService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +29,15 @@ public class ApiPostController {
             @RequestParam(name = "mode", required = false, defaultValue = "recent") String mode
     ) {
         System.out.println("offset=" + offset + " limit=" + limit + " mode=" + mode);
-        return postsService.getPostResponse(offset, limit, mode);
+        if (mode.equals(ApiPostController.MODE_EARLY) ||
+                (mode.equals(ApiPostController.MODE_RECENT))) {
+            return postsService.getPostResponseSortByDate(offset, limit, mode);
+        } else if (mode.equals(ApiPostController.MODE_POPULAR) ||
+                (mode.equals(ApiPostController.MODE_BEST))) {
+            return postsService.getPostResponseSortByVote(offset, limit, mode);
+
+        }
+        return null;
     }
 
     //TODO @GetMapping(/api/post/search) page 5

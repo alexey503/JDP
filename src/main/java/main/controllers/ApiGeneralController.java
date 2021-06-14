@@ -30,7 +30,6 @@ public class ApiGeneralController {
 
     @GetMapping(value = "/init", produces = {"application/json; charset=UTF-8"} )
     private InitResponse init() {
-        System.out.println(this.initResponse.getSubtitle());
         return this.initResponse;
     }
 
