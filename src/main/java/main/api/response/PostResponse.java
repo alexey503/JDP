@@ -1,11 +1,9 @@
 package main.api.response;
 
 import main.model.Post;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class PostResponse {
     private long count;
 

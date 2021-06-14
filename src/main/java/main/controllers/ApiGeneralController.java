@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = {"application/json; charset=UTF-8"})
 public class ApiGeneralController {
     //для прочих запросов к API.
 
@@ -28,12 +28,14 @@ public class ApiGeneralController {
         this.tagsService = tagsService;
     }
 
-    @GetMapping("/init")
+    @GetMapping(value = "/init", produces = {"application/json; charset=UTF-8"} )
     private InitResponse init() {
+        System.out.println(this.initResponse.getSubtitle());
         return this.initResponse;
     }
 
     @GetMapping("/settings")
+
     private Map<String, Boolean> settings() {
         return settingsService.getGlobalSettings();
     }
@@ -42,6 +44,7 @@ public class ApiGeneralController {
     public Map<String, List<TagResponse>> tags(@RequestParam(name = "query", required = false) String tagRequest) {
 
         Map<String, List<TagResponse>> response = new HashMap<>();
+
         response.put("tags", tagsService.getTags(tagRequest != null ? tagRequest : ""));
         return response;
     }

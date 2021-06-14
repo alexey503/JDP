@@ -2,9 +2,7 @@ package main.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import main.model.User;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AuthCheckResponse {
 
     private boolean result;
