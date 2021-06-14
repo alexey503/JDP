@@ -28,7 +28,7 @@ public class ApiPostController {
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "mode", required = false, defaultValue = "recent") String mode
     ) {
-        System.out.println("offset=" + offset + " limit=" + limit + " mode=" + mode);
+        //System.out.println("offset=" + offset + " limit=" + limit + " mode=" + mode);
         if (mode.equals(ApiPostController.MODE_EARLY) ||
                 (mode.equals(ApiPostController.MODE_RECENT))) {
             return postsService.getPostResponseSortByDate(offset, limit, mode);
