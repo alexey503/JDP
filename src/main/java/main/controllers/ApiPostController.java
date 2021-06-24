@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiPostController {
 
     public static final String MODE_RECENT = "recent";
+    public static final String MODE_EARLY = "early";
+
     public static final String MODE_POPULAR = "popular";
     public static final String MODE_BEST = "best";
-    public static final String MODE_EARLY = "early";
+
 
     private final PostsService postsService;
 
@@ -29,15 +31,7 @@ public class ApiPostController {
             @RequestParam(name = "mode", required = false, defaultValue = "recent") String mode
     ) {
         //System.out.println("offset=" + offset + " limit=" + limit + " mode=" + mode);
-        if (mode.equals(ApiPostController.MODE_EARLY) ||
-                (mode.equals(ApiPostController.MODE_RECENT))) {
-            return postsService.getPostResponseSortByDate(offset, limit, mode);
-        } else if (mode.equals(ApiPostController.MODE_POPULAR) ||
-                (mode.equals(ApiPostController.MODE_BEST))) {
-            return postsService.getPostResponseSortByVote(offset, limit, mode);
-
-        }
-        return null;
+        return postsService.getPostResponse(offset, limit, mode);
     }
 
     //TODO @GetMapping(/api/post/search) page 5
@@ -48,7 +42,7 @@ public class ApiPostController {
             @RequestParam(name = "query", required = false, defaultValue = "") String query) {
 
         if(query == null || query.trim().length() == 0){
-            return postsService.getPostResponseSortByDate(offset, limit, ApiPostController.MODE_RECENT);
+            return postsService.getPostResponse(offset, limit, ApiPostController.MODE_RECENT);
 
         } else {
             return postsService.getPostSearch(offset, limit, query);
