@@ -57,8 +57,6 @@ public class Post {
             inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostVote> postVotes;
 
-
-
     public PostUserEntity getUser() {
         return user;
     }
