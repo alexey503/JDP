@@ -19,6 +19,14 @@ public interface PostsRepository
 
 	Page<Post> findAllByIsActiveAndModerationStatusAndTimeBefore(byte isActive, ModerationStatus status, Date date, Pageable pageable);
 
+	//TODO
+	@Query("SELECT p FROM Posts p WHERE p.status = ?1 and p.name = ?2")
+	Page<Post> findAllSpecialQuerySortByPopular(Pageable pageable);
+
+	@Query("SELECT p FROM Posts p WHERE p.status = ?1 and p.name = ?2")
+	Page<Post> findAllSpecialQuerySortByBest(Pageable pageable);
+	
+	
 	//Page<Post> findAllByIsActiveAndModerationStatusAndTimeBeforeOrderByPostCommentsSize(byte isActive, ModerationStatus status, Date date, Pageable pageable);
 
 	//List<Post> findByIsActiveAndModerationStatusAndTimeBefore(byte isActive, ModerationStatus status, Date date);
@@ -30,15 +38,11 @@ public interface PostsRepository
 	* date < currentDate
 	*
 	* sorting:
-	*	recent
-	* 	popular
-	*   best
-	* 	early
+	*	+ recent
+		+ early
+	* 		popular (commentsCount MAX->MIN)
+	*   		best    (like and dislike votes count MAX->MIN)
+	* 	
 	*
 	* */
-
-
-
-	//Page<Post> findAllByTimeBeforeOrderById(Date date, Pageable pageable);
-
 }
