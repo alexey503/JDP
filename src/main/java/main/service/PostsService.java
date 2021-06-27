@@ -26,28 +26,24 @@ public class PostsService {
     public PostResponse getPostResponse(int offset, int limit, String mode) {
         PostResponse postResponse = new PostResponse();
 
+        Page<Post> postPage;
         Pageable pageable;
 
         if (mode.equals(ApiPostController.MODE_RECENT)) {
             pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
+            postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
         } else if (mode.equals(ApiPostController.MODE_EARLY)){
             pageable = PageRequest.of(offset / limit, limit, Sort.by("time").descending());
-/*        }else if (mode.equals(ApiPostController.MODE_BEST)) {
-            // сортировать по убыванию количества лайков (посты без лайков и дизлайков выводить)
-            pageable = PageRequest.of(offset / limit, limit, Sort.by("commentsCount").ascending());
+            postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
+        }else if (mode.equals(ApiPostController.MODE_BEST)) {
+            pageable = PageRequest.of(offset / limit, limit);
+            postPage = repository.findAllBest(pageable);
         } else if (mode.equals(ApiPostController.MODE_POPULAR)){
-            //сортировать по убыванию количества комментариев (посты без комментариев выводить)
-            pageable = PageRequest.of(offset / limit, limit, Sort.by("votesCount").descending());
-*/        }else {
+            pageable = PageRequest.of(offset / limit, limit);
+            postPage = repository.findAllPopular(pageable);
+        }else {
             return postResponse;
         }
-
-        Page<Post> postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
-
-        //Page<Post> postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBeforeOrderByPostCommentsSize((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
-
-
-
 
         List<PostDto> posts = new ArrayList<>();
         for (Post post : postPage) {
