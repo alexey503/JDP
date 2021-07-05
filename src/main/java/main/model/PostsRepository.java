@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Date;
-import java.util.List;
 
 public interface PostsRepository
 		extends PagingAndSortingRepository<Post, Integer> {
@@ -19,30 +18,22 @@ public interface PostsRepository
 
 	Page<Post> findAllByIsActiveAndModerationStatusAndTimeBefore(byte isActive, ModerationStatus status, Date date, Pageable pageable);
 
-	//TODO
-	@Query("SELECT p FROM Posts p WHERE p.status = ?1 and p.name = ?2")
-	Page<Post> findAllSpecialQuerySortByPopular(Pageable pageable);
+@Query(value = "SELECT " +
+		"posts.*, " +
+		"COUNT(posts.id = post_comments.post_id) AS commentsCount " +
+		"FROM  posts  LEFT JOIN post_comments ON posts.id = post_comments.post_id " +
+		"WHERE posts.is_active = 1 AND posts.moderation_status = \"ACCEPTED\" AND DATEDIFF(NOW(), posts.time) >= 0 " +
+		"GROUP BY id " +
+		"ORDER BY commentsCount DESC",
+		nativeQuery = true)
+	Page<Post> findAllPopular(Pageable pageable);
 
-	@Query("SELECT p FROM Posts p WHERE p.status = ?1 and p.name = ?2")
-	Page<Post> findAllSpecialQuerySortByBest(Pageable pageable);
-	
-	
-	//Page<Post> findAllByIsActiveAndModerationStatusAndTimeBeforeOrderByPostCommentsSize(byte isActive, ModerationStatus status, Date date, Pageable pageable);
-
-	//List<Post> findByIsActiveAndModerationStatusAndTimeBefore(byte isActive, ModerationStatus status, Date date);
-
-	//@Query("select u from posts u where u.id = 5")
-	/*
-	* select  byte isActive = 1
-	* moderation status = ModerationStatus.ACCEPTED
-	* date < currentDate
-	*
-	* sorting:
-	*	+ recent
-		+ early
-	* 		popular (commentsCount MAX->MIN)
-	*   		best    (like and dislike votes count MAX->MIN)
-	* 	
-	*
-	* */
+@Query(value = "SELECT " +
+		"posts.*, CASE WHEN SUM(post_votes.value) is NULL THEN 0 ELSE SUM(post_votes.value) END AS likes " +
+		"FROM  posts LEFT JOIN post_votes ON posts.id = post_votes.post_id " +
+		"WHERE posts.is_active = 1 AND posts.moderation_status = \"ACCEPTED\" AND DATEDIFF(NOW(), posts.time) >= 0 " +
+		"GROUP BY id " +
+		"ORDER BY likes DESC",
+		nativeQuery = true)
+	Page<Post> findAllBest(Pageable pageable);
 }

@@ -1,14 +1,11 @@
 package main.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import main.api.response.PostUserEntity;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "posts")
