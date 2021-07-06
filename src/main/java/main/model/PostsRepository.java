@@ -2,11 +2,12 @@ package main.model;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public interface PostsRepository
 		extends PagingAndSortingRepository<Post, Integer> {
@@ -56,4 +57,29 @@ public interface PostsRepository
 			"ORDER BY SUM(v.value) DESC")
 
 	Page<Post> findAllBest(Pageable pageable);
+
+	@Query( "SELECT EXTRACT(YEAR FROM p.time) AS YEAR " +
+			"FROM  Post p " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
+			"GROUP BY YEAR " +
+			"ORDER BY YEAR ASC")
+	ArrayList<String> findAllYearPublications();
+
+	@Query( "SELECT " +
+				"EXTRACT(YEAR FROM p.time) " +
+				"||'-'||" +
+				"EXTRACT(MONTH FROM p.time) " +
+				"||'-'||" +
+				"EXTRACT(DAY FROM p.time) " +
+					"AS DATE, " +
+
+				"COUNT(p) " +
+
+			"FROM  Post p " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
+				"AND EXTRACT(YEAR FROM p.time) = :year " +
+			"GROUP BY DATE " +
+			"ORDER BY DATE ASC")
+	List<String> findCountPostsByDateForYear(Integer year);
+
 }

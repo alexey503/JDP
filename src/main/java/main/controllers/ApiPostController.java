@@ -2,8 +2,6 @@ package main.controllers;
 
 import main.api.response.PostResponse;
 import main.service.PostsService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +38,7 @@ public class ApiPostController {
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "query", required = false, defaultValue = "") String query) {
 
-        if(query == null || query.trim().length() == 0){
+        if (query == null || query.trim().length() == 0) {
             return postsService.getPostResponse(offset, limit, ApiPostController.MODE_RECENT);
 
         } else {
@@ -49,7 +47,7 @@ public class ApiPostController {
     }
 
 
-    //TODO @GetMapping(/api/calendar) page 6
+
 
     //TODO @GetMapping(/api/post/byDate)
 
