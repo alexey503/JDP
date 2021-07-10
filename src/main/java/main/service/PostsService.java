@@ -6,6 +6,7 @@ import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
 import main.model.ModerationStatus;
 import main.model.Post;
+import main.model.PostVote;
 import main.model.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -128,6 +129,19 @@ public class PostsService {
             return null;
         }
         Post post = optionalPost.get();
+
+        int likeCount = 0;
+        int dislikeCount = 0;
+        for (PostVote postVote : post.getPostVotes()) {
+            if (postVote.getValue() > 0) {
+                likeCount++;
+            }
+            if (postVote.getValue() < 0) {
+                dislikeCount++;
+            }
+        }
+
+
         return new PostExtendedDto(
                 post.getId(),
                 post.getTime() / 1000,
@@ -135,8 +149,8 @@ public class PostsService {
                 post.getUser(),
                 post.getTitle(),
                 post.getText(),
-                +1,
-                -1,
+                likeCount,
+                dislikeCount,
                 post.getViewCount(),
                 post.getPostComments(),
                 post.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toList()));
