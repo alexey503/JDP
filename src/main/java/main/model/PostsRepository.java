@@ -82,4 +82,10 @@ public interface PostsRepository
 			"ORDER BY DATE ASC")
 	List<String> findCountPostsByDateForYear(Integer year);
 
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
+			"AND p.text LIKE %:query% " +
+			"ORDER BY p.time DESC")
+	Page<Post> postSearch(String query, Pageable pageable);
 }

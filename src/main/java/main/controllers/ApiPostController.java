@@ -31,7 +31,7 @@ public class ApiPostController {
         return postsService.getPostResponse(offset, limit, mode);
     }
 
-    //TODO @GetMapping(/api/post/search) page 5
+    //TODO Done @GetMapping(/api/post/search) page 5
     @GetMapping("/api/post/search")
     public PostResponse postSearch(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,

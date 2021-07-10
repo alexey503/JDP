@@ -75,35 +75,29 @@ public class PostsService {
     }
 
     public PostResponse getPostSearch(int offset, int limit, String query) {
+
         PostResponse postResponse = new PostResponse();
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
-        List <Post> postList = new ArrayList<>();//repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), );
-        postResponse.setCount(postList.size());
-
-        if(limit == 0 || offset/limit >= postList.size()) {
-            return postResponse;
-        }
+        Page <Post> postPage = repository.postSearch(query, pageable);
 
         List<PostDto> posts = new ArrayList<>();
 
-        for (int i = offset/limit; (i < limit) && (i < postList.size()) ; i++) {
-            Post post = postList.get(i);
-            if(post.getText().contains(query)) {
-                PostDto postDto = new PostDto(post.getId(),
-                        post.getUser(),
-                        post.getTime() / 1000,
-                        post.getTitle(),
-                        getAnnounce(post.getText()),
-                        post.getViewCount(),
-                        post.getPostComments().size(),
-                        post.getPostVotes()
-                );
-                posts.add(postDto);
-            }
+        for (Post post : postPage) {
+            PostDto postDto = new PostDto(post.getId(),
+                    post.getUser(),
+                    post.getTime() / 1000,
+                    post.getTitle(),
+                    getAnnounce(post.getText()),
+                    post.getViewCount(),
+                    post.getPostComments().size(),
+                    post.getPostVotes()
+            );
+            posts.add(postDto);
         }
 
         postResponse.setPosts(posts);
-        postResponse.setCount(posts.size());
+        postResponse.setCount(postPage.getTotalElements());
 
         return postResponse;
     }
