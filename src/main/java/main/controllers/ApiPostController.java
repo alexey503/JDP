@@ -54,15 +54,17 @@ public class ApiPostController {
             @RequestParam(name = "date") String dateString) {
 
         return postsService.getPostSearchByDate(offset, limit, dateString);
-
     }
 
+    //TODO Done @GetMapping(/api/post/byTag)
+    @GetMapping("/api/post/byTag")
+    public PostResponse postSearchByTag(
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "tag") String tag) {
 
-
-
-
-
-    //TODO @GetMapping(/api/post/byTag)
+        return postsService.getPostSearchByTag(offset, limit, tag);
+    }
 
     //TODO @GetMapping(/api/post/{ID}) Page 9
 }

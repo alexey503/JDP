@@ -11,11 +11,6 @@ import java.util.List;
 
 public interface PostsRepository
 		extends PagingAndSortingRepository<Post, Integer> {
-	//Iterable<Post> findAll(Sort sort);
-
-	//Page<Post> findAll(Pageable pageable);
-
-	//Page<Post> findAllByIsActive(byte isActive, Pageable pageable);
 
 	Page<Post> findAllByIsActiveAndModerationStatusAndTimeBefore(byte isActive, ModerationStatus status, Date date, Pageable pageable);
 
@@ -97,4 +92,13 @@ public interface PostsRepository
 			"AND EXTRACT(DAY FROM p.time) = :day " +
 			"ORDER BY p.time DESC")
 	Page<Post> postSearchByDate(Integer year, Integer month, Integer day, Pageable pageable);
+
+	@Query( "SELECT p " +
+			"FROM  Post p " +
+			"RIGHT JOIN Tag2Post t ON p = t.post " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
+			"AND t.tag.name = :tag " +
+			"GROUP BY p.id " +
+			"ORDER BY p.time DESC")
+	Page<Post> postSearchByTag(String tag, Pageable pageable);
 }

@@ -86,6 +86,17 @@ public class PostsService {
         return getPostResponse(postPage);
     }
 
+
+    public PostResponse getPostSearchByTag(int offset, int limit, String tag) {
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
+
+        Page<Post> postPage = repository.postSearchByTag(tag, pageable);
+
+        return getPostResponse(postPage);
+
+    }
+
+
     private PostResponse getPostResponse(Page<Post> postPage) {
 
         PostResponse postResponse = new PostResponse();
