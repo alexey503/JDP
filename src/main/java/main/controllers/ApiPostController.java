@@ -33,7 +33,7 @@ public class ApiPostController {
 
     //TODO Done @GetMapping(/api/post/search) page 5
     @GetMapping("/api/post/search")
-    public PostResponse postSearch(
+    public PostResponse postSearchByStringQuery(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "query", required = false, defaultValue = "") String query) {
@@ -42,14 +42,25 @@ public class ApiPostController {
             return postsService.getPostResponse(offset, limit, ApiPostController.MODE_RECENT);
 
         } else {
-            return postsService.getPostSearch(offset, limit, query);
+            return postsService.getPostSearchByStringQuery(offset, limit, query);
         }
+    }
+
+    //TODO Done @GetMapping(/api/post/byDate)
+    @GetMapping("/api/post/byDate")
+    public PostResponse postSearchByDate(
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "date") String dateString) {
+
+        return postsService.getPostSearchByDate(offset, limit, dateString);
+
     }
 
 
 
 
-    //TODO @GetMapping(/api/post/byDate)
+
 
     //TODO @GetMapping(/api/post/byTag)
 

@@ -87,5 +87,14 @@ public interface PostsRepository
 			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
 			"AND p.text LIKE %:query% " +
 			"ORDER BY p.time DESC")
-	Page<Post> postSearch(String query, Pageable pageable);
+	Page<Post> postSearchByStringQuery(String query, Pageable pageable);
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
+			"AND EXTRACT(YEAR FROM p.time) = :year " +
+			"AND EXTRACT(MONTH FROM p.time) = :month " +
+			"AND EXTRACT(DAY FROM p.time) = :day " +
+			"ORDER BY p.time DESC")
+	Page<Post> postSearchByDate(Integer year, Integer month, Integer day, Pageable pageable);
 }
