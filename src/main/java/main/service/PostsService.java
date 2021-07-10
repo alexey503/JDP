@@ -1,6 +1,7 @@
 package main.service;
 
 import main.api.response.PostDto;
+import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
 import main.model.ModerationStatus;
@@ -17,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class PostsService {
@@ -118,5 +120,26 @@ public class PostsService {
         postResponse.setCount(postPage.getTotalElements());
 
         return postResponse;
+    }
+
+    public PostExtendedDto getPostById(int id) {
+        Optional<Post> optionalPost = repository.findById(id);
+        if( optionalPost.isEmpty()){
+            return null;
+        }
+        Post post = optionalPost.get();
+        return new PostExtendedDto(
+                post.getId(),
+                post.getTime() / 1000,
+                post.isActive() == 1,
+                post.getUser(),
+                post.getTitle(),
+                post.getText(),
+                +1,
+                -1,
+                post.getViewCount(),
+                post.getPostComments(),
+                post.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toList()));
+
     }
 }

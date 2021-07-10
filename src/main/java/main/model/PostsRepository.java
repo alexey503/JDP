@@ -8,9 +8,20 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostsRepository
 		extends PagingAndSortingRepository<Post, Integer> {
+
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			//"LEFT JOIN PostComment c ON p.id = :id " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
+			"AND p.id = :id " +
+			"GROUP BY p.id"
+	)
+	Optional<Post> findById(Integer id);
 
 	Page<Post> findAllByIsActiveAndModerationStatusAndTimeBefore(byte isActive, ModerationStatus status, Date date, Pageable pageable);
 
@@ -101,4 +112,5 @@ public interface PostsRepository
 			"GROUP BY p.id " +
 			"ORDER BY p.time DESC")
 	Page<Post> postSearchByTag(String tag, Pageable pageable);
+
 }
