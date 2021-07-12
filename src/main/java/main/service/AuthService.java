@@ -79,11 +79,11 @@ public class AuthService {
     }
 
     private boolean isCaptchaValid(String captcha, String captchaSecret) {
-        Optional<Captcha> optionalCaptcha = this.captchaRepository.findByCode(captcha);
+        Optional<Captcha> optionalCaptcha = this.captchaRepository.findBySecretCode(captchaSecret);
         if (optionalCaptcha.isEmpty()) {
             return false;
         }
-        return optionalCaptcha.get().getSecretCode().equals(captchaSecret);
+        return optionalCaptcha.get().getCode().equals(captcha);
     }
 
     private boolean isPasswordValid(String password) {

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CaptchaRepository extends CrudRepository<Captcha, Integer> {
 
-    Optional<Captcha> findByCode(String code);
+    Optional<Captcha> findBySecretCode(String secretCode);
 
     @Transactional
     @Modifying
