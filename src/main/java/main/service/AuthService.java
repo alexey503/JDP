@@ -35,31 +35,31 @@ public class AuthService {
     public Map<String, Object> addNewUser(String email, String password, String name, String captcha, String captchaSecret) {
 
         Map<String, String> errors = new HashMap<>();
-        if(this.isEmailExist(email)){
+        if (this.isEmailExist(email)) {
             errors.put("email", "Этот e-mail уже зарегистрирован");
         }
 
-        if(!this.isNameValid(name)){
+        if (!this.isNameValid(name)) {
             errors.put("name", "Имя указано неверно");
         }
-        if(!this.isPasswordValid(password)){
+        if (!this.isPasswordValid(password)) {
             errors.put("password", "Пароль короче 6-ти символов");
         }
-        if(!this.isCaptchaValid(captcha, captchaSecret)){
+        if (!this.isCaptchaValid(captcha, captchaSecret)) {
             errors.put("captcha", "Код с картинки введён неверно");
         }
 
-        Map <String, Object> resultMap = new HashMap<>();
-        if(errors.size() > 0){
+        Map<String, Object> resultMap = new HashMap<>();
+        if (errors.size() > 0) {
             resultMap.put("result", false);
             resultMap.put("errors", errors);
             return resultMap;
         }
 
-        if(this.addUserToBase(email, name, password)) {
+        if (this.addUserToBase(email, name, password)) {
             resultMap.put("result", true);
             return resultMap;
-        }else{
+        } else {
             errors.put("error", "Ошибка создания пользователя в базе");
             resultMap.put("result", false);
             resultMap.put("errors", errors);
@@ -80,7 +80,7 @@ public class AuthService {
 
     private boolean isCaptchaValid(String captcha, String captchaSecret) {
         Optional<Captcha> optionalCaptcha = this.captchaRepository.findByCode(captcha);
-        if(optionalCaptcha.isEmpty()){
+        if (optionalCaptcha.isEmpty()) {
             return false;
         }
         return optionalCaptcha.get().getSecretCode().equals(captchaSecret);
@@ -115,7 +115,7 @@ public class AuthService {
             e.printStackTrace();
         }
         String imageText = "data:image/png;base64, " + Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
-        String secreteCodeKey = imageText.substring(23, 23+32);
+        String secreteCodeKey = this.generateSecretCode(20);
 
         Captcha captchaEntity = new Captcha();
         captchaEntity.setSecretCode(secreteCodeKey);
@@ -124,10 +124,23 @@ public class AuthService {
 
         captchaRepository.save(captchaEntity);
 
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("secret", secreteCodeKey);
         map.put("image", imageText);
 
         return map;
+    }
+
+    private String generateSecretCode(int length) {
+
+        Random random = new Random();
+        String secretCode = "";
+        int index = 0;
+
+        for (int i = 0; i < length; i++) {
+            index = random.nextInt('z' - 'a') + 'a';
+            secretCode += Character.toString(index);
+        }
+        return secretCode;
     }
 }

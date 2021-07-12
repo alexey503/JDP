@@ -23,7 +23,7 @@ public class ApiAuthController {
         return authService.getAuthCheckResponse();
     }
 
-    //TODO @GetMapping("/api/auth/captcha) page 10
+    //TODO Done @GetMapping("/api/auth/captcha) page 10
     @GetMapping("/api/auth/captcha")
     public Map<String,String> getCapture() {
 
