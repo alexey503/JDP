@@ -1,22 +1,27 @@
 package main.service;
 
+import com.github.cage.Cage;
+import com.github.cage.GCage;
 import main.api.response.AuthCheckResponse;
 import main.model.Captcha;
 import main.model.CaptchaRepository;
 import main.model.UserEntity;
 import main.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
+
+    @Value("${BlogEngine.killCaptureTimeout}")
+    private long killCaptureTimeout;
 
     @Autowired
     private CaptchaRepository captchaRepository;
@@ -96,4 +101,33 @@ public class AuthService {
         return userEntity.isPresent();
     }
 
+    public Map<String, String> getCapture() {
+
+        this.captchaRepository.deleteByTimeBefore(new Date(new Date().getTime() - this.killCaptureTimeout));
+
+        Cage cage = new GCage();
+
+        String text = cage.getTokenGenerator().next();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            cage.draw(text, byteArrayOutputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String imageText = "data:image/png;base64, " + Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+        String secreteCodeKey = imageText.substring(23, 23+32);
+
+        Captcha captchaEntity = new Captcha();
+        captchaEntity.setSecretCode(secreteCodeKey);
+        captchaEntity.setCode(text);
+        captchaEntity.setTime(new Date());
+
+        captchaRepository.save(captchaEntity);
+
+        Map<String,String> map = new HashMap<>();
+        map.put("secret", secreteCodeKey);
+        map.put("image", imageText);
+
+        return map;
+    }
 }

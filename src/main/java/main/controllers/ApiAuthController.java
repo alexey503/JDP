@@ -25,14 +25,14 @@ public class ApiAuthController {
 
     //TODO @GetMapping("/api/auth/captcha) page 10
     @GetMapping("/api/auth/captcha")
-    public AuthCheckResponse getCapture() {
+    public Map<String,String> getCapture() {
 
-        return authService.getAuthCheckResponse();
+        return authService.getCapture();
     }
 
 
 
-    //TODO @PostMapping("/api/auth/register") 11
+    //TODO Done @PostMapping("/api/auth/register") 11
     @PostMapping("/api/auth/register")
     public Map<String, Object> addNewUser(
             @RequestParam(name = "e_mail") String email,
