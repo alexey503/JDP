@@ -5,6 +5,7 @@ import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
 import main.model.*;
+import main.model.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
