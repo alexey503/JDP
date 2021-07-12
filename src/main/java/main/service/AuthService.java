@@ -3,6 +3,8 @@ package main.service;
 import main.api.response.AuthCheckResponse;
 import main.model.Captcha;
 import main.model.CaptchaRepository;
+import main.model.UserEntity;
+import main.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class AuthService {
 
     @Autowired
     private CaptchaRepository captchaRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public AuthCheckResponse getAuthCheckResponse() {
         return new AuthCheckResponse();
@@ -67,9 +71,7 @@ public class AuthService {
         if(optionalCaptcha.isEmpty()){
             return false;
         }
-
         return optionalCaptcha.get().getSecretCode().equals(captchaSecret);
-
     }
 
     private boolean isPasswordValid(String password) {
@@ -82,8 +84,9 @@ public class AuthService {
     }
 
     private boolean isEmailExist(String email) {
-        //TODO check in base
-        return true;
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        System.out.println(userEntity.isPresent());
+        return userEntity.isPresent();
     }
 
 }
