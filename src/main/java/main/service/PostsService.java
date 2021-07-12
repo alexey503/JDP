@@ -1,11 +1,10 @@
 package main.service;
 
 import main.api.response.PostDto;
+import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
-import main.model.ModerationStatus;
-import main.model.Post;
-import main.model.PostsRepository;
+import main.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class PostsService {
@@ -24,7 +24,6 @@ public class PostsService {
     private PostsRepository repository;
 
     public PostResponse getPostResponse(int offset, int limit, String mode) {
-        PostResponse postResponse = new PostResponse();
 
         Page<Post> postPage;
         Pageable pageable;
@@ -32,35 +31,20 @@ public class PostsService {
         if (mode.equals(ApiPostController.MODE_RECENT)) {
             pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
             postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
-        } else if (mode.equals(ApiPostController.MODE_EARLY)){
+        } else if (mode.equals(ApiPostController.MODE_EARLY)) {
             pageable = PageRequest.of(offset / limit, limit, Sort.by("time").descending());
             postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
-        }else if (mode.equals(ApiPostController.MODE_BEST)) {
+        } else if (mode.equals(ApiPostController.MODE_BEST)) {
             pageable = PageRequest.of(offset / limit, limit);
             postPage = repository.findAllBest(pageable);
-        } else if (mode.equals(ApiPostController.MODE_POPULAR)){
+        } else if (mode.equals(ApiPostController.MODE_POPULAR)) {
             pageable = PageRequest.of(offset / limit, limit);
             postPage = repository.findAllPopular(pageable);
-        }else {
-            return postResponse;
+        } else {
+            return new PostResponse();
         }
 
-        List<PostDto> posts = new ArrayList<>();
-        for (Post post : postPage) {
-                PostDto postDto = new PostDto(post.getId(),
-                        post.getUser(),
-                        post.getTime() / 1000,
-                        post.getTitle(),
-                        getAnnounce(post.getText()),
-                        post.getViewCount(),
-                        post.getPostComments().size(),
-                        post.getPostVotes()
-                );
-                posts.add(postDto);
-        }
-        postResponse.setPosts(posts);
-        postResponse.setCount(postPage.getTotalElements());
-        return postResponse;
+        return getPostResponse(postPage);
     }
 
     public static String getAnnounce(String text) {
@@ -74,37 +58,98 @@ public class PostsService {
         }
     }
 
-    public PostResponse getPostSearch(int offset, int limit, String query) {
-        PostResponse postResponse = new PostResponse();
+    public PostResponse getPostSearchByStringQuery(int offset, int limit, String query) {
 
-        List <Post> postList = new ArrayList<>();//repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), );
-        postResponse.setCount(postList.size());
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
-        if(limit == 0 || offset/limit >= postList.size()) {
-            return postResponse;
+        Page<Post> postPage = repository.postSearchByStringQuery(query, pageable);
+
+        return getPostResponse(postPage);
+    }
+
+    public PostResponse getPostSearchByDate(int offset, int limit, String dateString) {
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
+
+        Calendar calendar = new GregorianCalendar();
+        try {
+            calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dateString));
+        } catch (ParseException e) {
+            return new PostResponse();
         }
 
+        Page<Post> postPage = repository.postSearchByDate(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH),
+                pageable);
+
+        return getPostResponse(postPage);
+    }
+
+
+    public PostResponse getPostSearchByTag(int offset, int limit, String tag) {
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
+
+        Page<Post> postPage = repository.postSearchByTag(tag, pageable);
+
+        return getPostResponse(postPage);
+
+    }
+
+
+    private PostResponse getPostResponse(Page<Post> postPage) {
+
+        PostResponse postResponse = new PostResponse();
         List<PostDto> posts = new ArrayList<>();
 
-        for (int i = offset/limit; (i < limit) && (i < postList.size()) ; i++) {
-            Post post = postList.get(i);
-            if(post.getText().contains(query)) {
-                PostDto postDto = new PostDto(post.getId(),
-                        post.getUser(),
-                        post.getTime() / 1000,
-                        post.getTitle(),
-                        getAnnounce(post.getText()),
-                        post.getViewCount(),
-                        post.getPostComments().size(),
-                        post.getPostVotes()
-                );
-                posts.add(postDto);
+        for (Post post : postPage) {
+            PostDto postDto = new PostDto(post.getId(),
+                    post.getUser(),
+                    post.getTime() / 1000,
+                    post.getTitle(),
+                    getAnnounce(post.getText()),
+                    post.getViewCount(),
+                    post.getPostComments().size(),
+                    post.getPostVotes()
+            );
+            posts.add(postDto);
+        }
+        postResponse.setPosts(posts);
+        postResponse.setCount(postPage.getTotalElements());
+
+        return postResponse;
+    }
+
+    public PostExtendedDto getPostById(int id) {
+        Optional<Post> optionalPost = repository.findById(id);
+        if( optionalPost.isEmpty()){
+            return null;
+        }
+        Post post = optionalPost.get();
+
+        int likeCount = 0;
+        int dislikeCount = 0;
+        for (PostVote postVote : post.getPostVotes()) {
+            if (postVote.getValue() > 0) {
+                likeCount++;
+            }
+            if (postVote.getValue() < 0) {
+                dislikeCount++;
             }
         }
 
-        postResponse.setPosts(posts);
-        postResponse.setCount(posts.size());
+        return new PostExtendedDto(
+                post.getId(),
+                post.getTime() / 1000,
+                post.isActive() == 1,
+                post.getUser(),
+                post.getTitle(),
+                post.getText(),
+                likeCount,
+                dislikeCount,
+                post.getViewCount(),
+                post.getPostComments(),
+                post.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
 
-        return postResponse;
     }
 }

@@ -54,6 +54,21 @@ public class Post {
             inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostVote> postVotes;
 
+    @ManyToMany
+    @JoinTable(name = "tag2post",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")})
+
+    private List<Tag> tags;
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     public PostUserEntity getUser() {
         return user;
     }

@@ -13,21 +13,26 @@ public class UserEntity
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonIgnore
     @Column(name="is_moderator", nullable = false)
     private byte isModerator;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Date reg_time;
 
     @Column(nullable = false)
     private String name;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
+    @JsonIgnore
     private String code;
 
     @Column(length = 65535,columnDefinition="Text")
