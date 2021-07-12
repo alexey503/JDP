@@ -15,10 +15,8 @@ public class ApiPostController {
 
     public static final String MODE_RECENT = "recent";
     public static final String MODE_EARLY = "early";
-
     public static final String MODE_POPULAR = "popular";
     public static final String MODE_BEST = "best";
-
 
     private final PostsService postsService;
 
@@ -35,7 +33,6 @@ public class ApiPostController {
         return postsService.getPostResponse(offset, limit, mode);
     }
 
-    //TODO Done @GetMapping(/api/post/search) page 5
     @GetMapping("/api/post/search")
     public PostResponse postSearchByStringQuery(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
@@ -48,9 +45,9 @@ public class ApiPostController {
         } else {
             return postsService.getPostSearchByStringQuery(offset, limit, query);
         }
+
     }
 
-    //TODO Done @GetMapping(/api/post/byDate)
     @GetMapping("/api/post/byDate")
     public PostResponse postSearchByDate(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
@@ -60,7 +57,6 @@ public class ApiPostController {
         return postsService.getPostSearchByDate(offset, limit, dateString);
     }
 
-    //TODO Done @GetMapping(/api/post/byTag)
     @GetMapping("/api/post/byTag")
     public PostResponse postSearchByTag(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
@@ -70,11 +66,10 @@ public class ApiPostController {
         return postsService.getPostSearchByTag(offset, limit, tag);
     }
 
-    //TODO Done @GetMapping(/api/post/{id}) Page 9
     @GetMapping("/api/post/{id}")
     public ResponseEntity postGetById(@PathVariable int id) {
         PostExtendedDto postExtendedDto = postsService.getPostById(id);
-        if(postExtendedDto != null){
+        if (postExtendedDto != null) {
             return new ResponseEntity(postExtendedDto, HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

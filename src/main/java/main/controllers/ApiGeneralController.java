@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api", produces = {"application/json; charset=UTF-8"})
 public class ApiGeneralController {
-    //для прочих запросов к API.
 
     private final InitResponse initResponse;
     private final SettingsService settingsService;
@@ -33,7 +32,7 @@ public class ApiGeneralController {
         this.calendarService = calendarService;
     }
 
-    @GetMapping(value = "/init", produces = {"application/json; charset=UTF-8"} )
+    @GetMapping(value = "/init", produces = {"application/json; charset=UTF-8"})
     private InitResponse init() {
         return this.initResponse;
     }
@@ -53,7 +52,6 @@ public class ApiGeneralController {
         return response;
     }
 
-    //TODO Done @GetMapping(/api/calendar) page 6
     @GetMapping("/calendar")
     public CalendarDto calendar(@RequestParam(name = "year", required = false) String yearRequest) {
         if (yearRequest == null) {
@@ -61,5 +59,6 @@ public class ApiGeneralController {
         }
 
         return calendarService.getCalendarDto(yearRequest);
+
     }
 }

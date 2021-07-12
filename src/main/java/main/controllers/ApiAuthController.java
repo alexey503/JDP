@@ -15,7 +15,9 @@ public class ApiAuthController {
     private final AuthService authService;
 
     public ApiAuthController(AuthService authService) {
+
         this.authService = authService;
+
     }
 
     @GetMapping("/api/auth/check")
@@ -23,16 +25,13 @@ public class ApiAuthController {
         return authService.getAuthCheckResponse();
     }
 
-    //TODO Done @GetMapping("/api/auth/captcha) page 10
     @GetMapping("/api/auth/captcha")
-    public Map<String,String> getCapture() {
+    public Map<String, String> getCapture() {
 
         return authService.getCapture();
+
     }
 
-
-
-    //TODO Done @PostMapping("/api/auth/register") 11
     @PostMapping("/api/auth/register")
     public Map<String, Object> addNewUser(
             @RequestParam(name = "e_mail") String email,
@@ -42,6 +41,6 @@ public class ApiAuthController {
             @RequestParam(name = "captcha_secret") String captchaSecret) {
 
         return authService.addNewUser(email, password, name, captcha, captchaSecret);
-    }
 
+    }
 }
