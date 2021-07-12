@@ -4,10 +4,7 @@ import main.api.response.PostDto;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
-import main.model.ModerationStatus;
-import main.model.Post;
-import main.model.PostVote;
-import main.model.PostsRepository;
+import main.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -141,7 +138,6 @@ public class PostsService {
             }
         }
 
-
         return new PostExtendedDto(
                 post.getId(),
                 post.getTime() / 1000,
@@ -153,7 +149,7 @@ public class PostsService {
                 dislikeCount,
                 post.getViewCount(),
                 post.getPostComments(),
-                post.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toList()));
+                post.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
 
     }
 }

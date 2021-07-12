@@ -1,6 +1,5 @@
 package main.controllers;
 
-import main.api.response.PostDto;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.service.PostsService;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 public class ApiPostController {
@@ -73,9 +70,9 @@ public class ApiPostController {
         return postsService.getPostSearchByTag(offset, limit, tag);
     }
 
-    //TODO @GetMapping(/api/post/{id}) Page 9
+    //TODO Done @GetMapping(/api/post/{id}) Page 9
     @GetMapping("/api/post/{id}")
-    public ResponseEntity<PostExtendedDto> postGetById(@PathVariable int id) {
+    public ResponseEntity postGetById(@PathVariable int id) {
         PostExtendedDto postExtendedDto = postsService.getPostById(id);
         if(postExtendedDto != null){
             return new ResponseEntity(postExtendedDto, HttpStatus.OK);

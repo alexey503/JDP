@@ -1,5 +1,8 @@
 package main.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,23 +14,27 @@ public class PostComment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="parent_id", nullable = true)
-    private PostComment parent;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="post_id", nullable = false)
-    private Post post;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id", nullable = false)
-    private UserEntity userEntity;
-
+    @JsonProperty("timestamp")
     @Column(nullable = false)
     private Date time;
 
     @Column(nullable = false, length = 65535,columnDefinition="Text")
     private String text;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id", nullable = false)
+    private UserEntity userEntity;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="parent_id")
+    private Post parent;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="post_id", nullable = false)
+    private Post post;
+
+
 
     public int getId() {
         return id;
@@ -37,20 +44,13 @@ public class PostComment
         this.id = id;
     }
 
-    public PostComment getParent() {
+
+    public Post getParent() {
         return parent;
     }
 
-    public void setParent(PostComment parent) {
+    public void setParent(Post parent) {
         this.parent = parent;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
     }
 
     public UserEntity getUser() {
@@ -61,8 +61,8 @@ public class PostComment
         this.userEntity = userEntity;
     }
 
-    public Date getTime() {
-        return time;
+    public long getTime() {
+        return time.getTime()/1000;
     }
 
     public void setTime(Date time) {
