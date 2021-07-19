@@ -1,6 +1,7 @@
-package main.model;
+package main.model.entities;
 
 import main.api.response.PostUserEntity;
+import main.model.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Post {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "moderator_id", referencedColumnName = "id")
     @Where(clause = "is_moderator > 0")
-    private UserEntity moderator;
+    private User moderator;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
@@ -113,11 +114,11 @@ public class Post {
         this.moderationStatus = moderationStatus;
     }
 
-    public UserEntity getModerator() {
+    public User getModerator() {
         return moderator;
     }
 
-    public void setModerator(UserEntity moderator) {
+    public void setModerator(User moderator) {
         this.moderator = moderator;
     }
 

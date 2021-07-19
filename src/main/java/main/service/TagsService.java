@@ -1,7 +1,8 @@
 package main.service;
 
 import main.api.response.TagResponse;
-import main.model.*;
+import main.model.entities.Tag;
+import main.model.entities.Tag2Post;
 import main.model.repositories.Tag2PostRepository;
 import main.model.repositories.TagsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

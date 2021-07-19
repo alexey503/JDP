@@ -1,14 +1,14 @@
 package main.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import main.model.UserEntity;
+import main.model.User;
 
 public class AuthCheckResponse {
 
     private boolean result;
 
     @JsonIgnore
-    private UserEntity userEntity;
+    private User user;
 
     public boolean isResult() {
         return result;
@@ -18,11 +18,11 @@ public class AuthCheckResponse {
         this.result = result;
     }
 
-    public UserEntity getUser() {
-        return userEntity;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

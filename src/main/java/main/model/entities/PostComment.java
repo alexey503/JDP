@@ -1,7 +1,8 @@
-package main.model;
+package main.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import main.model.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class PostComment
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", nullable = false)
-    private UserEntity userEntity;
+    private User user;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
@@ -53,12 +54,12 @@ public class PostComment
         this.parent = parent;
     }
 
-    public UserEntity getUser() {
-        return userEntity;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getTime() {

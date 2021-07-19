@@ -1,6 +1,6 @@
 package main.model.repositories;
 
-import main.model.Tag2Post;
+import main.model.entities.Tag2Post;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

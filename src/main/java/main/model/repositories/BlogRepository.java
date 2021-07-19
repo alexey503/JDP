@@ -1,9 +1,9 @@
 package main.model.repositories;
 
-import main.model.UserEntity;
+import main.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BlogRepository extends CrudRepository<UserEntity, Integer> {
+public interface BlogRepository extends CrudRepository<User, Integer> {
 }

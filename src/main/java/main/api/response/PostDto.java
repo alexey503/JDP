@@ -1,9 +1,7 @@
 package main.api.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import main.model.PostVote;
+import main.model.entities.PostVote;
 
-import java.util.Date;
 import java.util.List;
 
 public class PostDto {

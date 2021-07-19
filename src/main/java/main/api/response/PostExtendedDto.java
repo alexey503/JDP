@@ -1,10 +1,7 @@
 package main.api.response;
 
-import main.model.PostComment;
-import main.model.PostVote;
-import main.model.Tag;
+import main.model.entities.PostComment;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 
 public class PostExtendedDto {
