@@ -45,20 +45,13 @@ public interface PostsRepository
 	ArrayList<String> findAllYearPublications();
 
 	@Query( "SELECT " +
-				"EXTRACT(YEAR FROM p.time) " +
-				"||'-'||" +
-				"EXTRACT(MONTH FROM p.time) " +
-				"||'-'||" +
-				"EXTRACT(DAY FROM p.time) " +
-					"AS DATE, " +
-
-				"COUNT(p) " +
-
+			"	DATE(p.time) AS d, " +
+			"	COUNT(p) " +
 			"FROM  Post p " +
 			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
 				"AND EXTRACT(YEAR FROM p.time) = :year " +
-			"GROUP BY DATE " +
-			"ORDER BY DATE ASC")
+			"GROUP BY d " +
+			"ORDER BY d ASC")
 	List<String> findCountPostsByDateForYear(Integer year);
 
 	@Query("SELECT p " +
