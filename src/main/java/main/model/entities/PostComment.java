@@ -2,7 +2,6 @@ package main.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import main.model.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -35,7 +34,13 @@ public class PostComment
     @JoinColumn(name="post_id", nullable = false)
     private Post post;
 
+    public Post getPost() {
+        return post;
+    }
 
+    public void setPost(Post post) {
+        this.post = post;
+    }
 
     public int getId() {
         return id;

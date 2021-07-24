@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ApiPostController {
 
-    public static final String MODE_RECENT = "recent";
-    public static final String MODE_EARLY = "early";
+    public static final String MODE_RECENT =  "recent";
+    public static final String MODE_EARLY =   "early";
     public static final String MODE_POPULAR = "popular";
-    public static final String MODE_BEST = "best";
+    public static final String MODE_BEST =    "best";
 
     private final PostsService postsService;
 
@@ -25,7 +25,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/api/post")
-    public PostResponse getPost(
+    public ResponseEntity getPost(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "mode", required = false, defaultValue = "recent") String mode
@@ -34,7 +34,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/api/post/search")
-    public PostResponse postSearchByStringQuery(
+    public ResponseEntity postSearchByStringQuery(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "query", required = false, defaultValue = "") String query) {

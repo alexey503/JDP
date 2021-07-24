@@ -5,7 +5,7 @@ import com.github.cage.GCage;
 import main.api.response.AuthCheckResponse;
 import main.model.entities.Captcha;
 import main.model.repositories.CaptchaRepository;
-import main.model.User;
+import main.model.entities.User;
 import main.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

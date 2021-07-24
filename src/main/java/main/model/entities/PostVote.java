@@ -1,7 +1,5 @@
 package main.model.entities;
 
-import main.model.User;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,7 +16,7 @@ public class PostVote
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="post_id", nullable = false)
+    @JoinColumn(name="post_id", referencedColumnName = "id", nullable = false)
     private Post post;
 
     @Column(nullable = false)

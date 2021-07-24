@@ -1,7 +1,7 @@
 package main.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import main.model.User;
+import main.model.entities.User;
 
 public class AuthCheckResponse {
 

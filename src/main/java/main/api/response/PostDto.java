@@ -1,6 +1,9 @@
 package main.api.response;
 
+import main.model.entities.Post;
 import main.model.entities.PostVote;
+import main.service.PostsService;
+import org.jsoup.Jsoup;
 
 import java.util.List;
 
@@ -12,9 +15,12 @@ public class PostDto {
         private String title;
         private String announce;
         private int viewCount;
-        private int commentCount;
-        private int likeCount;
-        private int dislikeCount;
+        private long commentCount;
+        private long likeCount;
+        private long dislikeCount;
+
+        public PostDto() {
+        }
 
         public PostDto(int id, PostUserEntity user, long timestamp, String title, String announce, int viewCount, int commentCount, List<PostVote> postVotes) {
                 this.id = id;
@@ -33,6 +39,26 @@ public class PostDto {
                                 this.likeCount++;
                         }
                         if (postVote.getValue() < 0) {
+                                this.dislikeCount++;
+                        }
+                }
+        }
+
+        public PostDto(Post post, long likes, long commentsCount) {
+                this.id = post.getId();
+                this.user = post.getUser();
+                this.timestamp = post.getTime() / 1000;
+                this.title = post.getTitle();
+                this.announce = Jsoup.parse(post.getText()).text();
+                //this.announce = PostsService.getAnnounce(post.getText());
+                this.viewCount = post.getViewCount();
+                this.commentCount = post.getPostComments().size();
+                //this.commentCount = commentsCount;
+                this.likeCount = likes;
+
+                this.dislikeCount = 0;
+                for (PostVote postVote : post.getPostVotes()) {
+                        if(postVote.getValue() < 0) {
                                 this.dislikeCount++;
                         }
                 }
@@ -86,27 +112,27 @@ public class PostDto {
                 this.viewCount = viewCount;
         }
 
-        public int getCommentCount() {
+        public long getCommentCount() {
                 return commentCount;
         }
 
-        public void setCommentCount(int commentCount) {
+        public void setCommentCount(long commentCount) {
                 this.commentCount = commentCount;
         }
 
-        public int getLikeCount() {
+        public long getLikeCount() {
                 return likeCount;
         }
 
-        public void setLikeCount(int likeCount) {
+        public void setLikeCount(long likeCount) {
                 this.likeCount = likeCount;
         }
 
-        public int getDislikeCount() {
+        public long getDislikeCount() {
                 return dislikeCount;
         }
 
-        public void setDislikeCount(int dislikeCount) {
+        public void setDislikeCount(long dislikeCount) {
                 this.dislikeCount = dislikeCount;
         }
 
