@@ -2,6 +2,7 @@ package main.api.response;
 
 import main.model.entities.PostComment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostExtendedDto {
@@ -31,7 +32,11 @@ public class PostExtendedDto {
                 this.likeCount = likeCount;
                 this.dislikeCount = dislikeCount;
                 this.viewCount = viewCount;
-                this.comments = comments;
+                if(comments != null) {
+                        this.comments = comments;
+                }else{
+                        this.comments = new ArrayList<>();
+                }
                 this.tags = tags;
         }
 

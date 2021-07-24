@@ -5,8 +5,10 @@ import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
 import main.model.entities.Post;
+import main.model.entities.PostComment;
 import main.model.entities.PostVote;
 import main.model.entities.Tag;
+import main.model.repositories.PostCommentsRepository;
 import main.model.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,9 @@ import java.util.stream.Collectors;
 public class PostsService {
     @Autowired
     private PostsRepository repository;
+
+    @Autowired
+    PostCommentsRepository commentsRepository;
 
     public ResponseEntity getPostResponse(int offset, int limit, String mode) {
 
@@ -143,6 +148,8 @@ public class PostsService {
             }
         }
 
+        List<PostComment> postComments = commentsRepository.findByPostId(id);
+
         return new PostExtendedDto(
                 post.getId(),
                 post.getTime() / 1000,
@@ -153,8 +160,7 @@ public class PostsService {
                 likeCount,
                 dislikeCount,
                 post.getViewCount(),
-                post.getPostComments(),
+                postComments,
                 post.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
-
     }
 }

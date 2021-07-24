@@ -30,16 +30,20 @@ public class PostComment
     @JoinColumn(name="parent_id")
     private Post parent;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="post_id", nullable = false)
-    private Post post;
+    /*
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false)
+    @JoinColumn(name="post_id", referencedColumnName = "id", nullable = false, updatable = false)
+     */
 
-    public Post getPost() {
-        return post;
+    @Column(name = "post_id")
+    private int postId;
+
+    public int getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
     public int getId() {

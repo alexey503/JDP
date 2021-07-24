@@ -32,7 +32,7 @@ public interface PostsRepository
 			"    ) " +
 			"FROM Post p " +
 			"LEFT JOIN PostVote v ON p.id = v.post AND v.value = 1 " +
-			"LEFT JOIN PostComment c ON p.id = c.post " +
+			"LEFT JOIN PostComment c ON p.id = c.postId " +
 			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
 			"GROUP BY p.id")
 	Page<PostDto> findPostsDto(Pageable pageable);
