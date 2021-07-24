@@ -4,12 +4,18 @@ import main.api.response.PostDto;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.controllers.ApiPostController;
-import main.model.*;
+import main.model.entities.Post;
+import main.model.entities.PostComment;
+import main.model.entities.PostVote;
+import main.model.entities.Tag;
+import main.model.repositories.PostCommentsRepository;
+import main.model.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -23,28 +29,32 @@ public class PostsService {
     @Autowired
     private PostsRepository repository;
 
-    public PostResponse getPostResponse(int offset, int limit, String mode) {
+    @Autowired
+    PostCommentsRepository commentsRepository;
 
-        Page<Post> postPage;
-        Pageable pageable;
+    public ResponseEntity getPostResponse(int offset, int limit, String mode) {
 
-        if (mode.equals(ApiPostController.MODE_RECENT)) {
-            pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
-            postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
-        } else if (mode.equals(ApiPostController.MODE_EARLY)) {
-            pageable = PageRequest.of(offset / limit, limit, Sort.by("time").descending());
-            postPage = repository.findAllByIsActiveAndModerationStatusAndTimeBefore((byte) 1, ModerationStatus.ACCEPTED, new Date(), pageable);
-        } else if (mode.equals(ApiPostController.MODE_BEST)) {
-            pageable = PageRequest.of(offset / limit, limit);
-            postPage = repository.findAllBest(pageable);
-        } else if (mode.equals(ApiPostController.MODE_POPULAR)) {
-            pageable = PageRequest.of(offset / limit, limit);
-            postPage = repository.findAllPopular(pageable);
-        } else {
-            return new PostResponse();
+        Sort sort;
+        switch (mode){
+            case ApiPostController.MODE_RECENT:
+                sort = Sort.by("time").descending();
+                break;
+            case ApiPostController.MODE_EARLY:
+                sort = Sort.by("time").ascending();
+                break;
+            case ApiPostController.MODE_BEST://сортировать по убыванию количества лайков
+                sort = Sort.by("likesCount").descending();
+                break;
+            case ApiPostController.MODE_POPULAR://сортировать по убыванию количества комментариев
+                sort = Sort.by("commentsCount").descending();
+                break;
+
+            default:
+                return ResponseEntity.badRequest().body("Error mode not found");
         }
 
-        return getPostResponse(postPage);
+        return ResponseEntity.ok(new PostResponse(
+                repository.findPostsDto(PageRequest.of(offset / limit, limit, sort))));
     }
 
     public static String getAnnounce(String text) {
@@ -58,13 +68,13 @@ public class PostsService {
         }
     }
 
-    public PostResponse getPostSearchByStringQuery(int offset, int limit, String query) {
+    public ResponseEntity getPostSearchByStringQuery(int offset, int limit, String query) {
 
         Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
         Page<Post> postPage = repository.postSearchByStringQuery(query, pageable);
 
-        return getPostResponse(postPage);
+        return ResponseEntity.ok(getPostResponse(postPage));
     }
 
     public PostResponse getPostSearchByDate(int offset, int limit, String dateString) {
@@ -138,6 +148,8 @@ public class PostsService {
             }
         }
 
+        List<PostComment> postComments = commentsRepository.findByPostId(id);
+
         return new PostExtendedDto(
                 post.getId(),
                 post.getTime() / 1000,
@@ -148,8 +160,7 @@ public class PostsService {
                 likeCount,
                 dislikeCount,
                 post.getViewCount(),
-                post.getPostComments(),
+                postComments,
                 post.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
-
     }
 }

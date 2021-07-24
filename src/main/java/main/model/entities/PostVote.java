@@ -1,4 +1,4 @@
-package main.model;
+package main.model.entities;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,10 +13,10 @@ public class PostVote
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", nullable = false)
-    private UserEntity userEntity;
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="post_id", nullable = false)
+    @JoinColumn(name="post_id", referencedColumnName = "id", nullable = false)
     private Post post;
 
     @Column(nullable = false)
@@ -33,12 +33,12 @@ public class PostVote
         this.id = id;
     }
 
-    public UserEntity getUser() {
-        return userEntity;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Post getPost() {

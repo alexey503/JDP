@@ -1,4 +1,4 @@
-package main.model;
+package main.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,18 +23,28 @@ public class PostComment
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", nullable = false)
-    private UserEntity userEntity;
+    private User user;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="parent_id")
     private Post parent;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="post_id", nullable = false)
-    private Post post;
+    /*
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false)
+    @JoinColumn(name="post_id", referencedColumnName = "id", nullable = false, updatable = false)
+     */
 
+    @Column(name = "post_id")
+    private int postId;
 
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
 
     public int getId() {
         return id;
@@ -53,12 +63,12 @@ public class PostComment
         this.parent = parent;
     }
 
-    public UserEntity getUser() {
-        return userEntity;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getTime() {

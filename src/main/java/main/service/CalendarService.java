@@ -2,7 +2,7 @@ package main.service;
 
 import main.api.response.CalendarDto;
 import main.api.response.PostDateCountDto;
-import main.model.PostsRepository;
+import main.model.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

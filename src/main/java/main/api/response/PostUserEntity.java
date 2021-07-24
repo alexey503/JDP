@@ -1,7 +1,5 @@
 package main.api.response;
 
-import main.model.UserEntity;
-
 import javax.persistence.*;
 
 @Entity

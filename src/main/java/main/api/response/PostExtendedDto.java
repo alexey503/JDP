@@ -1,10 +1,8 @@
 package main.api.response;
 
-import main.model.PostComment;
-import main.model.PostVote;
-import main.model.Tag;
+import main.model.entities.PostComment;
 
-import javax.xml.stream.events.Comment;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostExtendedDto {
@@ -34,7 +32,11 @@ public class PostExtendedDto {
                 this.likeCount = likeCount;
                 this.dislikeCount = dislikeCount;
                 this.viewCount = viewCount;
-                this.comments = comments;
+                if(comments != null) {
+                        this.comments = comments;
+                }else{
+                        this.comments = new ArrayList<>();
+                }
                 this.tags = tags;
         }
 

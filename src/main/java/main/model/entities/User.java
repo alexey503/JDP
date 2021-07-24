@@ -1,4 +1,4 @@
-package main.model;
+package main.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="users")
-public class UserEntity
+public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

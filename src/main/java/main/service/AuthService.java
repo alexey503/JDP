@@ -3,10 +3,10 @@ package main.service;
 import com.github.cage.Cage;
 import com.github.cage.GCage;
 import main.api.response.AuthCheckResponse;
-import main.model.Captcha;
-import main.model.CaptchaRepository;
-import main.model.UserEntity;
-import main.model.UserRepository;
+import main.model.entities.Captcha;
+import main.model.repositories.CaptchaRepository;
+import main.model.entities.User;
+import main.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,7 @@ public class AuthService {
     }
 
     private boolean addUserToBase(String email, String name, String password) {
-        UserEntity newUser = new UserEntity();
+        User newUser = new User();
         newUser.setEmail(email);
         newUser.setName(name);
         newUser.setPassword(password);
@@ -96,7 +96,7 @@ public class AuthService {
     }
 
     private boolean isEmailExist(String email) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        Optional<User> userEntity = userRepository.findByEmail(email);
         System.out.println(userEntity.isPresent());
         return userEntity.isPresent();
     }

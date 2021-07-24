@@ -1,6 +1,7 @@
-package main.model;
+package main.model.entities;
 
 import main.api.response.PostUserEntity;
+import main.model.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Post {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "moderator_id", referencedColumnName = "id")
     @Where(clause = "is_moderator > 0")
-    private UserEntity moderator;
+    private User moderator;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
@@ -42,24 +43,56 @@ public class Post {
     @Column(name = "view_count", nullable = false)
     private int viewCount;
 
-    @ManyToMany
+    @OneToMany
     @JoinTable(name = "post_comments",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "id")})
     private List<PostComment> postComments;
 
-    @ManyToMany
+
+    @OneToMany
     @JoinTable(name = "post_votes",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "id")})
+
     private List<PostVote> postVotes;
 
     @ManyToMany
     @JoinTable(name = "tag2post",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
-
     private List<Tag> tags;
+
+
+    public Post() {
+    }
+
+    public Post(int id, byte isActive, ModerationStatus moderationStatus, User moderator, PostUserEntity user, Date time, String title, String text, int viewCount, List<PostComment> postComments, List<PostVote> postVotes, List<Tag> tags) {
+        this.id = id;
+        this.isActive = isActive;
+        this.moderationStatus = moderationStatus;
+        this.moderator = moderator;
+        this.user = user;
+        this.time = time;
+        this.title = title;
+        this.text = text;
+        this.viewCount = viewCount;
+        this.postComments = postComments;
+        this.postVotes = postVotes;
+        this.tags = tags;
+    }
+
+    public byte getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(byte isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setUser(PostUserEntity user) {
+        this.user = user;
+    }
 
     public List<Tag> getTags() {
         return tags;
@@ -113,11 +146,11 @@ public class Post {
         this.moderationStatus = moderationStatus;
     }
 
-    public UserEntity getModerator() {
+    public User getModerator() {
         return moderator;
     }
 
-    public void setModerator(UserEntity moderator) {
+    public void setModerator(User moderator) {
         this.moderator = moderator;
     }
 

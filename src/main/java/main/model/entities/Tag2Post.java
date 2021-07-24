@@ -1,4 +1,7 @@
-package main.model;
+package main.model.entities;
+
+import main.model.entities.Post;
+import main.model.entities.Tag;
 
 import javax.persistence.*;
 
