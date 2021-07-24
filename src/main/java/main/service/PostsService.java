@@ -37,10 +37,10 @@ public class PostsService {
         Sort sort;
         switch (mode){
             case ApiPostController.MODE_RECENT:
-                sort = Sort.by("time").ascending();
+                sort = Sort.by("time").descending();
                 break;
             case ApiPostController.MODE_EARLY:
-                sort = Sort.by("time").descending();
+                sort = Sort.by("time").ascending();
                 break;
             case ApiPostController.MODE_BEST://сортировать по убыванию количества лайков
                 sort = Sort.by("likesCount").descending();
