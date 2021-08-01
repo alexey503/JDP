@@ -1,12 +1,22 @@
 package main.controllers;
 
+import main.api.request.LoginRequest;
 import main.api.response.AuthCheckResponse;
+import main.api.response.LoginResponse;
+import main.api.response.UserLoginResponse;
+import main.model.repositories.UserRepository;
 import main.service.AuthService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -14,15 +24,27 @@ public class ApiAuthController {
 
     private final AuthService authService;
 
-    public ApiAuthController(AuthService authService) {
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+
+
+    @Autowired
+    public ApiAuthController(AuthService authService, AuthenticationManager authenticationManager, UserRepository userRepository) {
 
         this.authService = authService;
 
+        this.authenticationManager = authenticationManager;
+
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/api/auth/check")
-    public AuthCheckResponse authCheck() {
-        return authService.getAuthCheckResponse();
+    public ResponseEntity<LoginResponse>check(Principal principal){
+        if(principal == null){
+            return ResponseEntity.ok(new LoginResponse());
+        }
+
+        return ResponseEntity.ok(this.getLoginResponse(principal.getName()));
     }
 
     @GetMapping("/api/auth/captcha")
@@ -40,7 +62,41 @@ public class ApiAuthController {
             @RequestParam(name = "captcha") String captcha,
             @RequestParam(name = "captcha_secret") String captchaSecret) {
 
+
         return authService.addNewUser(email, password, name, captcha, captchaSecret);
 
+    }
+
+    @PostMapping("/api/auth/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
+        System.out.println("Login: " + loginRequest.getEmail() + " " + loginRequest.getPassword());
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+
+        System.out.println("Token name: " + usernamePasswordAuthenticationToken.getName());
+
+        Authentication auth = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        User user = (User) auth.getPrincipal();
+
+        return ResponseEntity.ok(this.getLoginResponse(user.getUsername()));
+    }
+
+    private LoginResponse getLoginResponse(String email){
+        main.model.entities.User currentUser = userRepository.findByEmail(email).orElseThrow(()->
+                new UsernameNotFoundException(email));
+
+        UserLoginResponse userLoginResponse = new UserLoginResponse();
+        userLoginResponse.setEmail(currentUser.getEmail());
+        userLoginResponse.setName(currentUser.getName());
+        userLoginResponse.setModeration(currentUser.getIsModerator() == 1 );
+        userLoginResponse.setId(currentUser.getId());
+
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setResult(true);
+        loginResponse.setUserLoginResponse(userLoginResponse);
+        return loginResponse;
     }
 }

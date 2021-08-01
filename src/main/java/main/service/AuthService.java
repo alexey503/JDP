@@ -97,7 +97,6 @@ public class AuthService {
 
     private boolean isEmailExist(String email) {
         Optional<User> userEntity = userRepository.findByEmail(email);
-        System.out.println(userEntity.isPresent());
         return userEntity.isPresent();
     }
 

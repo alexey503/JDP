@@ -2861,3 +2861,49 @@ databaseChangeLog:
               - column:
                   name: user_id
                   value: 4
+  - changeSet:
+      id: 24
+      author: tester
+      comment: "Create admin user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: name
+                  value: "moderator"
+              - column:
+                  name: password
+                  value: "$2y$12$91zkeKxW..FUzM6QRLNgXeMcLGCyySVbwxMNXUzoqtyNBKwocKC32"
+              - column:
+                  name: email
+                  value: "administrator@server.com"
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: now()
+  - changeSet:
+      id: 25
+      author: tester
+      comment: "Create admin user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: name
+                  value: "Simple User"
+              - column:
+                  name: password
+                  value: "$2y$12$N9jD6WhvleF2mDkai5RXTO8Qj6nK3/rWt88ZmKOI..Zom/ELHdTD2"
+              - column:
+                  name: email
+                  value: "useruser@server.com"
+              - column:
+                  name: is_moderator
+                  value: 0
+              - column:
+                  name: reg_time
+                  value: now()
