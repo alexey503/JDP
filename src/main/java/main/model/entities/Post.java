@@ -31,8 +31,8 @@ public class Post {
     @JoinColumn(nullable = false)
     private PostUserEntity user;
 
-    @Column(nullable = false)
-    private Date time;
+    @Column(name = "time", nullable = false)
+    private long time;
 
     @Column(nullable = false)
     private String title;
@@ -67,7 +67,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(int id, byte isActive, ModerationStatus moderationStatus, User moderator, PostUserEntity user, Date time, String title, String text, int viewCount, List<PostComment> postComments, List<PostVote> postVotes, List<Tag> tags) {
+    public Post(int id, byte isActive, ModerationStatus moderationStatus, User moderator, PostUserEntity user, long time, String title, String text, int viewCount, List<PostComment> postComments, List<PostVote> postVotes, List<Tag> tags) {
         this.id = id;
         this.isActive = isActive;
         this.moderationStatus = moderationStatus;
@@ -155,10 +155,10 @@ public class Post {
     }
 
     public long getTime() {
-        return time.getTime();
+        return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

@@ -16,7 +16,7 @@ public class PostComment
 
     @JsonProperty("timestamp")
     @Column(nullable = false)
-    private Date time;
+    private long time;
 
     @Column(nullable = false, length = 65535,columnDefinition="Text")
     private String text;
@@ -72,10 +72,10 @@ public class PostComment
     }
 
     public long getTime() {
-        return time.getTime()/1000;
+        return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

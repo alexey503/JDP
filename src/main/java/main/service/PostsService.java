@@ -34,27 +34,26 @@ public class PostsService {
 
     public ResponseEntity getPostResponse(int offset, int limit, String mode) {
 
-        Sort sort;
         switch (mode){
             case ApiPostController.MODE_RECENT:
-                sort = Sort.by("time").descending();
-                break;
+                return ResponseEntity.ok(new PostResponse(
+                        repository.findPostsPage(PageRequest.of(offset / limit, limit,
+                                Sort.by("time").descending()))));
             case ApiPostController.MODE_EARLY:
-                sort = Sort.by("time").ascending();
-                break;
+                return ResponseEntity.ok(new PostResponse(
+                        repository.findPostsPage(PageRequest.of(offset / limit, limit,
+                                Sort.by("time").ascending()))));
             case ApiPostController.MODE_BEST://сортировать по убыванию количества лайков
-                sort = Sort.by("likesCount").descending();
-                break;
+                //sort = Sort.by("likesCount").descending();
+                return ResponseEntity.ok(new PostResponse(
+                        repository.findPostsPageSortedByLikesCount(PageRequest.of(offset / limit, limit))));
             case ApiPostController.MODE_POPULAR://сортировать по убыванию количества комментариев
-                sort = Sort.by("commentsCount").descending();
-                break;
+                return ResponseEntity.ok(new PostResponse(
+                        repository.findPostsPageSortedByCommentsCount(PageRequest.of(offset / limit, limit))));
 
             default:
                 return ResponseEntity.badRequest().body("Error mode not found");
         }
-
-        return ResponseEntity.ok(new PostResponse(
-                repository.findPostsDto(PageRequest.of(offset / limit, limit, sort))));
     }
 
     public static String getAnnounce(String text) {
@@ -80,6 +79,7 @@ public class PostsService {
     public PostResponse getPostSearchByDate(int offset, int limit, String dateString) {
         Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
+        System.out.println(dateString);
         Calendar calendar = new GregorianCalendar();
         try {
             calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dateString));
@@ -115,7 +115,7 @@ public class PostsService {
         for (Post post : postPage) {
             PostDto postDto = new PostDto(post.getId(),
                     post.getUser(),
-                    post.getTime() / 1000,
+                    post.getTime(),
                     post.getTitle(),
                     getAnnounce(post.getText()),
                     post.getViewCount(),
@@ -152,7 +152,7 @@ public class PostsService {
 
         return new PostExtendedDto(
                 post.getId(),
-                post.getTime() / 1000,
+                post.getTime(),
                 post.isActive() == 1,
                 post.getUser(),
                 post.getTitle(),

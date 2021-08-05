@@ -47,7 +47,7 @@ public class PostDto {
         public PostDto(Post post, long likes, long commentsCount) {
                 this.id = post.getId();
                 this.user = post.getUser();
-                this.timestamp = post.getTime() / 1000;
+                this.timestamp = post.getTime();
                 this.title = post.getTitle();
                 this.announce = Jsoup.parse(post.getText()).text();
                 //this.announce = PostsService.getAnnounce(post.getText());

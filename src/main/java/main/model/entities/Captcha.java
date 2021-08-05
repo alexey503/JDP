@@ -12,7 +12,7 @@ public class Captcha
     private int id;
 
     @Column(nullable = false)
-    private Date time;
+    private long time;
 
     @Column(nullable = false, columnDefinition = "TINYTEXT")
     private String code;
@@ -28,11 +28,11 @@ public class Captcha
         this.id = id;
     }
 
-    public Date getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

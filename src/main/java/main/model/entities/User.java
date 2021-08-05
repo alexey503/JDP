@@ -19,7 +19,7 @@ public class User
 
     @JsonIgnore
     @Column(nullable = false)
-    private Date reg_time;
+    private long reg_time;
 
     @Column(nullable = false)
     private String name;
@@ -54,11 +54,11 @@ public class User
         isModerator = moderator;
     }
 
-    public Date getReg_time() {
+    public long getReg_time() {
         return reg_time;
     }
 
-    public void setReg_time(Date reg_time) {
+    public void setReg_time(long reg_time) {
         this.reg_time = reg_time;
     }
 
