@@ -1,7 +1,10 @@
 package main.api.response;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name="users")
 public class PostUserEntity {
@@ -13,19 +16,4 @@ public class PostUserEntity {
     @Column(nullable = false)
     private String name;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-            return this.id;
-    }
-
-    public String getName() {
-            return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

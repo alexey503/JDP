@@ -6,6 +6,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
+
+    USER,
+    MODERATOR;
+
+    /*
     USER(Set.of(Permission.USER)),
     MODERATOR(Set.of(Permission.USER, Permission.MODERATE));
 
@@ -18,7 +23,7 @@ public enum Role {
     public Set<Permission> getPermissions() {
         return permissions;
     }
-/*
+
     public Set<SimpleGrantedAuthority> getAuthorities(){
         return permissions.stream().map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
                 .collect(Collectors.toSet());

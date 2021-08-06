@@ -153,7 +153,7 @@ public class PostsService {
         return new PostExtendedDto(
                 post.getId(),
                 post.getTime(),
-                post.isActive() == 1,
+                post.getIsActive() == 1,
                 post.getUser(),
                 post.getTitle(),
                 post.getText(),
