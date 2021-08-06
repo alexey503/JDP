@@ -276,7 +276,7 @@ databaseChangeLog:
             constraints:
               nullable: false
             name: reg_time
-            type: datetime
+            type: BIGINT
         tableName: users
 - changeSet:
     id: 1620225015440-10

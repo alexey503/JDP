@@ -6,18 +6,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InitResponse {
-    @Value("${BlogEngine.title}")
+    @Value("${blogNew.title}")
     private String title;
-    @Value("${BlogEngine.subtitle}")
+    @Value("${blogNew.subtitle}")
     private String subtitle;
-    @Value("${BlogEngine.phone}")
+    @Value("${blogNew.phone}")
     private String phone;
-    @Value("${BlogEngine.email}")
+    @Value("${blogNew.email}")
     @JsonProperty("email")
     private String email;
-    @Value("${BlogEngine.copyright}")
+    @Value("${blogNew.copyright}")
     private String copyright;
-    @Value("${BlogEngine.copyrightFrom}")
+    @Value("${blogNew.copyrightFrom}")
     private String copyrightFrom;
 
     public String getTitle() {

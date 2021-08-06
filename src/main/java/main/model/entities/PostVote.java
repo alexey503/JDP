@@ -20,7 +20,7 @@ public class PostVote
     private Post post;
 
     @Column(nullable = false)
-    private Date time;
+    private long time;
 
     @Column(nullable = false)
     private byte value;
@@ -49,11 +49,11 @@ public class PostVote
         this.post = post;
     }
 
-    public Date getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

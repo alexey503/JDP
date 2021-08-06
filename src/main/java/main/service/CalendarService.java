@@ -22,8 +22,8 @@ public class CalendarService {
         result.setPosts(
                 dateAndPostCount.stream()
                         .map(s -> {
-                            String[] str = s.split(",");
-                            return new PostDateCountDto(str[0], str[1]);
+                            String[] str = s.split("[, ]");
+                            return new PostDateCountDto(str[0], str[2]);
                         })
 
                         .collect(
@@ -31,6 +31,7 @@ public class CalendarService {
                                         date -> date.getDate(),
                                         count -> Integer.parseInt(count.getCount()))
                         )
+
         );
         result.setYears(repository.findAllYearPublications());
 

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 @Service
 public class AuthService {
 
-    @Value("${BlogEngine.killCaptureTimeout}")
+    @Value("${blogNew.killCaptureTimeout}")
     private long killCaptureTimeout;
 
     @Autowired
@@ -72,7 +72,7 @@ public class AuthService {
         newUser.setEmail(email);
         newUser.setName(name);
         newUser.setPassword(password);
-        newUser.setReg_time(new Date());
+        newUser.setReg_time(new Date().getTime());
 
         this.userRepository.save(newUser);
         return true;
@@ -119,7 +119,7 @@ public class AuthService {
         Captcha captchaEntity = new Captcha();
         captchaEntity.setSecretCode(secreteCodeKey);
         captchaEntity.setCode(text);
-        captchaEntity.setTime(new Date());
+        captchaEntity.setTime(new Date().getTime());
 
         captchaRepository.save(captchaEntity);
 

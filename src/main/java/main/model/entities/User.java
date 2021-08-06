@@ -22,7 +22,7 @@ public class User
 
     @JsonIgnore
     @Column(nullable = false)
-    private Date reg_time;
+    private long reg_time;
 
     @Column(nullable = false)
     private String name;

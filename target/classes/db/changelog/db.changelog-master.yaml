@@ -26,7 +26,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: time
-                  type: datetime
+                  type: BIGINT
             tableName: captcha_codes
   - changeSet:
       id: 1620225015440-2
@@ -89,7 +89,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: time
-                  type: datetime
+                  type: BIGINT
               - column:
                   name: parent_id
                   type: INT
@@ -121,7 +121,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: time
-                  type: datetime
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
@@ -170,7 +170,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: time
-                  type: datetime
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
@@ -276,7 +276,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: reg_time
-                  type: datetime
+                  type: BIGINT
             tableName: users
   - changeSet:
       id: 1620225015440-10
@@ -525,7 +525,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: reg_time
-                  value: now()
+                  value: 1627817720
       rollback:
         - delete:
             tableName: users
@@ -555,7 +555,7 @@ databaseChangeLog:
                   value: "AlexeyCode"
               - column:
                   name: reg_time
-                  value: now()
+                  value: 1627817720
         - insert:
             tableName: users
             columns:
@@ -576,7 +576,7 @@ databaseChangeLog:
                   value: "Code"
               - column:
                   name: reg_time
-                  value: now()
+                  value: 1627817720
         - insert:
             tableName: users
             columns:
@@ -594,7 +594,7 @@ databaseChangeLog:
                   value: 0
               - column:
                   name: reg_time
-                  value: now()
+                  value: 1627817720
       rollback:
         - delete:
             tableName: users
@@ -666,7 +666,7 @@ databaseChangeLog:
                   value: "Today a good weather"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "About weather"
@@ -690,7 +690,7 @@ databaseChangeLog:
                   value: "How to go for looking a job?"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "About looking for job"
@@ -714,7 +714,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -729,7 +729,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -753,7 +753,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Comment 0"
@@ -777,7 +777,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: code
                   value: "1234"
@@ -789,7 +789,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: code
                   value: "5678"
@@ -886,6 +886,7 @@ databaseChangeLog:
       id: 14
       author: superuser
       comment: "Create 20 posts "
+
       changes:
         - insert:
             tableName: posts
@@ -901,7 +902,7 @@ databaseChangeLog:
                   value: "Post 1"
               - column:
                   name: time
-                  value: now()
+                  value: 1623244648
               - column:
                   name: title
                   value: "Post 1 title"
@@ -925,7 +926,7 @@ databaseChangeLog:
                   value: "Post 2"
               - column:
                   name: time
-                  value: now()
+                  value: 1565000769
               - column:
                   name: title
                   value: "Post 2 title"
@@ -949,7 +950,7 @@ databaseChangeLog:
                   value: "Post 3"
               - column:
                   name: time
-                  value: now()
+                  value: 1565000769
               - column:
                   name: title
                   value: "Post 3 title"
@@ -973,7 +974,7 @@ databaseChangeLog:
                   value: "Post 4"
               - column:
                   name: time
-                  value: now()
+                  value: 1596623169
               - column:
                   name: title
                   value: "Post 4 title"
@@ -997,7 +998,7 @@ databaseChangeLog:
                   value: "Post 5"
               - column:
                   name: time
-                  value: now()
+                  value: 1596623169
               - column:
                   name: title
                   value: "Post 5 title"
@@ -1021,7 +1022,7 @@ databaseChangeLog:
                   value: "Post 6"
               - column:
                   name: time
-                  value: now()
+                  value: 1627194248
               - column:
                   name: title
                   value: "Post 6 title"
@@ -1045,7 +1046,7 @@ databaseChangeLog:
                   value: "Post 7"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 7 title"
@@ -1069,7 +1070,7 @@ databaseChangeLog:
                   value: "Post 8"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 8 title"
@@ -1093,7 +1094,7 @@ databaseChangeLog:
                   value: "Post 9"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 9 title"
@@ -1117,7 +1118,7 @@ databaseChangeLog:
                   value: "Post 10"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 10 title"
@@ -1141,7 +1142,7 @@ databaseChangeLog:
                   value: "Post 11"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 11 title"
@@ -1165,7 +1166,7 @@ databaseChangeLog:
                   value: "Post 12"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 12 title"
@@ -1189,7 +1190,7 @@ databaseChangeLog:
                   value: "Post 13"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 13 title"
@@ -1213,7 +1214,7 @@ databaseChangeLog:
                   value: "Post 14"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 14 title"
@@ -1237,7 +1238,7 @@ databaseChangeLog:
                   value: "Post 15"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 15 title"
@@ -1261,7 +1262,7 @@ databaseChangeLog:
                   value: "Post 16"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 16 title"
@@ -1285,7 +1286,7 @@ databaseChangeLog:
                   value: "Post 17"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 17 title"
@@ -1309,7 +1310,7 @@ databaseChangeLog:
                   value: "Post 18"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 18 title"
@@ -1333,7 +1334,7 @@ databaseChangeLog:
                   value: "Post 19"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 19 title"
@@ -1357,7 +1358,7 @@ databaseChangeLog:
                   value: "Post 20"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 20 title"
@@ -1381,7 +1382,7 @@ databaseChangeLog:
                   value: "Post 21"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 21 title"
@@ -1752,7 +1753,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Post Comment 1"
@@ -1767,7 +1768,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Post Comment 2"
@@ -1782,7 +1783,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Post Comment 3"
@@ -1807,7 +1808,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Post Comment 4-1"
@@ -1822,7 +1823,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Post Comment 4-2"
@@ -1837,7 +1838,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Post Comment 4-3"
@@ -1862,7 +1863,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -1877,7 +1878,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -1892,7 +1893,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -1907,7 +1908,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -1937,7 +1938,7 @@ databaseChangeLog:
                   value: "Будучи <tag1>преподавателем на курсе «Full-stack Web-development», <tag2>я работал <tag3> <tag4>со многими программистами-новичками. Хорошая новость в том, что мне редко встречались студенты, End"
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: title
                   value: "Post 1 title"
@@ -2062,7 +2063,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2077,7 +2078,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2092,7 +2093,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2107,7 +2108,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2122,7 +2123,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2137,7 +2138,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2152,7 +2153,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2167,7 +2168,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2182,7 +2183,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2197,7 +2198,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2212,7 +2213,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2227,7 +2228,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2242,7 +2243,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2257,7 +2258,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2272,7 +2273,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2287,7 +2288,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2302,7 +2303,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2317,7 +2318,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2332,7 +2333,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2347,7 +2348,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2362,7 +2363,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2377,7 +2378,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2392,7 +2393,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2407,7 +2408,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2422,7 +2423,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2437,7 +2438,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2452,7 +2453,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2467,7 +2468,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2482,7 +2483,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2497,7 +2498,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2512,7 +2513,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2527,7 +2528,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2542,7 +2543,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2557,7 +2558,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2572,7 +2573,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2587,7 +2588,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2602,7 +2603,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2617,7 +2618,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2632,7 +2633,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2647,7 +2648,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2662,7 +2663,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2677,7 +2678,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2692,7 +2693,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2707,7 +2708,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2722,7 +2723,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: 1
@@ -2737,7 +2738,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2752,7 +2753,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2767,7 +2768,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2782,7 +2783,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: value
                   value: -1
@@ -2803,7 +2804,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: parent_id
                   value: 5
@@ -2821,7 +2822,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Комментарий от 24 июля на 7 пост"
@@ -2836,7 +2837,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Комментарий от 24 июля на 6 post"
@@ -2851,7 +2852,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: time
-                  value: now()
+                  value: 1627817720
               - column:
                   name: text
                   value: "Комментарий от 24 июля на 6 пост"
