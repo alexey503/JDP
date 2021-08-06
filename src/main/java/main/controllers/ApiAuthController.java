@@ -1,19 +1,11 @@
 package main.controllers;
 
-import main.api.request.LoginRequest;
-import main.api.response.AuthCheckResponse;
+
 import main.api.response.LoginResponse;
-import main.api.response.UserLoginResponse;
 import main.model.repositories.UserRepository;
 import main.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -24,29 +16,30 @@ public class ApiAuthController {
 
     private final AuthService authService;
 
-    private final AuthenticationManager authenticationManager;
+    //private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
 
     @Autowired
-    public ApiAuthController(AuthService authService, AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public ApiAuthController(AuthService authService, /*AuthenticationManager authenticationManager, */UserRepository userRepository) {
 
         this.authService = authService;
 
-        this.authenticationManager = authenticationManager;
+        //this.authenticationManager = authenticationManager;
 
         this.userRepository = userRepository;
     }
-
+/*
     @GetMapping("/api/auth/check")
     public ResponseEntity<LoginResponse>check(Principal principal){
         if(principal == null){
             return ResponseEntity.ok(new LoginResponse());
         }
 
-        return ResponseEntity.ok(this.getLoginResponse(principal.getName()));
+        //return ResponseEntity.ok(this.getLoginResponse(principal.getName()));
+        return ResponseEntity.ok(new LoginResponse());
     }
-
+*/
     @GetMapping("/api/auth/captcha")
     public Map<String, String> getCapture() {
 
@@ -66,7 +59,7 @@ public class ApiAuthController {
         return authService.addNewUser(email, password, name, captcha, captchaSecret);
 
     }
-
+/*
     @PostMapping("/api/auth/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
         System.out.println("Login: " + loginRequest.getEmail() + " " + loginRequest.getPassword());
@@ -99,4 +92,7 @@ public class ApiAuthController {
         loginResponse.setUserLoginResponse(userLoginResponse);
         return loginResponse;
     }
+
+
+ */
 }

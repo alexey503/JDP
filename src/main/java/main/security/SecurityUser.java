@@ -1,5 +1,5 @@
 package main.security;
-
+/*
 import lombok.Data;
 import main.model.entities.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,6 +53,7 @@ public class SecurityUser implements UserDetails {
         return true;
     }
 
+    /*
     public static UserDetails fromUser(User user){
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
@@ -60,4 +61,7 @@ public class SecurityUser implements UserDetails {
                 true, true, true, true,
                 user.getRole().getAuthorities() );
     }
+
 }
+
+ */
