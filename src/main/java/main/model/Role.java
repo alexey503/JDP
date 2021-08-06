@@ -2,15 +2,14 @@ package main.model;
 
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
 
-    USER,
-    MODERATOR;
 
-    /*
     USER(Set.of(Permission.USER)),
     MODERATOR(Set.of(Permission.USER, Permission.MODERATE));
 
@@ -25,9 +24,10 @@ public enum Role {
     }
 
     public Set<SimpleGrantedAuthority> getAuthorities(){
-        return permissions.stream().map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+        return permissions.stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
                 .collect(Collectors.toSet());
     }
 
- */
+
 }

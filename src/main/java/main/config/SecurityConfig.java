@@ -1,9 +1,11 @@
 package main.config;
 
+import main.model.Permission;
 import main.model.Role;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,11 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() // antihacking disabled!
                 .authorizeRequests()
                 .antMatchers("/", "/api/init").permitAll()
-                .antMatchers("/api/post").hasAnyRole(
-                        Role.USER.toString(),
-                        Role.MODERATOR.toString())
-                .antMatchers("/api/post/search*").hasAnyRole(
-                        Role.MODERATOR.toString())
+                .antMatchers(HttpMethod.GET, "/api/post")
+                    .hasAuthority(Permission.USER.getPermission())
+                .antMatchers(HttpMethod.GET, "/api/post/search*")
+                    .hasAuthority(Permission.MODERATE.getPermission())
                 .anyRequest() // any req locked
                 .authenticated()
                 .and()
@@ -42,10 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     protected UserDetailsService userDetailsService(){
 
-        return new InMemoryUserDetailsManager(User.builder().username("user")
-                .password(passwordEncoder().encode("user")).roles(Role.USER.toString()).build(),
+        return new InMemoryUserDetailsManager(
+                User.builder().username("user")
+                        .password(passwordEncoder().encode("user"))
+                        .authorities(Role.USER.getAuthorities())
+                        .build(),
                 User.builder().username("moderator")
-                        .password(passwordEncoder().encode("moderator")).roles(Role.MODERATOR.toString()).build()
+                        .password(passwordEncoder().encode("moderator"))
+                        .authorities(Role.MODERATOR.getAuthorities())
+                        .build()
         );
     }
 /*
