@@ -1,44 +1,50 @@
 package main.config;
 
-import main.model.Permission;
-import main.model.Role;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    public SecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable() // antihacking disabled!
                 .authorizeRequests()
-                .antMatchers("/", "/api/init").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/post")
-                    .hasAuthority(Permission.USER.getPermission())
-                .antMatchers(HttpMethod.GET, "/api/post/search*")
-                    .hasAuthority(Permission.MODERATE.getPermission())
+                .antMatchers("/**").permitAll()
+                //.antMatchers(HttpMethod.GET, "/api/post").hasAuthority(Permission.USER.getPermission())
+                //.antMatchers(HttpMethod.GET, "/api/post/search*").hasAuthority(Permission.MODERATE.getPermission())
                 .anyRequest() // any req locked
                 .authenticated()
                 .and()
-                .formLogin().permitAll() //form login permitted all. Now its default form spring security
-                .and()
+                //.formLogin().permitAll() //form login permitted all. Now its default form spring security
+                .formLogin().disable()
                 .httpBasic()// base auth work too
         ;
 
     }
 
+    /*
     //Метод входит в контекст спринга и при обращении будет вызван именно он, а не какой-то дефолтный
     @Bean
     protected UserDetailsService userDetailsService(){
@@ -54,15 +60,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .build()
         );
     }
-/*
+
+     */
+
     @Bean
     protected DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         return daoAuthenticationProvider;
     }
-*/
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(12);

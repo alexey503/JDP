@@ -5,6 +5,7 @@ import main.api.response.PostResponse;
 import main.service.PostsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +27,7 @@ public class ApiPostController {
 
 
     @GetMapping("/api/post")
-    //@PreAuthorize("hasAuthority('user:write')")
+    @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity getPost(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
@@ -36,7 +37,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/api/post/search")
-    //@PreAuthorize("hasAuthority('user:moderate')")
+    @PreAuthorize("hasAuthority('user:moderate')")
     public ResponseEntity postSearchByStringQuery(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
