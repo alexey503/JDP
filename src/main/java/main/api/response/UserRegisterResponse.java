@@ -1,7 +1,10 @@
 package main.api.response;
 
+import lombok.Data;
+
 import java.util.Map;
 
+@Data
 public class UserRegisterResponse {
     private boolean result;
     private Map<String, String> errors;
@@ -11,19 +14,4 @@ public class UserRegisterResponse {
         this.errors = errors;
     }
 
-    public boolean isResult() {
-        return result;
-    }
-
-    public void setResult(boolean result) {
-        this.result = result;
-    }
-
-    public Map<String, String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(Map<String, String> errors) {
-        this.errors = errors;
-    }
 }

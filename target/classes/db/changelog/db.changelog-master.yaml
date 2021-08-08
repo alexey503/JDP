@@ -513,13 +513,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: "admin"
+                  value: "administrator"
               - column:
                   name: password
-                  value: "admin"
+                  value: "$2a$12$mxwF9DXFPPWPQ1OpwSPA/.H2Kaz2Lg/Y.zeaQejvnTsID6TM0rnIi"
               - column:
                   name: email
-                  value: "admin@server.com"
+                  value: "moderator@server.com"
               - column:
                   name: is_moderator
                   value: 1
@@ -529,7 +529,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: users
-            where: name in ('admin')
+            where: name in ('administrator')
   - changeSet:
       id: 4
       author: superuser
@@ -543,7 +543,7 @@ databaseChangeLog:
                   value: "Alexey"
               - column:
                   name: password
-                  value: "AlexeyPassword"
+                  value: "$2a$12$dXkoHKsJeQlVE/cvx5BPtumzKsmTMojNYwsK7.r3XSBo9S7DLC9OS"
               - column:
                   name: email
                   value: "alexey@server.com"
@@ -561,13 +561,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: "Ivan Ivanovich"
+                  value: "user"
               - column:
                   name: password
-                  value: "Password"
+                  value: "$2a$12$EagU6Po5Pr6sGaNKAvLyvOiBju0ex7Q4oRiGC2ubZlEk8/h1D3cGO"
               - column:
                   name: email
-                  value: "ii@server.com"
+                  value: "user@server.com"
               - column:
                   name: is_moderator
                   value: 0
@@ -585,7 +585,7 @@ databaseChangeLog:
                   value: "guest"
               - column:
                   name: password
-                  value: ""
+                  value: "$2a$12$BjkOjP.v5wAUUbnbLDNHY.db9VzXq/h7SpXr.3SFTc79zwg8R4ptW"
               - column:
                   name: email
                   value: "guest@server.com"
@@ -598,7 +598,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: users
-            where: name in ('Alexey', 'guest', 'Ivan Ivanovich')
+            where: name in ('Alexey', 'user', 'guest')
 
   - changeSet:
       id: 5
@@ -675,7 +675,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 1
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -699,7 +699,7 @@ databaseChangeLog:
                   value: 0
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
       rollback:
         - delete:
             tableName: posts
@@ -911,7 +911,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -935,7 +935,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -944,7 +944,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: moderation_status
-                  value: "ACCEPTED"
+                  value: "DECLINED"
               - column:
                   name: text
                   value: "Post 3"
@@ -959,7 +959,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -2862,3 +2862,49 @@ databaseChangeLog:
               - column:
                   name: user_id
                   value: 4
+  - changeSet:
+      id: 24
+      author: tester
+      comment: "Create admin user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: name
+                  value: "moderator"
+              - column:
+                  name: password
+                  value: "$2y$12$91zkeKxW..FUzM6QRLNgXeMcLGCyySVbwxMNXUzoqtyNBKwocKC32"
+              - column:
+                  name: email
+                  value: "administrator@server.com"
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: now()
+  - changeSet:
+      id: 25
+      author: tester
+      comment: "Create admin user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: name
+                  value: "Simple User"
+              - column:
+                  name: password
+                  value: "$2y$12$N9jD6WhvleF2mDkai5RXTO8Qj6nK3/rWt88ZmKOI..Zom/ELHdTD2"
+              - column:
+                  name: email
+                  value: "useruser@server.com"
+              - column:
+                  name: is_moderator
+                  value: 0
+              - column:
+                  name: reg_time
+                  value: now()

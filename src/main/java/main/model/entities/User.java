@@ -1,12 +1,15 @@
 package main.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import main.model.Role;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name="users")
+@Data
 public class User
 {
     @Id
@@ -38,67 +41,8 @@ public class User
     @Column(length = 65535,columnDefinition="Text")
     private String photo;
 
-    public int getId() {
-        return id;
+    public Role getRole(){
+        return isModerator == 1 ? Role.MODERATOR : Role.USER;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public byte isModerator() {
-        return isModerator;
-    }
-
-    public void setModerator(byte moderator) {
-        isModerator = moderator;
-    }
-
-    public long getReg_time() {
-        return reg_time;
-    }
-
-    public void setReg_time(long reg_time) {
-        this.reg_time = reg_time;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
 }

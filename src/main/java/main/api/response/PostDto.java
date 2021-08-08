@@ -1,5 +1,6 @@
 package main.api.response;
 
+import lombok.Data;
 import main.model.entities.Post;
 import main.model.entities.PostVote;
 import main.service.PostsService;
@@ -7,6 +8,7 @@ import org.jsoup.Jsoup;
 
 import java.util.List;
 
+@Data
 public class PostDto {
 
         private int id;
@@ -63,77 +65,4 @@ public class PostDto {
                         }
                 }
         }
-
-        public int getId() {
-                return id;
-        }
-
-        public void setId(int id) {
-                this.id = id;
-        }
-
-        public PostUserEntity getUser() {
-                return user;
-        }
-
-        public void setUser(PostUserEntity user) {
-                this.user = user;
-        }
-
-        public long getTimestamp() {
-                return timestamp;
-        }
-
-        public void setTimestamp(long timestamp) {
-                this.timestamp = timestamp;
-        }
-
-        public String getTitle() {
-                return title;
-        }
-
-        public void setTitle(String title) {
-                this.title = title;
-        }
-
-        public String getAnnounce() {
-                return announce;
-        }
-
-        public void setAnnounce(String announce) {
-                this.announce = announce;
-        }
-
-        public int getViewCount() {
-                return viewCount;
-        }
-
-        public void setViewCount(int viewCount) {
-                this.viewCount = viewCount;
-        }
-
-        public long getCommentCount() {
-                return commentCount;
-        }
-
-        public void setCommentCount(long commentCount) {
-                this.commentCount = commentCount;
-        }
-
-        public long getLikeCount() {
-                return likeCount;
-        }
-
-        public void setLikeCount(long likeCount) {
-                this.likeCount = likeCount;
-        }
-
-        public long getDislikeCount() {
-                return dislikeCount;
-        }
-
-        public void setDislikeCount(long dislikeCount) {
-                this.dislikeCount = dislikeCount;
-        }
-
 }

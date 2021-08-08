@@ -2,13 +2,14 @@ package main.model.repositories;
 
 import main.api.response.PostDto;
 import main.model.entities.Post;
+import main.model.entities.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +19,7 @@ public interface PostsRepository
 
 	@Query("SELECT p " +
 			"FROM Post p " +
-			//"LEFT JOIN PostComment c ON p.id = :id " +
 			"WHERE " +
-			//"	p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= UNIX_TIMESTAMP() AND " +
 			"	p.id = :id " +
 			"GROUP BY p.id"
 	)
@@ -28,27 +27,11 @@ public interface PostsRepository
 
 	@Query("SELECT p.time " +
 			"FROM Post p " +
-			//"LEFT JOIN PostComment c ON p.id = :id " +
 			"WHERE " +
-			//"	p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= UNIX_TIMESTAMP() AND " +
 			"	p.id = :id "
-			//"GROUP BY p.id"
 	)
 	long findTimeById(Integer id);
-/*
-	@Query("SELECT new main.api.response.PostDto(" +
-			"        p, " +
-//			"		 SUM(CASE WHEN v.value = 1 THEN 1 ELSE 0 END) AS likesCount, " +
-			"		 COUNT(DISTINCT v.id) AS likesCount, " +
-			"		 COUNT(DISTINCT c.id) AS commentsCount " +
-			"    ) " +
-			"FROM Post p " +
-			"LEFT JOIN PostVote v ON p.id = v.post AND v.value = 1 " +
-			"LEFT JOIN PostComment c ON p.id = c.postId " +
-			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= CURRENT_DATE() " +
-			"GROUP BY p.id")
-	Page<PostDto> findPostsDto(Pageable pageable);
-	*/
+
 	@Query("SELECT p " +
 			"FROM Post p " +
 			"LEFT JOIN PostVote v ON p.id = v.post AND v.value = 1 " +
@@ -121,4 +104,37 @@ public interface PostsRepository
 			"ORDER BY p.time DESC")
 	Page<Post> postSearchByTag(String tag, Pageable pageable);
 
+
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"LEFT JOIN User u ON u.email = :userName " +
+			"WHERE p.isActive = 0 " +
+			"	AND u = p.user"
+	)
+    Page<Post> findMyPostsInactive(Pageable pageable, String userName);
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"LEFT JOIN User u ON u.email = :userName " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'NEW' " +
+			"	AND u = p.user"
+	)
+	Page<Post> findMyPostsPending(Pageable pageable, String userName);
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"LEFT JOIN User u ON u.email = :userName " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'DECLINED' " +
+			"	AND u = p.user"
+	)
+	Page<Post> findMyPostsDeclined(Pageable pageable, String userName);
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"LEFT JOIN User u ON u.email = :userName " +
+			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' " +
+			"	AND u = p.user"
+	)
+	Page<Post> findMyPostsPublished(Pageable pageable, String userName);
 }

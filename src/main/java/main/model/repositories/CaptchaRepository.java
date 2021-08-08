@@ -18,6 +18,6 @@ public interface CaptchaRepository extends CrudRepository<Captcha, Integer> {
     @Transactional
     @Modifying
     @Query("DELETE FROM Captcha c WHERE c.time < :time")
-    void deleteByTimeBefore(Date time);
+    void deleteByTimeBefore(long time);
 }
 

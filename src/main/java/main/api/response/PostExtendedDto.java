@@ -1,10 +1,12 @@
 package main.api.response;
 
+import lombok.Data;
 import main.model.entities.PostComment;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class PostExtendedDto {
 
         private int id;
@@ -37,94 +39,6 @@ public class PostExtendedDto {
                 }else{
                         this.comments = new ArrayList<>();
                 }
-                this.tags = tags;
-        }
-
-        public int getId() {
-                return id;
-        }
-
-        public void setId(int id) {
-                this.id = id;
-        }
-
-        public long getTimestamp() {
-                return timestamp;
-        }
-
-        public void setTimestamp(long timestamp) {
-                this.timestamp = timestamp;
-        }
-
-        public boolean isActive() {
-                return active;
-        }
-
-        public void setActive(boolean active) {
-                this.active = active;
-        }
-
-        public PostUserEntity getUser() {
-                return user;
-        }
-
-        public void setUser(PostUserEntity user) {
-                this.user = user;
-        }
-
-        public String getTitle() {
-                return title;
-        }
-
-        public void setTitle(String title) {
-                this.title = title;
-        }
-
-        public String getText() {
-                return text;
-        }
-
-        public void setText(String text) {
-                this.text = text;
-        }
-
-        public int getLikeCount() {
-                return likeCount;
-        }
-
-        public void setLikeCount(int likeCount) {
-                this.likeCount = likeCount;
-        }
-
-        public int getDislikeCount() {
-                return dislikeCount;
-        }
-
-        public void setDislikeCount(int dislikeCount) {
-                this.dislikeCount = dislikeCount;
-        }
-
-        public int getViewCount() {
-                return viewCount;
-        }
-
-        public void setViewCount(int viewCount) {
-                this.viewCount = viewCount;
-        }
-
-        public List<PostComment> getComments() {
-                return comments;
-        }
-
-        public void setComments(List<PostComment> comments) {
-                this.comments = comments;
-        }
-
-        public List<String> getTags() {
-                return tags;
-        }
-
-        public void setTags(List<String> tags) {
                 this.tags = tags;
         }
 }

@@ -1,11 +1,13 @@
 package main.api.response;
 
+import lombok.Data;
 import main.model.entities.Post;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class PostResponse {
     private long count;
     private List<PostDto> posts;
@@ -24,21 +26,9 @@ public class PostResponse {
     }
 
     public PostResponse() {
+        count = 0;
+        posts = new ArrayList<>();
     }
-
-    public List<PostDto> getPosts() { return posts; }
-    public void setPosts(List<PostDto> posts) {
-        this.posts = posts;
-    }
-
-    public long getCount() {
-        return count;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
-    }
-
 }
 
 

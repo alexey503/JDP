@@ -1,10 +1,12 @@
 package main.model.entities;
 
+import lombok.Data;
 import main.model.entities.Post;
 import main.model.entities.Tag;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name="tag2post")
 public class Tag2Post {
@@ -20,27 +22,4 @@ public class Tag2Post {
     @JoinColumn(name="tag_id", nullable = false)
     private Tag tag;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public Tag getTag() {
-        return tag;
-    }
-
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
 }
