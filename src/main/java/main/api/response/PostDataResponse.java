@@ -12,11 +12,16 @@ public class PostDataResponse {
     public static final String ERR_TYPE_NAME = "name";
     public static final String ERR_TYPE_PASSWORD = "password";
     public static final String ERR_TYPE_CAPTCHA = "captcha";
+    public static final String ERR_TYPE_TITLE = "title";
+    public static final String ERR_TYPE_TEXT = "text";
 
     public static final String ERROR_EMAIL_ENGAGED = "Этот e-mail уже зарегистрирован";
     public static final String ERROR_WRONG_NAME = "Имя указано неверно";
     public static final String ERROR_SHORT_PASSWORD = "Пароль короче 6-ти символов";
     public static final String ERROR_WRONG_CAPTURE = "Код с картинки введён неверно";
+
+    public static final String ERROR_SHORT_TITLE = "Заголовок должен содержать 3 и более символа";
+    public static final String ERROR_SHORT_TEXT = "Текст публикации должен быть более 50 символов";
 
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

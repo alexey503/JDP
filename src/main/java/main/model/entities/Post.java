@@ -29,7 +29,7 @@ public class Post {
     @Where(clause = "is_moderator > 0")
     private User moderator;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(nullable = false)
     private PostUserEntity user;
 

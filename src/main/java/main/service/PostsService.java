@@ -179,4 +179,8 @@ public class PostsService {
                 return new PostResponse();
         }
     }
+
+    public void addNewPost(Post newPost) {
+        this.repository.save(newPost);
+    }
 }

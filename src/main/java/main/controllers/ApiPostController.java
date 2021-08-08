@@ -5,7 +5,16 @@ import main.api.request.PostPostRequest;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.api.response.PostDataResponse;
+import main.api.response.PostUserEntity;
+import main.model.ModerationStatus;
+import main.model.entities.Tag;
+import main.model.entities.User;
+import main.model.repositories.UserRepository;
 import main.service.PostsService;
+
+import java.util.*;
+
+import main.service.TagsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +31,17 @@ public class ApiPostController {
 
     public static final String STATUS_INACTIVE =  "inactive";
     public static final String STATUS_PENDING =   "pending";
-    public static final String STATUS_DECLINED =   "declined";
+    public static final String STATUS_DECLINED =  "declined";
     public static final String STATUS_PUBLISHED = "published";
 
     private final PostsService postsService;
+    private final UserRepository userRepository;
+    private final TagsService tagsService;
 
-    public ApiPostController(PostsService postsService) {
+    public ApiPostController(PostsService postsService, UserRepository userRepository, TagsService tagsService) {
         this.postsService = postsService;
+        this.userRepository = userRepository;
+        this.tagsService = tagsService;
     }
 
 
@@ -42,12 +55,47 @@ public class ApiPostController {
         return ResponseEntity.ok().body(postsService.getPostResponse(offset, limit, mode));
     }
 
-
-    //TODO добавление поста Api page 14
     @PostMapping("/api/post")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postPost(@RequestBody PostPostRequest postPostRequest) {
-        return ResponseEntity.ok().body(new PostDataResponse());
+    public ResponseEntity<PostDataResponse> postPost(@RequestBody PostPostRequest postPostRequest, Principal principal) {
+        Map<String, String> errors = new HashMap<>();
+        if(postPostRequest.getTitle().length() < 3){
+            errors.put(PostDataResponse.ERR_TYPE_TITLE, PostDataResponse.ERROR_SHORT_TITLE);
+        }
+
+        if(postPostRequest.getText().length() < 50){
+            errors.put(PostDataResponse.ERR_TYPE_TEXT, PostDataResponse.ERROR_SHORT_TEXT);
+        }
+
+        long nowTime = new Date().getTime() / 1000;
+        if( nowTime > postPostRequest.getTimestamp()){
+            postPostRequest.setTimestamp(nowTime);
+        }
+
+        Optional<User> userEntity = userRepository.findByEmail(principal.getName());
+        if(userEntity.isEmpty()){
+            errors.put("authError", "Email пользователя не найден в базе");
+        }
+
+        PostDataResponse postDataResponse = new PostDataResponse();
+        if(errors.isEmpty()){
+            main.model.entities.Post newPost = new main.model.entities.Post();
+            newPost.setTime(postPostRequest.getTimestamp());
+            newPost.setIsActive(postPostRequest.getActive());
+            newPost.setTitle(postPostRequest.getTitle());
+
+            newPost.setTags(tagsService.getTagsForPost(postPostRequest.getTags()));
+
+            newPost.setText(postPostRequest.getText());
+            newPost.setModerationStatus(ModerationStatus.NEW);
+            newPost.setUser(new PostUserEntity(userEntity.get().getId(),userEntity.get().getName()));
+
+            this.postsService.addNewPost(newPost);
+            postDataResponse.setResult(true);
+        }else{
+            postDataResponse.setErrors(errors);
+        }
+        return ResponseEntity.ok().body(postDataResponse);
     }
 
     //TODO добавление комментания к посту Api page 17
