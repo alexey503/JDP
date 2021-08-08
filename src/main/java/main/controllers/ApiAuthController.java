@@ -142,7 +142,6 @@ public class ApiAuthController {
     @GetMapping("/logout")
     public ResponseEntity<AuthCheckResponse> logout(Principal principal) {
 
-        System.out.println("Logout: " + principal.getName());
         SecurityContextHolder.clearContext();
 
         AuthCheckResponse response = new AuthCheckResponse();

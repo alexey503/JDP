@@ -77,7 +77,6 @@ public class PostsService {
     public PostResponse getPostSearchByDate(int offset, int limit, String dateString) {
         Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
-        System.out.println(dateString);
         Calendar calendar = new GregorianCalendar();
         try {
             calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dateString));
