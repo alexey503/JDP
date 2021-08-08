@@ -34,7 +34,6 @@ public class ApiPostController {
 
 
     @GetMapping("/api/post")
-    @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostResponse> getPost(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
