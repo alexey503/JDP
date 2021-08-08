@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class RegisterResponse {
+public class PostDataResponse {
 
     public static final String ERR_TYPE_EMAIL = "email";
     public static final String ERR_TYPE_NAME = "name";
@@ -18,8 +18,17 @@ public class RegisterResponse {
     public static final String ERROR_SHORT_PASSWORD = "Пароль короче 6-ти символов";
     public static final String ERROR_WRONG_CAPTURE = "Код с картинки введён неверно";
 
-    private boolean result;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer id;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean result;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> errors;
+
+    public PostDataResponse() {
+        result = false;
+    }
 }

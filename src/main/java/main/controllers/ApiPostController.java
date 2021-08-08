@@ -1,15 +1,14 @@
 package main.controllers;
 
+import main.api.request.PostPostCommentRequest;
+import main.api.request.PostPostRequest;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
+import main.api.response.PostDataResponse;
 import main.service.PostsService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -43,6 +42,36 @@ public class ApiPostController {
         return ResponseEntity.ok().body(postsService.getPostResponse(offset, limit, mode));
     }
 
+
+    //TODO добавление поста Api page 14
+    @PostMapping("/api/post")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<PostDataResponse> postPost(@RequestBody PostPostRequest postPostRequest) {
+        return ResponseEntity.ok().body(new PostDataResponse());
+    }
+
+    //TODO добавление комментания к посту Api page 17
+    @PostMapping("/api/comment")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<PostDataResponse> postPostComment(@RequestBody PostPostCommentRequest postPostCommentRequest) {
+        return ResponseEntity.ok().body(new PostDataResponse());
+    }
+
+    //TODO добавление лайка Api page 24
+    @PostMapping("/api/post/like")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<PostDataResponse> postLike(@RequestBody int post_id) {
+        return ResponseEntity.ok().body(new PostDataResponse());
+    }
+
+    //TODO добавление дизлайка Api page 24
+    @PostMapping("/api/post/dislike")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<PostDataResponse> postDislike(@RequestBody int post_id) {
+        return ResponseEntity.ok().body(new PostDataResponse());
+    }
+
+
     @GetMapping("/api/post/search")
     public ResponseEntity<PostResponse> postSearchByStringQuery(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
@@ -67,7 +96,6 @@ public class ApiPostController {
 
         return ResponseEntity.ok(postsService.getMyPosts(offset, limit, status, principal));
     }
-
 
     @GetMapping("/api/post/byDate")
     public PostResponse postSearchByDate(
@@ -94,5 +122,14 @@ public class ApiPostController {
             return ResponseEntity.ok(postExtendedDto);
         }
         return ResponseEntity.notFound().build();
+    }
+
+
+    //TODO редактирование поста Api page 15
+    @PutMapping("/api/post/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<PostDataResponse> postEdit(@PathVariable int id) {
+
+        return ResponseEntity.ok(new PostDataResponse());
     }
 }

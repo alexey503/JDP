@@ -1,6 +1,7 @@
 package main.controllers;
 
 
+import main.api.request.ChangePasswordRequest;
 import main.api.request.LoginRequest;
 import main.api.request.RegisterRequest;
 import main.api.response.*;
@@ -60,33 +61,33 @@ public class ApiAuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<PostDataResponse> register(@RequestBody RegisterRequest registerRequest){
 
         Map<String, String> errors = new HashMap<>();
 
         Optional<main.model.entities.User> userEntity = userRepository.findByEmail(registerRequest.getEmail());
         if (userEntity.isPresent()) {
-            errors.put(RegisterResponse.ERR_TYPE_EMAIL,
-                    RegisterResponse.ERROR_EMAIL_ENGAGED);
+            errors.put(PostDataResponse.ERR_TYPE_EMAIL,
+                    PostDataResponse.ERROR_EMAIL_ENGAGED);
         }
 
         Matcher matcher = Pattern.compile("^[a-zA-Zа-яА-Я_]{2,}$").matcher(registerRequest.getName());
         if (!matcher.find()) {
-            errors.put(RegisterResponse.ERR_TYPE_NAME,
-                    RegisterResponse.ERROR_WRONG_NAME);
+            errors.put(PostDataResponse.ERR_TYPE_NAME,
+                    PostDataResponse.ERROR_WRONG_NAME);
         }
 
         if (registerRequest.getPassword().length() < 6) {
-            errors.put(RegisterResponse.ERR_TYPE_PASSWORD,
-                    RegisterResponse.ERROR_SHORT_PASSWORD);
+            errors.put(PostDataResponse.ERR_TYPE_PASSWORD,
+                    PostDataResponse.ERROR_SHORT_PASSWORD);
         }
 
         if (!captchaService.isCaptchaValid(registerRequest.getCaptcha(), registerRequest.getCaptchaSecretCode())) {
-            errors.put(RegisterResponse.ERR_TYPE_CAPTCHA,
-                    RegisterResponse.ERROR_WRONG_CAPTURE);
+            errors.put(PostDataResponse.ERR_TYPE_CAPTCHA,
+                    PostDataResponse.ERROR_WRONG_CAPTURE);
         }
 
-        RegisterResponse response = new RegisterResponse();
+        PostDataResponse response = new PostDataResponse();
 
         if (errors.size() > 0) {
             response.setResult(false);
@@ -140,13 +141,25 @@ public class ApiAuthController {
 
 
     @GetMapping("/logout")
-    public ResponseEntity<AuthCheckResponse> logout(Principal principal) {
+    public ResponseEntity<AuthCheckResponse> logout() {
 
         SecurityContextHolder.clearContext();
 
         AuthCheckResponse response = new AuthCheckResponse();
         response.setResult(true);
         return ResponseEntity.ok(response);
+    }
+
+    //TODO изменение пароля Api page 22
+    @PostMapping("/password")
+    public ResponseEntity<PostDataResponse> changePassword(ChangePasswordRequest changePasswordRequest){
+        return ResponseEntity.ok(new PostDataResponse());
+    }
+
+    //TODO изменение пароля Api page 21
+    @PostMapping("/restore")
+    public ResponseEntity<PostDataResponse> passwordRestore(String email){
+        return ResponseEntity.ok(new PostDataResponse());
     }
 
 }
