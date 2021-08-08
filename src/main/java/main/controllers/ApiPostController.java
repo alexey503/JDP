@@ -44,7 +44,6 @@ public class ApiPostController {
     }
 
     @GetMapping("/api/post/search")
-    @PreAuthorize("hasAuthority('user:moderate')")
     public ResponseEntity<PostResponse> postSearchByStringQuery(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
