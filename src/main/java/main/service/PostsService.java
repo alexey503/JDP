@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,27 +33,24 @@ public class PostsService {
     @Autowired
     PostCommentsRepository commentsRepository;
 
-    public ResponseEntity getPostResponse(int offset, int limit, String mode) {
+    public PostResponse getPostResponse(int offset, int limit, String mode) {
 
         switch (mode){
             case ApiPostController.MODE_RECENT:
-                return ResponseEntity.ok(new PostResponse(
-                        repository.findPostsPage(PageRequest.of(offset / limit, limit,
-                                Sort.by("time").descending()))));
+                return new PostResponse(repository.findPostsPage(PageRequest.of(offset / limit, limit,
+                                Sort.by("time").descending())));
             case ApiPostController.MODE_EARLY:
-                return ResponseEntity.ok(new PostResponse(
-                        repository.findPostsPage(PageRequest.of(offset / limit, limit,
-                                Sort.by("time").ascending()))));
+                return new PostResponse(repository.findPostsPage(PageRequest.of(offset / limit, limit,
+                                Sort.by("time").ascending())));
             case ApiPostController.MODE_BEST://сортировать по убыванию количества лайков
-                //sort = Sort.by("likesCount").descending();
-                return ResponseEntity.ok(new PostResponse(
-                        repository.findPostsPageSortedByLikesCount(PageRequest.of(offset / limit, limit))));
+                return new PostResponse(
+                        repository.findPostsPageSortedByLikesCount(PageRequest.of(offset / limit, limit)));
             case ApiPostController.MODE_POPULAR://сортировать по убыванию количества комментариев
-                return ResponseEntity.ok(new PostResponse(
-                        repository.findPostsPageSortedByCommentsCount(PageRequest.of(offset / limit, limit))));
+                return new PostResponse(
+                        repository.findPostsPageSortedByCommentsCount(PageRequest.of(offset / limit, limit)));
 
             default:
-                return ResponseEntity.badRequest().body("Error mode not found");
+                return new PostResponse();
         }
     }
 
@@ -67,13 +65,13 @@ public class PostsService {
         }
     }
 
-    public ResponseEntity getPostSearchByStringQuery(int offset, int limit, String query) {
+    public PostResponse getPostSearchByStringQuery(int offset, int limit, String query) {
 
         Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
         Page<Post> postPage = repository.postSearchByStringQuery(query, pageable);
 
-        return ResponseEntity.ok(getPostResponse(postPage));
+        return getPostResponse(postPage);
     }
 
     public PostResponse getPostSearchByDate(int offset, int limit, String dateString) {
@@ -162,5 +160,24 @@ public class PostsService {
                 post.getViewCount(),
                 postComments,
                 post.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
+    }
+
+    public PostResponse getMyPosts(int offset, int limit, String status, Principal principal) {
+        switch (status){
+            case ApiPostController.STATUS_INACTIVE:
+                return new PostResponse(
+                        repository.findMyPostsInactive(PageRequest.of(offset / limit, limit), principal.getName()));
+            case ApiPostController.STATUS_PENDING:
+                return new PostResponse(
+                        repository.findMyPostsPending(PageRequest.of(offset / limit, limit), principal.getName()));
+            case ApiPostController.STATUS_DECLINED:
+                return new PostResponse(
+                        repository.findMyPostsDeclined(PageRequest.of(offset / limit, limit), principal.getName()));
+            case ApiPostController.STATUS_PUBLISHED:
+                return new PostResponse(
+                        repository.findMyPostsPublished(PageRequest.of(offset / limit, limit), principal.getName()));
+            default:
+                return new PostResponse();
+        }
     }
 }

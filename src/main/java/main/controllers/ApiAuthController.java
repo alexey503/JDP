@@ -2,11 +2,10 @@ package main.controllers;
 
 
 import main.api.request.LoginRequest;
-import main.api.response.AuthCheckResponse;
-import main.api.response.LoginResponse;
-import main.api.response.UserLoginResponse;
+import main.api.request.RegisterRequest;
+import main.api.response.*;
 import main.model.repositories.UserRepository;
-import main.service.AuthService;
+import main.service.CaptchaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,29 +14,33 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/auth")
 public class ApiAuthController {
 
-    private final AuthService authService;
-
+    private final CaptchaService captchaService;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ApiAuthController(AuthService authService, AuthenticationManager authenticationManager, UserRepository userRepository) {
-
-        this.authService = authService;
-
+    public ApiAuthController(CaptchaService captchaService, AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.captchaService = captchaService;
         this.authenticationManager = authenticationManager;
-
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/check")
@@ -50,28 +53,63 @@ public class ApiAuthController {
     }
 
     @GetMapping("/captcha")
-    public Map<String, String> getCapture() {
+    public ResponseEntity<CaptchaResponse> getCapture() {
 
-        return authService.getCapture();
+        return ResponseEntity.ok(captchaService.getCaptchaResponse());
 
     }
 
     @PostMapping("/register")
-    public Map<String, Object> addNewUser(
-            @RequestParam(name = "e_mail") String email,
-            @RequestParam(name = "password") String password,
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "captcha") String captcha,
-            @RequestParam(name = "captcha_secret") String captchaSecret) {
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest){
 
+        Map<String, String> errors = new HashMap<>();
 
-        return authService.addNewUser(email, password, name, captcha, captchaSecret);
+        Optional<main.model.entities.User> userEntity = userRepository.findByEmail(registerRequest.getEmail());
+        if (userEntity.isPresent()) {
+            errors.put(RegisterResponse.ERR_TYPE_EMAIL,
+                    RegisterResponse.ERROR_EMAIL_ENGAGED);
+        }
+
+        Matcher matcher = Pattern.compile("^[a-zA-Zа-яА-Я_]{2,}$").matcher(registerRequest.getName());
+        if (!matcher.find()) {
+            errors.put(RegisterResponse.ERR_TYPE_NAME,
+                    RegisterResponse.ERROR_WRONG_NAME);
+        }
+
+        if (registerRequest.getPassword().length() < 6) {
+            errors.put(RegisterResponse.ERR_TYPE_PASSWORD,
+                    RegisterResponse.ERROR_SHORT_PASSWORD);
+        }
+
+        if (!captchaService.isCaptchaValid(registerRequest.getCaptcha(), registerRequest.getCaptchaSecretCode())) {
+            errors.put(RegisterResponse.ERR_TYPE_CAPTCHA,
+                    RegisterResponse.ERROR_WRONG_CAPTURE);
+        }
+
+        RegisterResponse response = new RegisterResponse();
+
+        if (errors.size() > 0) {
+            response.setResult(false);
+            response.setErrors(errors);
+            return ResponseEntity.ok(response);
+        }
+
+        main.model.entities.User newUser = new main.model.entities.User();
+        newUser.setEmail(registerRequest.getEmail());
+        newUser.setName(registerRequest.getName());
+        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        newUser.setReg_time(new Date().getTime());
+
+        this.userRepository.save(newUser);
+
+        response.setResult(true);
+
+        return ResponseEntity.ok(response);
 
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
-        System.out.println("Login: " + loginRequest.getEmail() + " " + loginRequest.getPassword());
         Authentication auth = authenticationManager
                 .authenticate(
                         new UsernamePasswordAuthenticationToken(

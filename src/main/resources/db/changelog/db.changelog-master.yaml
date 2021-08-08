@@ -675,7 +675,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 1
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -699,7 +699,7 @@ databaseChangeLog:
                   value: 0
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
       rollback:
         - delete:
             tableName: posts
@@ -911,7 +911,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -935,7 +935,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
         - insert:
             tableName: posts
             columns:
@@ -944,7 +944,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: moderation_status
-                  value: "ACCEPTED"
+                  value: "DECLINED"
               - column:
                   name: text
                   value: "Post 3"
@@ -959,7 +959,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: user_id
-                  value: 2
+                  value: 3
         - insert:
             tableName: posts
             columns:

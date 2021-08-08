@@ -26,6 +26,8 @@ public class PostResponse {
     }
 
     public PostResponse() {
+        count = 0;
+        posts = new ArrayList<>();
     }
 }
 
