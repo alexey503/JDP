@@ -14,6 +14,7 @@ public class PostDataResponse {
     public static final String ERR_TYPE_CAPTCHA = "captcha";
     public static final String ERR_TYPE_TITLE = "title";
     public static final String ERR_TYPE_TEXT = "text";
+    public static final String ERR_TYPE_PHOTO = "photo";
 
     public static final String ERROR_EMAIL_ENGAGED = "Этот e-mail уже зарегистрирован";
     public static final String ERROR_WRONG_NAME = "Имя указано неверно";
@@ -22,6 +23,8 @@ public class PostDataResponse {
 
     public static final String ERROR_SHORT_TITLE = "Заголовок должен содержать 3 и более символа";
     public static final String ERROR_SHORT_TEXT = "Текст публикации должен быть более 50 символов";
+
+    public static final String ERROR_OVER_SIZE = "Фото слишком большое, нужно не более 5 Мб";
 
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

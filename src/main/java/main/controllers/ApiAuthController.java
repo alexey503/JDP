@@ -99,7 +99,7 @@ public class ApiAuthController {
         newUser.setEmail(registerRequest.getEmail());
         newUser.setName(registerRequest.getName());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        newUser.setReg_time(new Date().getTime());
+        newUser.setReg_time(new Date().getTime()/1000);
 
         this.userRepository.save(newUser);
 
