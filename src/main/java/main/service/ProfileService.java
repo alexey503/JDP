@@ -12,8 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +30,10 @@ import java.util.regex.Pattern;
 public class ProfileService {
 
     private static final long MAX_PHOTO_SIZE = 1024 * 1024 * 5;
-    private static final String AVATAR_DIRECTORY = System.getProperty("user.dir") + "/resources/img";
+    private static final String AVATAR_DIRECTORY = "/target/classes/img";
+            //"/resources/img";
+    private static final int AVATAR_WIDTH = 35;
+    private static final int AVATAR_HEIGHT = 35;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -77,6 +86,13 @@ public class ProfileService {
             }
         }
         if(removePhoto != null && removePhoto == 1){
+            try {
+                if(userProfile.getPhoto() != null) {
+                    Files.deleteIfExists(Paths.get(userProfile.getPhoto()));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             userProfile.setPhoto("");
         }
 
@@ -99,29 +115,37 @@ public class ProfileService {
 
     private String savePhoto(MultipartFile photo) {
 
-        File avaDir = new File(AVATAR_DIRECTORY);
+        File avaDir = new File(System.getProperty("user.dir") + AVATAR_DIRECTORY);
         if (!avaDir.exists()){
             avaDir.mkdirs();
         }
 
-        String ext = photo.getOriginalFilename().substring(photo.getOriginalFilename().lastIndexOf('.'));
-        if(ext.length() < 3){
-            ext = "jpg";
-        }
-
-        String newFileName = RandomStringUtils.randomAlphanumeric(10) + ext;
-
-        File outputFile = new File(AVATAR_DIRECTORY, newFileName);
+        String newFileName = RandomStringUtils.randomAlphanumeric(10) + ".jpg";
+        File outputFile = new File(System.getProperty("user.dir") + AVATAR_DIRECTORY, newFileName);
         try {
-            photo.transferTo(outputFile);
+            ImageIO.write(getReducedImage(photo.getInputStream()), "jpg", outputFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return outputFile.getAbsolutePath();
+        System.out.println("outputFile.getAbsolutePath(): " + outputFile.getAbsolutePath());
+        System.out.println("outputFile.getName(): " + outputFile.getName());
+        System.out.println("outputFile.getParent(): " + outputFile.getParent());
+        return "img/" + outputFile.getName();
     }
 
     private boolean isNameValid(String name) {
         Matcher matcher = Pattern.compile("^[a-zA-Zа-яА-Я_][a-zA-Zа-яА-Я0-9_]+").matcher(name);
         return matcher.find();
     }
+
+    private BufferedImage getReducedImage(InputStream inputStream) throws IOException {
+        Image scaledImage = ImageIO.read(inputStream)
+                .getScaledInstance(AVATAR_WIDTH, AVATAR_HEIGHT, BufferedImage.SCALE_SMOOTH);
+
+        BufferedImage bwImg = new BufferedImage(AVATAR_WIDTH, AVATAR_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = bwImg.createGraphics();
+        graphics.drawImage(scaledImage, 0, 0, null);
+        return bwImg;
+    }
+
 }
