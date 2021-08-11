@@ -71,7 +71,7 @@ public class ApiAuthController {
                     PostDataResponse.ERROR_EMAIL_ENGAGED);
         }
 
-        Matcher matcher = Pattern.compile("^[a-zA-Zа-яА-Я_]{2,}$").matcher(registerRequest.getName());
+        Matcher matcher = Pattern.compile("^[a-zA-Zа-яА-Я0-9_]{2,}$").matcher(registerRequest.getName());
         if (!matcher.find()) {
             errors.put(PostDataResponse.ERR_TYPE_NAME,
                     PostDataResponse.ERROR_WRONG_NAME);
@@ -131,6 +131,7 @@ public class ApiAuthController {
         userLoginResponse.setName(currentUser.getName());
         userLoginResponse.setModeration(currentUser.getIsModerator() == 1);
         userLoginResponse.setId(currentUser.getId());
+        userLoginResponse.setPhoto(currentUser.getPhoto());
 
 
         LoginResponse loginResponse = new LoginResponse();
