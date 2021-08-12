@@ -201,8 +201,7 @@ public class ApiPostController {
         return ResponseEntity.notFound().build();
     }
 
-    //TODO загрузка изображений странцица 16
-    @PostMapping(value = "/api/post/image",
+    @PostMapping(value = "/api/image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
