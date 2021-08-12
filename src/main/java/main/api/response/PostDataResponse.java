@@ -30,6 +30,8 @@ public class PostDataResponse {
     public static final String ERROR_UPLOAD_FILE_OVER_SIZE = "Размер файла превышает допустимый размер";
     public static final String ERROR_UPLOAD_FILE_WRONG_FORMAT = "Формат изображения должен быть jpg или png";
 
+    public static final String ERROR_UPLOAD_FILE = "Ошибка при загрузке картинки";
+
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer id;
