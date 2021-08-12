@@ -9,8 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -98,7 +96,7 @@ public class ProfileService {
 
         if(photo != null && !photo.isEmpty()) {
             if(photo.getSize() > MAX_PHOTO_SIZE){
-                errors.put(PostDataResponse.ERR_TYPE_PHOTO, PostDataResponse.ERROR_OVER_SIZE);
+                errors.put(PostDataResponse.ERR_TYPE_PHOTO, PostDataResponse.ERROR_AVATAR_OVER_SIZE);
             }else {
                 userProfile.setPhoto(savePhoto(photo));
             }

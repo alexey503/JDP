@@ -1,5 +1,6 @@
 package main.api.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class PostDataResponse {
     public static final String ERR_TYPE_TITLE = "title";
     public static final String ERR_TYPE_TEXT = "text";
     public static final String ERR_TYPE_PHOTO = "photo";
+    public static final String ERR_TYPE_IMAGE = "image";
 
     public static final String ERROR_EMAIL_ENGAGED = "Этот e-mail уже зарегистрирован";
     public static final String ERROR_WRONG_NAME = "Имя указано неверно";
@@ -24,7 +26,9 @@ public class PostDataResponse {
     public static final String ERROR_SHORT_TITLE = "Заголовок должен содержать 3 и более символа";
     public static final String ERROR_SHORT_TEXT = "Текст публикации должен быть более 50 символов";
 
-    public static final String ERROR_OVER_SIZE = "Фото слишком большое, нужно не более 5 Мб";
+    public static final String ERROR_AVATAR_OVER_SIZE = "Фото слишком большое, нужно не более 5 Мб";
+    public static final String ERROR_UPLOAD_FILE_OVER_SIZE = "Размер файла превышает допустимый размер";
+    public static final String ERROR_UPLOAD_FILE_WRONG_FORMAT = "Формат изображения должен быть jpg или png";
 
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,6 +39,9 @@ public class PostDataResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> errors;
+
+    @JsonIgnore
+    private String resultDataString;
 
     public PostDataResponse() {
         result = false;

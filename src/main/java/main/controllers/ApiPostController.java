@@ -10,14 +10,17 @@ import main.model.ModerationStatus;
 import main.model.entities.Tag;
 import main.model.entities.User;
 import main.model.repositories.UserRepository;
+import main.service.LoadImageService;
 import main.service.PostsService;
 
 import java.util.*;
 
 import main.service.TagsService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
@@ -37,11 +40,13 @@ public class ApiPostController {
     private final PostsService postsService;
     private final UserRepository userRepository;
     private final TagsService tagsService;
+    private final LoadImageService loadImageService;
 
-    public ApiPostController(PostsService postsService, UserRepository userRepository, TagsService tagsService) {
+    public ApiPostController(PostsService postsService, UserRepository userRepository, TagsService tagsService, LoadImageService loadImageService) {
         this.postsService = postsService;
         this.userRepository = userRepository;
         this.tagsService = tagsService;
+        this.loadImageService = loadImageService;
     }
 
 
@@ -194,5 +199,21 @@ public class ApiPostController {
             return ResponseEntity.ok(postExtendedDto);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    //TODO загрузка изображений странцица 16
+    @PostMapping(value = "/api/post/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<?> uploadImage(@RequestParam MultipartFile image) {
+
+        PostDataResponse response = this.loadImageService.uploadImage(image);
+        if(!response.getResult()){
+            return ResponseEntity.badRequest().body(response);
+        }else{
+            return ResponseEntity.ok(response.getResultDataString());
+        }
     }
 }
