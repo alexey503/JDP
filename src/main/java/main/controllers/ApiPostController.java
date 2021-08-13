@@ -62,68 +62,16 @@ public class ApiPostController {
 
     @PostMapping("/api/post")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postPost(@RequestBody PostPostRequest postPostRequest, Principal principal) {
-        Optional<User> userEntity = userRepository.findByEmail(principal.getName());
-        if (userEntity.isEmpty()) {
-            //errors.put("authError", "Email пользователя не найден в базе");
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(getPostDataResponseForPostEdit(postPostRequest, userEntity.get(), false, -1));
+    public ResponseEntity<PostDataResponse> postNewPost(@RequestBody PostPostRequest postPostRequest) {
+        return ResponseEntity.ok().body(postsService.postNewPost(postPostRequest));
     }
 
     @PutMapping("/api/post/{id}")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postEdit(@PathVariable int id, @RequestBody PostPostRequest postPostRequest, Principal principal) {
-        Optional<User> userEntity = userRepository.findByEmail(principal.getName());
-        if (userEntity.isEmpty()) {
-            //errors.put("authError", "Email пользователя не найден в базе");
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok().body(getPostDataResponseForPostEdit(postPostRequest, userEntity.get(), userEntity.get().getIsModerator() == 1, id));
+    public ResponseEntity<PostDataResponse> postEdit(@PathVariable int id, @RequestBody PostPostRequest postPostRequest) {
+        return ResponseEntity.ok().body(postsService.editPost(postPostRequest, id));
     }
 
-    private PostDataResponse getPostDataResponseForPostEdit(PostPostRequest postPostRequest, User user, boolean isModerator, int id) {
-
-        Map<String, String> errors = new HashMap<>();
-        if (postPostRequest.getTitle().length() < 3) {
-            errors.put(PostDataResponse.ERR_TYPE_TITLE, PostDataResponse.ERROR_SHORT_TITLE);
-        }
-
-        if (postPostRequest.getText().length() < 50) {
-            errors.put(PostDataResponse.ERR_TYPE_TEXT, PostDataResponse.ERROR_SHORT_TEXT);
-        }
-
-        long nowTime = new Date().getTime() / 1000;
-        if (nowTime > postPostRequest.getTimestamp()) {
-            postPostRequest.setTimestamp(nowTime);
-        }
-
-        PostDataResponse postDataResponse = new PostDataResponse();
-        if (errors.isEmpty()) {
-            main.model.entities.Post newPost = new main.model.entities.Post();
-            if (id >= 0) {
-                newPost.setId(id);
-            }
-            newPost.setTime(postPostRequest.getTimestamp());
-            newPost.setIsActive(postPostRequest.getActive());
-            newPost.setTitle(postPostRequest.getTitle());
-
-            newPost.setTags(tagsService.getTagsForPost(postPostRequest.getTags()));
-
-            newPost.setText(postPostRequest.getText());
-            if (!isModerator) {
-                newPost.setModerationStatus(ModerationStatus.NEW);
-            }
-            newPost.setUser(new PostUserEntity(user.getId(), user.getName()));
-
-            this.postsService.addNewPost(newPost);
-            postDataResponse.setResult(true);
-        } else {
-            postDataResponse.setErrors(errors);
-        }
-        return postDataResponse;
-    }
 
     //TODO добавление комментания к посту Api page 17
     @PostMapping("/api/comment")
