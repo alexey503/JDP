@@ -1,5 +1,7 @@
 package main.service;
 
+import main.api.request.PostPostCommentRequest;
+import main.api.response.PostDataResponse;
 import main.api.response.PostDto;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
@@ -32,6 +34,9 @@ public class PostsService {
 
     @Autowired
     PostCommentsRepository commentsRepository;
+
+    @Autowired
+    AuthServi
 
     public PostResponse getPostResponse(int offset, int limit, String mode) {
 
@@ -182,5 +187,15 @@ public class PostsService {
 
     public void addNewPost(Post newPost) {
         this.repository.save(newPost);
+    }
+
+    public PostDataResponse addComment(PostPostCommentRequest postPostCommentRequest){
+        PostComment newComment = new PostComment();
+        newComment.setText(postPostCommentRequest.getText());
+        newComment.setPostId(postPostCommentRequest.getPostId());
+        newComment.setParent(postPostCommentRequest.getParentId());
+        newComment.setUser();
+        newComment.setTime(new Date.gettime()/1000);
+
     }
 }

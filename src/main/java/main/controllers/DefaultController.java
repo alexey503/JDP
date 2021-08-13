@@ -8,7 +8,7 @@ public class DefaultController {
 
     //для остальных запросов не через API (главная страница - /, в частности)
 
-    @RequestMapping(value="/**/{path:[^\\\\.]*}")
+    @RequestMapping(value = "/**/{path:[^\\\\.]*}")
     public String redirectToIndex() {
         return "forward:/";
     }

@@ -7,9 +7,9 @@ import lombok.Data;
 public class PostPostCommentRequest {
 
     @JsonProperty("parent_id")
-    private int parentId;
+    private Integer parentId;
     @JsonProperty("post_id")
-    private int postId;
+    private Integer postId;
     private String text;
 
 }

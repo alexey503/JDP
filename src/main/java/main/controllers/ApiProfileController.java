@@ -3,6 +3,7 @@ package main.controllers;
 import main.api.request.ProfileDTO;
 import main.api.response.PostDataResponse;
 import main.service.ProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,11 +16,9 @@ import java.security.Principal;
 @RequestMapping("/api/profile")
 public class ApiProfileController {
 
+    @Autowired
     private final ProfileService profileService;
 
-    public ApiProfileController(ProfileService profileService) {
-        this.profileService = profileService;
-    }
 
     //TODO редактирование профиля Api page 19
     @PostMapping(value = "/my",
@@ -32,6 +31,7 @@ public class ApiProfileController {
         return ResponseEntity.ok(profileService.updateProfile(null, profileDTO.getRemovePhoto(), profileDTO.getName(), profileDTO.getEmail(), profileDTO.getPassword(), principal.getName()));
 
     }
+
     @PostMapping(value = "/my",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE

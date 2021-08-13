@@ -20,17 +20,15 @@ import java.util.Map;
 @RequestMapping(value = "/api", produces = {"application/json; charset=UTF-8"})
 public class ApiGeneralController {
 
+    @Autowired
     private final InitResponse initResponse;
+    @Autowired
     private final SettingsService settingsService;
+    @Autowired
     private final TagsService tagsService;
+    @Autowired
     private final CalendarService calendarService;
 
-    public ApiGeneralController(InitResponse initResponse, SettingsService settingsService, TagsService tagsService, CalendarService calendarService) {
-        this.initResponse = initResponse;
-        this.settingsService = settingsService;
-        this.tagsService = tagsService;
-        this.calendarService = calendarService;
-    }
 
     @GetMapping(value = "/init", produces = {"application/json; charset=UTF-8"})
     private InitResponse init() {
@@ -38,16 +36,13 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/settings")
-
     private Map<String, Boolean> settings() {
         return settingsService.getGlobalSettings();
     }
 
     @GetMapping("/tag")
     public Map<String, List<TagResponse>> tags(@RequestParam(name = "query", required = false) String tagRequest) {
-
         Map<String, List<TagResponse>> response = new HashMap<>();
-
         response.put("tags", tagsService.getTags(tagRequest != null ? tagRequest : ""));
         return response;
     }
@@ -57,8 +52,6 @@ public class ApiGeneralController {
         if (yearRequest == null) {
             yearRequest = String.valueOf(LocalDate.now().getYear());
         }
-
         return calendarService.getCalendarDto(yearRequest);
-
     }
 }

@@ -12,4 +12,7 @@ public class AuthCheckResponse {
     @JsonIgnore
     private User user;
 
+    public AuthCheckResponse(boolean result) {
+        this.result = result;
+    }
 }
