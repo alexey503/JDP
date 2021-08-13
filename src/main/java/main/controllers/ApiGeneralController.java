@@ -6,6 +6,7 @@ import main.api.response.TagResponse;
 import main.service.CalendarService;
 import main.service.SettingsService;
 import main.service.TagsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,13 +22,13 @@ import java.util.Map;
 public class ApiGeneralController {
 
     @Autowired
-    private final InitResponse initResponse;
+    private InitResponse initResponse;
     @Autowired
-    private final SettingsService settingsService;
+    private SettingsService settingsService;
     @Autowired
-    private final TagsService tagsService;
+    private TagsService tagsService;
     @Autowired
-    private final CalendarService calendarService;
+    private CalendarService calendarService;
 
 
     @GetMapping(value = "/init", produces = {"application/json; charset=UTF-8"})

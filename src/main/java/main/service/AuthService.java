@@ -30,15 +30,15 @@ import java.util.regex.Pattern;
 public class AuthService {
 
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Autowired
-    private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private CaptchaService captchaService;
 
-    public ResponseEntity<PostDataResponse> registration(RegisterRequest registerRequest){
+    public PostDataResponse registration(RegisterRequest registerRequest){
 
         Map<String, String> errors = new HashMap<>();
 
@@ -69,7 +69,7 @@ public class AuthService {
         if (errors.size() > 0) {
             response.setResult(false);
             response.setErrors(errors);
-            return ResponseEntity.ok(response);
+            return response;
         }
 
         main.model.entities.User newUser = new main.model.entities.User();
@@ -82,10 +82,10 @@ public class AuthService {
 
         response.setResult(true);
 
-        return ResponseEntity.ok(response);
+        return response;
     }
 
-    public ResponseEntity<LoginResponse>login(LoginRequest loginRequest){
+    public LoginResponse login(LoginRequest loginRequest){
 
         Authentication auth = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
@@ -94,18 +94,18 @@ public class AuthService {
                         ));
         SecurityContextHolder.getContext().setAuthentication(auth);
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-        return ResponseEntity.ok(getLoginResponse(user.getUsername()));
+        return getLoginResponse(user.getUsername());
     }
 
     public ResponseEntity<LoginResponse> check() {
 
-        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByEmail(securityUser.getUsername());
-
-        try{
-            LoginResponse loginResponse = getLoginResponse(securityUser.getUsername();
+        try {
+            SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            LoginResponse loginResponse = getLoginResponse(securityUser.getUsername());
             return ResponseEntity.ok(loginResponse);
         }catch(UsernameNotFoundException ex){
+            System.out.println("Пользователь не найден.");
+        }catch (Exception e){
             System.out.println("Ошибка идентификации пользователя.");
         }
         return ResponseEntity.ok(new LoginResponse());
@@ -114,6 +114,12 @@ public class AuthService {
     public AuthCheckResponse logout() {
         SecurityContextHolder.clearContext();
         return new AuthCheckResponse(true);
+    }
+
+    public String getAuthUserName(){
+        org.springframework.security.core.userdetails.User userDetailsUser =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetailsUser.getUsername();
     }
 
     private LoginResponse getLoginResponse(String email) throws UsernameNotFoundException{

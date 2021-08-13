@@ -4,8 +4,7 @@ import main.api.response.PostDataResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,29 +40,50 @@ public class LoadImageService {
         }
 
         if(errors.isEmpty()){
-            StringBuilder localFileName = new StringBuilder("upload");
+            String localFileName = "";
             try (InputStream inputStream = image.getInputStream()) {
 
+                StringBuilder filePathBuilder = new StringBuilder("upload/");
                 for (int i = 0; i < 3; i++) {
-                    localFileName.append("/")
-                            .append(RandomStringUtils.randomAlphabetic(2));
+                    filePathBuilder.append(RandomStringUtils.randomAlphabetic(2)).append("/");
                 }
-                Path filePath = Paths.get(localFileName.toString());
+                Path filePath = Paths.get(filePathBuilder.toString());
                 Files.createDirectories(filePath);
 
-                localFileName.append(RandomStringUtils.randomNumeric(5)).append(".jpg");
+                filePathBuilder.append(RandomStringUtils.randomNumeric(5)).append(".jpg");
 
-                Files.copy(inputStream, filePath,
+                localFileName = filePathBuilder.toString();
+
+                Files.copy(inputStream, Paths.get(localFileName),
                         StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             response.setResult(true);
-            response.setResultDataString(localFileName.toString());
+            response.setResultDataString(localFileName);
         }else{
             response.setErrors(errors);
         }
         return response;
+    }
+
+    public MultipartFile getMultipartImageFile(String fileName) {
+        File file = new File(fileName);
+        if(!file.exists()){
+            System.out.println("File not found: " + fileName);
+        }else {
+            System.out.println("File exists " + fileName);
+            InputStream is = null;
+            try {
+                is = new FileInputStream(file);
+                //MultipartFile multipartFile = new MockMultipartFile(fileName, is);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

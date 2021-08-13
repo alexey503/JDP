@@ -2,12 +2,10 @@ package main.controllers;
 
 import main.api.request.PostPostCommentRequest;
 import main.api.request.PostPostRequest;
+import main.api.request.PostVoteRequest;
 import main.api.response.PostDataResponse;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
-import main.api.response.PostUserEntity;
-import main.model.ModerationStatus;
-import main.model.entities.User;
 import main.model.repositories.UserRepository;
 import main.service.LoadImageService;
 import main.service.PostsService;
@@ -21,10 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 public class ApiPostController {
@@ -40,15 +34,15 @@ public class ApiPostController {
     public static final String STATUS_PUBLISHED = "published";
 
     @Autowired
-    private final PostsService postsService;
+    private PostsService postsService;
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    private final TagsService tagsService;
+    private TagsService tagsService;
     @Autowired
-    private final LoadImageService loadImageService;
+    private LoadImageService loadImageService;
     @Autowired
-    private final VoteService voteService;
+    private VoteService voteService;
 
 
     @GetMapping("/api/post")
@@ -80,18 +74,16 @@ public class ApiPostController {
         return ResponseEntity.ok().body(postsService.addComment(postPostCommentRequest));
     }
 
-    //TODO добавление лайка Api page 24
     @PostMapping("/api/post/like")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postLike(@RequestBody(name = "post_id") int postId) {
-        return ResponseEntity.ok().body(voteService.putVote(postId, userId, 1));
+    public ResponseEntity<PostDataResponse> postLike(@RequestBody PostVoteRequest postVoteRequest) {
+        return ResponseEntity.ok().body(voteService.putVote(postVoteRequest.getPostId(), (byte)1));
     }
 
-    //TODO добавление дизлайка Api page 24
     @PostMapping("/api/post/dislike")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postDislike(@RequestBody int post_id) {
-        return ResponseEntity.ok().body(voteService.putVote(postId, userId, -1));
+    public ResponseEntity<PostDataResponse> postDislike(@RequestBody PostVoteRequest postVoteRequest) {
+        return ResponseEntity.ok().body(voteService.putVote(postVoteRequest.getPostId(), (byte)-1));
     }
 
 
@@ -161,4 +153,34 @@ public class ApiPostController {
             return ResponseEntity.ok(response.getResultDataString());
         }
     }
+/*
+    @GetMapping(value = "/upload/{folder0}/{folder1}/{folder2}/{filename}")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<Resource> requestImage(
+            @PathVariable String folder0,
+            @PathVariable String folder1,
+            @PathVariable String folder2,
+            @PathVariable String filename) {
+
+        String fileName = "upload/" + folder0 + "/" + folder1 + "/" + folder2 + "/" + filename;
+
+        Resource file = storageService.loadAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+
+/*
+        MultipartFile multipartFile = loadImageService.getMultipartImageFile(fileName);
+
+        System.out.println("Orig name " + multipartFile.getOriginalFilename());
+        System.out.println("Name " + multipartFile.getName());
+        System.out.println("Contenttype " + multipartFile.getContentType());
+        if(multipartFile.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }else{
+            return ResponseEntity.ok(multipartFile);
+        }
+
+    }
+
+ */
 }

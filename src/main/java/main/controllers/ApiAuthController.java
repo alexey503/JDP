@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class ApiAuthController {
 
-    @autowired
-    private final AuthService authService;
     @Autowired
-    private final CaptchaService captchaService;
+    private AuthService authService;
+    @Autowired
+    private CaptchaService captchaService;
 
 
     @GetMapping("/check")

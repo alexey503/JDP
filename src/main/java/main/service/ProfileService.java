@@ -125,9 +125,7 @@ public class ProfileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("outputFile.getAbsolutePath(): " + outputFile.getAbsolutePath());
-        System.out.println("outputFile.getName(): " + outputFile.getName());
-        System.out.println("outputFile.getParent(): " + outputFile.getParent());
+
         return "img/" + outputFile.getName();
     }
 

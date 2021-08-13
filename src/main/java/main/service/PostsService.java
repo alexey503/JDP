@@ -8,6 +8,7 @@ import main.model.ModerationStatus;
 import main.model.entities.*;
 import main.model.repositories.PostCommentsRepository;
 import main.model.repositories.PostsRepository;
+import main.model.repositories.UserRepository;
 import main.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,12 +32,14 @@ import java.util.stream.Collectors;
 public class PostsService {
     @Autowired
     private PostsRepository repository;
-
     @Autowired
     private PostCommentsRepository commentsRepository;
-
     @Autowired
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TagsService tagsService;
 
 
     public PostResponse getPostResponse(int offset, int limit, String mode) {
@@ -184,35 +188,41 @@ public class PostsService {
         }
     }
 
-    public void addNewPost(Post newPost) {
-        this.repository.save(newPost);
-    }
-
     public PostDataResponse addComment(PostPostCommentRequest postPostCommentRequest){
         PostComment newComment = new PostComment();
+
+        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByEmail(securityUser.getUsername());
+        if(user.isPresent()) {
+            newComment.setUser(user.get());
+        }else{
+            return new PostDataResponse();
+        }
+
         newComment.setText(postPostCommentRequest.getText());
         newComment.setPostId(postPostCommentRequest.getPostId());
-        newComment.setParent(postPostCommentRequest.getParentId());
-        newComment.setUser();
-        newComment.setTime(new Date.gettime()/1000);
+        newComment.setParent(repository.findById(postPostCommentRequest.getParentId()).get());
+        newComment.setTime(new Date().getTime()/1000);
 
+        commentsRepository.save(newComment);
+        return new PostDataResponse(true);
     }
 
-    public ResponseEntity<PostDataResponse> postNewPost(PostPostRequest postPostRequest){
+    public PostDataResponse postNewPost(PostPostRequest postPostRequest){
         SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByEmail(securityUser.getUsername());
+        User user = userRepository.findByEmail(securityUser.getUsername()).get();
 
-        return ResponseEntity.ok().body(getPostDataResponseForPostEdit(postPostRequest, user, false, -1));
+        return getPostDataResponseForPostEdit(postPostRequest, user, false, -1);
     }
 
-    public ResponseEntity<PostDataResponse> editPost(PostPostRequest postPostRequest, int id){
+    public PostDataResponse editPost(PostPostRequest postPostRequest, int id){
         SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByEmail(securityUser.getUsername());
+        User user = userRepository.findByEmail(securityUser.getUsername()).get();
 
         if(user.getIsModerator() == 1) {
-            return ResponseEntity.ok().body(getPostDataResponseForPostEdit(postPostRequest, user, true, id));
+            return getPostDataResponseForPostEdit(postPostRequest, user, true, id);
         }
-        return ResponseEntity.ok().body(new PostDataResponse());
+        return new PostDataResponse();
     }
 
 
@@ -250,7 +260,8 @@ public class PostsService {
             }
             newPost.setUser(new PostUserEntity(user.getId(), user.getName()));
 
-            this.postsService.addNewPost(newPost);
+            repository.save(newPost);
+
             postDataResponse.setResult(true);
         } else {
             postDataResponse.setErrors(errors);

@@ -48,4 +48,8 @@ public class PostDataResponse {
     public PostDataResponse() {
         result = false;
     }
+
+    public PostDataResponse(Boolean result) {
+        this.result = result;
+    }
 }

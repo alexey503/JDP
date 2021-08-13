@@ -1,8 +1,22 @@
 package main.model.repositories;
 
+import main.model.entities.Post;
 import main.model.entities.PostVote;
+import main.model.entities.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public class VotesRepository extends CrudRepository<PostVote, Integer> {
+import java.util.Optional;
+
+@Repository
+public interface VotesRepository extends CrudRepository<PostVote, Integer> {
+
+    @Query("SELECT v " +
+            "FROM PostVote v " +
+            "WHERE v.post = :post " +
+            "   AND v.user = :user"
+    )
     Optional<PostVote> findByPostAndByUser(Post post, User user);
+
 }

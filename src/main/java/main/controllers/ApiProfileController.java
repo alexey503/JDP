@@ -17,7 +17,7 @@ import java.security.Principal;
 public class ApiProfileController {
 
     @Autowired
-    private final ProfileService profileService;
+    private ProfileService profileService;
 
 
     //TODO редактирование профиля Api page 19
