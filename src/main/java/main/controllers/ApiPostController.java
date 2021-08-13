@@ -2,20 +2,18 @@ package main.controllers;
 
 import main.api.request.PostPostCommentRequest;
 import main.api.request.PostPostRequest;
+import main.api.response.PostDataResponse;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
-import main.api.response.PostDataResponse;
 import main.api.response.PostUserEntity;
 import main.model.ModerationStatus;
-import main.model.entities.Tag;
 import main.model.entities.User;
 import main.model.repositories.UserRepository;
 import main.service.LoadImageService;
 import main.service.PostsService;
-
-import java.util.*;
-
 import main.service.TagsService;
+import main.service.VoteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,31 +21,34 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class ApiPostController {
 
-    public static final String MODE_RECENT =  "recent";
-    public static final String MODE_EARLY =   "early";
+    public static final String MODE_RECENT = "recent";
+    public static final String MODE_EARLY = "early";
     public static final String MODE_POPULAR = "popular";
-    public static final String MODE_BEST =    "best";
+    public static final String MODE_BEST = "best";
 
-    public static final String STATUS_INACTIVE =  "inactive";
-    public static final String STATUS_PENDING =   "pending";
-    public static final String STATUS_DECLINED =  "declined";
+    public static final String STATUS_INACTIVE = "inactive";
+    public static final String STATUS_PENDING = "pending";
+    public static final String STATUS_DECLINED = "declined";
     public static final String STATUS_PUBLISHED = "published";
 
+    @Autowired
     private final PostsService postsService;
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final TagsService tagsService;
+    @Autowired
     private final LoadImageService loadImageService;
-
-    public ApiPostController(PostsService postsService, UserRepository userRepository, TagsService tagsService, LoadImageService loadImageService) {
-        this.postsService = postsService;
-        this.userRepository = userRepository;
-        this.tagsService = tagsService;
-        this.loadImageService = loadImageService;
-    }
+    @Autowired
+    private final VoteService voteService;
 
 
     @GetMapping("/api/post")
@@ -56,96 +57,41 @@ public class ApiPostController {
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "mode", required = false, defaultValue = "recent") String mode
     ) {
-
         return ResponseEntity.ok().body(postsService.getPostResponse(offset, limit, mode));
     }
 
     @PostMapping("/api/post")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postPost(@RequestBody PostPostRequest postPostRequest, Principal principal) {
-
-        Optional<User> userEntity = userRepository.findByEmail(principal.getName());
-        if(userEntity.isEmpty()){
-            //errors.put("authError", "Email пользователя не найден в базе");
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok().body(getPostDataResponseForPostEdit(postPostRequest, userEntity.get(), false, -1));
+    public ResponseEntity<PostDataResponse> postNewPost(@RequestBody PostPostRequest postPostRequest) {
+        return ResponseEntity.ok().body(postsService.postNewPost(postPostRequest));
     }
 
     @PutMapping("/api/post/{id}")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postEdit(@PathVariable int id, @RequestBody PostPostRequest postPostRequest, Principal principal) {
-        Optional<User> userEntity = userRepository.findByEmail(principal.getName());
-        if(userEntity.isEmpty()){
-            //errors.put("authError", "Email пользователя не найден в базе");
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok().body(getPostDataResponseForPostEdit(postPostRequest, userEntity.get(), userEntity.get().getIsModerator() == 1, id));
+    public ResponseEntity<PostDataResponse> postEdit(@PathVariable int id, @RequestBody PostPostRequest postPostRequest) {
+        return ResponseEntity.ok().body(postsService.editPost(postPostRequest, id));
     }
 
-    private PostDataResponse getPostDataResponseForPostEdit(PostPostRequest postPostRequest, User user, boolean isModerator, int id) {
-
-        Map<String, String> errors = new HashMap<>();
-        if(postPostRequest.getTitle().length() < 3){
-            errors.put(PostDataResponse.ERR_TYPE_TITLE, PostDataResponse.ERROR_SHORT_TITLE);
-        }
-
-        if(postPostRequest.getText().length() < 50){
-            errors.put(PostDataResponse.ERR_TYPE_TEXT, PostDataResponse.ERROR_SHORT_TEXT);
-        }
-
-        long nowTime = new Date().getTime() / 1000;
-        if( nowTime > postPostRequest.getTimestamp()){
-            postPostRequest.setTimestamp(nowTime);
-        }
-
-        PostDataResponse postDataResponse = new PostDataResponse();
-        if(errors.isEmpty()){
-            main.model.entities.Post newPost = new main.model.entities.Post();
-            if(id >= 0){
-                newPost.setId(id);
-            }
-            newPost.setTime(postPostRequest.getTimestamp());
-            newPost.setIsActive(postPostRequest.getActive());
-            newPost.setTitle(postPostRequest.getTitle());
-
-            newPost.setTags(tagsService.getTagsForPost(postPostRequest.getTags()));
-
-            newPost.setText(postPostRequest.getText());
-            if(!isModerator) {
-                newPost.setModerationStatus(ModerationStatus.NEW);
-            }
-            newPost.setUser(new PostUserEntity(user.getId(), user.getName()));
-
-            this.postsService.addNewPost(newPost);
-            postDataResponse.setResult(true);
-        }else{
-            postDataResponse.setErrors(errors);
-        }
-        return postDataResponse;
-    }
 
     //TODO добавление комментания к посту Api page 17
     @PostMapping("/api/comment")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postPostComment(@RequestBody PostPostCommentRequest postPostCommentRequest) {
-        return ResponseEntity.ok().body(new PostDataResponse());
+        return ResponseEntity.ok().body(postsService.addComment(postPostCommentRequest));
     }
 
     //TODO добавление лайка Api page 24
     @PostMapping("/api/post/like")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<PostDataResponse> postLike(@RequestBody int post_id) {
-        return ResponseEntity.ok().body(new PostDataResponse());
+    public ResponseEntity<PostDataResponse> postLike(@RequestBody(name = "post_id") int postId) {
+        return ResponseEntity.ok().body(voteService.putVote(postId, userId, 1));
     }
 
     //TODO добавление дизлайка Api page 24
     @PostMapping("/api/post/dislike")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postDislike(@RequestBody int post_id) {
-        return ResponseEntity.ok().body(new PostDataResponse());
+        return ResponseEntity.ok().body(voteService.putVote(postId, userId, -1));
     }
 
 
@@ -209,9 +155,9 @@ public class ApiPostController {
     public ResponseEntity<?> uploadImage(@RequestParam MultipartFile image) {
 
         PostDataResponse response = this.loadImageService.uploadImage(image);
-        if(!response.getResult()){
+        if (!response.getResult()) {
             return ResponseEntity.badRequest().body(response);
-        }else{
+        } else {
             return ResponseEntity.ok(response.getResultDataString());
         }
     }
