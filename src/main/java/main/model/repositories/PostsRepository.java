@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,4 +138,17 @@ public interface PostsRepository
 			"	AND u = p.user"
 	)
 	Page<Post> findMyPostsPublished(Pageable pageable, String userName);
+
+	int countByUserId(int id);
+
+	@Query("SELECT SUM(p.viewCount) " +
+			"FROM Post p " +
+			"WHERE p.user.id = :userId")
+	int countUserViews(int userId);
+
+	@Query("SELECT MIN(p.time) " +
+			"FROM Post p " +
+			"WHERE p.user.id = :userId ")
+	long countUsersFirstPublicationTime(int userId);
+
 }

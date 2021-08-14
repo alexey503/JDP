@@ -7,10 +7,7 @@ import main.api.response.PostDataResponse;
 import main.api.response.PostExtendedDto;
 import main.api.response.PostResponse;
 import main.model.repositories.UserRepository;
-import main.service.LoadImageService;
-import main.service.PostsService;
-import main.service.TagsService;
-import main.service.VoteService;
+import main.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +40,8 @@ public class ApiPostController {
     private LoadImageService loadImageService;
     @Autowired
     private VoteService voteService;
+    @Autowired
+    private AuthService authService;
 
 
     @GetMapping("/api/post")
@@ -66,12 +65,10 @@ public class ApiPostController {
         return ResponseEntity.ok().body(postsService.editPost(postPostRequest, id));
     }
 
-
-    //TODO добавление комментания к посту Api page 17
     @PostMapping("/api/comment")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postPostComment(@RequestBody PostPostCommentRequest postPostCommentRequest) {
-        return ResponseEntity.ok().body(postsService.addComment(postPostCommentRequest));
+        return ResponseEntity.ok().body(postsService.addComment(postPostCommentRequest, authService.getAuthUserEmail()));
     }
 
     @PostMapping("/api/post/like")

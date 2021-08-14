@@ -188,11 +188,10 @@ public class PostsService {
         }
     }
 
-    public PostDataResponse addComment(PostPostCommentRequest postPostCommentRequest){
+    public PostDataResponse addComment(PostPostCommentRequest postPostCommentRequest, String userName){
         PostComment newComment = new PostComment();
 
-        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<User> user = userRepository.findByEmail(securityUser.getUsername());
+        Optional<User> user = userRepository.findByEmail(userName);
         if(user.isPresent()) {
             newComment.setUser(user.get());
         }else{
@@ -201,7 +200,7 @@ public class PostsService {
 
         newComment.setText(postPostCommentRequest.getText());
         newComment.setPostId(postPostCommentRequest.getPostId());
-        newComment.setParent(repository.findById(postPostCommentRequest.getParentId()).get());
+        newComment.setParent(repository.findById(postPostCommentRequest.getParentId()).orElse(null));
         newComment.setTime(new Date().getTime()/1000);
 
         commentsRepository.save(newComment);

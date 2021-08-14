@@ -55,7 +55,7 @@ public class ApiAuthController {
         return ResponseEntity.ok(new PostDataResponse());
     }
 
-    //TODO изменение пароля Api page 21
+    //TODO восстановление пароля Api page 21
     @PostMapping("/restore")
     public ResponseEntity<PostDataResponse> passwordRestore(String email) {
         return ResponseEntity.ok(new PostDataResponse());

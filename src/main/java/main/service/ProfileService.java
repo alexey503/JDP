@@ -58,7 +58,6 @@ public class ProfileService {
 
         User userProfile = userOptional.get();
 
-        System.out.println("New Name: " + name);
         if (name != null) {
             if (isNameValid(name)) {
                 userProfile.setName(name);

@@ -106,7 +106,7 @@ public class AuthService {
         }catch(UsernameNotFoundException ex){
             System.out.println("Пользователь не найден.");
         }catch (Exception e){
-            System.out.println("Ошибка идентификации пользователя.");
+            System.out.println("Пользователь не авторизован.");
         }
         return ResponseEntity.ok(new LoginResponse());
     }
@@ -116,10 +116,15 @@ public class AuthService {
         return new AuthCheckResponse(true);
     }
 
-    public String getAuthUserName(){
+    public String getAuthUserEmail(){
         org.springframework.security.core.userdetails.User userDetailsUser =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userDetailsUser.getUsername();
+    }
+
+    public User getAuthUser(){
+        //return userRepository.findByEmail(getAuthUserEmail()).orElse(new User());
+        return userRepository.findByEmail(getAuthUserEmail()).orElse(null);
     }
 
     private LoginResponse getLoginResponse(String email) throws UsernameNotFoundException{

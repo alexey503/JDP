@@ -1,9 +1,13 @@
 package main.api.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class MyStatisticsResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class StatisticsResponse {
     private int postsCount;
     private int likesCount;
     private int dislikesCount;

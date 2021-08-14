@@ -513,10 +513,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: "administrator"
+                  value: "moderator"
               - column:
                   name: password
-                  value: "$2a$12$mxwF9DXFPPWPQ1OpwSPA/.H2Kaz2Lg/Y.zeaQejvnTsID6TM0rnIi"
+                  value: "$2a$12$iP0Ri.2/ePVuma0sjJQEKuQNjmjka5CVdG.Hx/FtlUPZrYx36Vebm"
               - column:
                   name: email
                   value: "moderator@server.com"
@@ -529,7 +529,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: users
-            where: name in ('administrator')
+            where: name in ('moserator')
   - changeSet:
       id: 4
       author: superuser
@@ -540,10 +540,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: "Alexey"
+                  value: "alexey"
               - column:
                   name: password
-                  value: "$2a$12$dXkoHKsJeQlVE/cvx5BPtumzKsmTMojNYwsK7.r3XSBo9S7DLC9OS"
+                  value: "$2a$12$iP0Ri.2/ePVuma0sjJQEKuQNjmjka5CVdG.Hx/FtlUPZrYx36Vebm"
               - column:
                   name: email
                   value: "alexey@server.com"
@@ -564,7 +564,7 @@ databaseChangeLog:
                   value: "user"
               - column:
                   name: password
-                  value: "$2a$12$EagU6Po5Pr6sGaNKAvLyvOiBju0ex7Q4oRiGC2ubZlEk8/h1D3cGO"
+                  value: "$2a$12$iP0Ri.2/ePVuma0sjJQEKuQNjmjka5CVdG.Hx/FtlUPZrYx36Vebm"
               - column:
                   name: email
                   value: "user@server.com"
@@ -585,7 +585,7 @@ databaseChangeLog:
                   value: "guest"
               - column:
                   name: password
-                  value: "$2a$12$BjkOjP.v5wAUUbnbLDNHY.db9VzXq/h7SpXr.3SFTc79zwg8R4ptW"
+                  value: "$2a$12$iP0Ri.2/ePVuma0sjJQEKuQNjmjka5CVdG.Hx/FtlUPZrYx36Vebm"
               - column:
                   name: email
                   value: "guest@server.com"
