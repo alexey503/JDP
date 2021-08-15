@@ -1,5 +1,6 @@
 package main.service;
 
+import main.api.request.ChangePasswordRequest;
 import main.api.request.LoginRequest;
 import main.api.request.RegisterRequest;
 import main.api.response.AuthCheckResponse;
@@ -9,7 +10,9 @@ import main.api.response.UserLoginResponse;
 import main.model.entities.User;
 import main.model.repositories.UserRepository;
 import main.security.SecurityUser;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +33,12 @@ import java.util.regex.Pattern;
 @Service
 public class AuthService {
 
+    @Value("${email.mailSubject}")
+    private String subject;
+
+    @Value("${email.siteAddress}")
+    private String siteAddress;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -37,6 +47,9 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CaptchaService captchaService;
+    @Autowired
+    private EmailService emailService;
+
 
     public PostDataResponse registration(RegisterRequest registerRequest){
 
@@ -143,5 +156,71 @@ public class AuthService {
         loginResponse.setResult(true);
         loginResponse.setUserLoginResponse(userLoginResponse);
         return loginResponse;
+    }
+
+    public PostDataResponse restore(Map<String, String> requestMap) {
+
+        if(requestMap == null){
+            return new PostDataResponse();
+        }
+        String email = requestMap.get("email");
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            String code = RandomStringUtils.randomAlphanumeric(45);
+
+            try {
+                emailService.sendEmail(email, subject, "For restore password go to\n" +
+                        siteAddress + "/login/change-password/" + code);
+
+            } catch (Exception e) {
+                System.out.println("Ошибка при отправке email с кодоом восстановления пароля:");
+                System.out.println(e.toString());
+                return new PostDataResponse();
+            }
+
+            //saving code to base
+            User user = optionalUser.get();
+            user.setCode(code);
+            userRepository.save(user);
+
+            return new PostDataResponse(true);
+        }else{
+            return new PostDataResponse();
+        }
+
+    }
+
+    public PostDataResponse changePassword(ChangePasswordRequest changePasswordRequest) {
+
+        Map<String, String> errors = new HashMap<>();
+        User user = userRepository.findByCode(changePasswordRequest.getCode()).orElse(null);
+
+        if(user == null){
+            errors.put(PostDataResponse.ERR_TYPE_CODE,
+                    PostDataResponse.ERROR_ARH_CODE);
+        }
+
+        if (changePasswordRequest.getPassword().length() < 6) {
+            errors.put(PostDataResponse.ERR_TYPE_PASSWORD,
+                    PostDataResponse.ERROR_SHORT_PASSWORD);
+        }
+
+        if (!captchaService.isCaptchaValid(changePasswordRequest.getCaptcha(), changePasswordRequest.getCaptchaSecretCode())) {
+            errors.put(PostDataResponse.ERR_TYPE_CAPTCHA,
+                    PostDataResponse.ERROR_WRONG_CAPTURE);
+        }
+
+        if (errors.size() > 0) {
+            PostDataResponse postDataResponse = new PostDataResponse();
+            postDataResponse.setErrors(errors);
+            return postDataResponse;
+        }
+
+        user.setCode("");
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getPassword()));
+
+        this.userRepository.save(user);
+
+        return new PostDataResponse(true);
     }
 }

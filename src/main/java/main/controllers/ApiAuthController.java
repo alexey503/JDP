@@ -10,6 +10,8 @@ import main.api.response.LoginResponse;
 import main.api.response.PostDataResponse;
 import main.service.AuthService;
 import main.service.CaptchaService;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,15 +51,13 @@ public class ApiAuthController {
         return ResponseEntity.ok(authService.logout());
     }
 
-    //TODO изменение пароля Api page 22
     @PostMapping("/password")
-    public ResponseEntity<PostDataResponse> changePassword(ChangePasswordRequest changePasswordRequest) {
-        return ResponseEntity.ok(new PostDataResponse());
+    public ResponseEntity<PostDataResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        return ResponseEntity.ok(authService.changePassword(changePasswordRequest));
     }
 
-    //TODO восстановление пароля Api page 21
     @PostMapping("/restore")
-    public ResponseEntity<PostDataResponse> passwordRestore(String email) {
-        return ResponseEntity.ok(new PostDataResponse());
+    public ResponseEntity<PostDataResponse> passwordRestore(@RequestBody(required = false) Map<String, String> requestMap) {
+        return ResponseEntity.ok(authService.restore(requestMap));
     }
 }

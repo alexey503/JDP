@@ -32,4 +32,16 @@ public interface VotesRepository extends CrudRepository<PostVote, Integer> {
             "   AND v.value = -1"
     )
     int getUserDislikesCount(int userId);
+
+    @Query("SELECT COUNT(v) " +
+            "FROM PostVote v " +
+            "WHERE v.value = 1"
+    )
+    int countLikes();
+
+    @Query("SELECT COUNT(v) " +
+            "FROM PostVote v " +
+            "WHERE v.value = -1"
+    )
+    int countDislikes();
 }

@@ -17,6 +17,7 @@ public class PostDataResponse {
     public static final String ERR_TYPE_TEXT = "text";
     public static final String ERR_TYPE_PHOTO = "photo";
     public static final String ERR_TYPE_IMAGE = "image";
+    public static final String ERR_TYPE_CODE = "code";
 
     public static final String ERROR_EMAIL_ENGAGED = "Этот e-mail уже зарегистрирован";
     public static final String ERROR_WRONG_NAME = "Имя указано неверно";
@@ -31,6 +32,9 @@ public class PostDataResponse {
     public static final String ERROR_UPLOAD_FILE_WRONG_FORMAT = "Формат изображения должен быть jpg или png";
 
     public static final String ERROR_UPLOAD_FILE = "Ошибка при загрузке картинки";
+
+    public static final String ERROR_ARH_CODE = "Ссылка для восстановления пароля устарела. " +
+            "Вы можете <a href=\"/login/restore-password\">запросить ссылку снова</a>.";
 
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

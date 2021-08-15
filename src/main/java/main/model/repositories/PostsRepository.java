@@ -151,4 +151,15 @@ public interface PostsRepository
 			"WHERE p.user.id = :userId ")
 	long countUsersFirstPublicationTime(int userId);
 
+	@Query("SELECT COUNT(p.id) " +
+			"FROM Post p")
+    int countAll();
+
+	@Query("SELECT SUM(p.viewCount) " +
+			"FROM Post p")
+	int countViews();
+
+	@Query("SELECT MIN(p.time) " +
+			"FROM Post p")
+	long firstPublicationTime();
 }

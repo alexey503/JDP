@@ -19,8 +19,6 @@ public class ApiProfileController {
     @Autowired
     private ProfileService profileService;
 
-
-    //TODO редактирование профиля Api page 19
     @PostMapping(value = "/my",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE

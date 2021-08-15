@@ -10,6 +10,9 @@ import java.util.Map;
 
 @Service
 public class SettingsService {
+
+    public static final String KEY_STATISTICS_IS_PUBLIC = "STATISTICS_IS_PUBLIC";
+
     private Map<String, Boolean> settings;
 
     @Autowired
