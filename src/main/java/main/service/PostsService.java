@@ -1,5 +1,6 @@
 package main.service;
 
+import main.api.request.ModerationActivityRequest;
 import main.api.request.PostPostCommentRequest;
 import main.api.request.PostPostRequest;
 import main.api.response.*;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostsService {
     @Autowired
-    private PostsRepository repository;
+    private PostsRepository postsRepository;
     @Autowired
     private PostCommentsRepository commentsRepository;
     @Autowired
@@ -44,17 +45,17 @@ public class PostsService {
 
         switch (mode){
             case ApiPostController.MODE_RECENT:
-                return new PostResponse(repository.findPostsPage(PageRequest.of(offset / limit, limit,
+                return new PostResponse(postsRepository.findPostsPage(PageRequest.of(offset / limit, limit,
                                 Sort.by("time").descending())));
             case ApiPostController.MODE_EARLY:
-                return new PostResponse(repository.findPostsPage(PageRequest.of(offset / limit, limit,
+                return new PostResponse(postsRepository.findPostsPage(PageRequest.of(offset / limit, limit,
                                 Sort.by("time").ascending())));
             case ApiPostController.MODE_BEST://сортировать по убыванию количества лайков
                 return new PostResponse(
-                        repository.findPostsPageSortedByLikesCount(PageRequest.of(offset / limit, limit)));
+                        postsRepository.findPostsPageSortedByLikesCount(PageRequest.of(offset / limit, limit)));
             case ApiPostController.MODE_POPULAR://сортировать по убыванию количества комментариев
                 return new PostResponse(
-                        repository.findPostsPageSortedByCommentsCount(PageRequest.of(offset / limit, limit)));
+                        postsRepository.findPostsPageSortedByCommentsCount(PageRequest.of(offset / limit, limit)));
 
             default:
                 return new PostResponse();
@@ -76,7 +77,7 @@ public class PostsService {
 
         Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
-        Page<Post> postPage = repository.postSearchByStringQuery(query, pageable);
+        Page<Post> postPage = postsRepository.postSearchByStringQuery(query, pageable);
 
         return getPostResponse(postPage);
     }
@@ -91,7 +92,7 @@ public class PostsService {
             return new PostResponse();
         }
 
-        Page<Post> postPage = repository.postSearchByDate(
+        Page<Post> postPage = postsRepository.postSearchByDate(
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH),
@@ -104,7 +105,7 @@ public class PostsService {
     public PostResponse getPostSearchByTag(int offset, int limit, String tag) {
         Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("time").ascending());
 
-        Page<Post> postPage = repository.postSearchByTag(tag, pageable);
+        Page<Post> postPage = postsRepository.postSearchByTag(tag, pageable);
 
         return getPostResponse(postPage);
 
@@ -134,7 +135,7 @@ public class PostsService {
     }
 
     public PostExtendedDto getPostById(int id) {
-        Optional<Post> optionalPost = repository.findById(id);
+        Optional<Post> optionalPost = postsRepository.findById(id);
         if( optionalPost.isEmpty()){
             return null;
         }
@@ -171,16 +172,16 @@ public class PostsService {
         switch (status){
             case ApiPostController.STATUS_INACTIVE:
                 return new PostResponse(
-                        repository.findMyPostsInactive(PageRequest.of(offset / limit, limit), principal.getName()));
+                        postsRepository.findMyPostsInactive(PageRequest.of(offset / limit, limit), principal.getName()));
             case ApiPostController.STATUS_PENDING:
                 return new PostResponse(
-                        repository.findMyPostsPending(PageRequest.of(offset / limit, limit), principal.getName()));
+                        postsRepository.findMyPostsPending(PageRequest.of(offset / limit, limit), principal.getName()));
             case ApiPostController.STATUS_DECLINED:
                 return new PostResponse(
-                        repository.findMyPostsDeclined(PageRequest.of(offset / limit, limit), principal.getName()));
+                        postsRepository.findMyPostsDeclined(PageRequest.of(offset / limit, limit), principal.getName()));
             case ApiPostController.STATUS_PUBLISHED:
                 return new PostResponse(
-                        repository.findMyPostsPublished(PageRequest.of(offset / limit, limit), principal.getName()));
+                        postsRepository.findMyPostsPublished(PageRequest.of(offset / limit, limit), principal.getName()));
             default:
                 return new PostResponse();
         }
@@ -198,7 +199,7 @@ public class PostsService {
 
         newComment.setText(postPostCommentRequest.getText());
         newComment.setPostId(postPostCommentRequest.getPostId());
-        newComment.setParent(repository.findById(postPostCommentRequest.getParentId()).orElse(null));
+        newComment.setParent(postsRepository.findById(postPostCommentRequest.getParentId()).orElse(null));
         newComment.setTime(new Date().getTime()/1000);
 
         commentsRepository.save(newComment);
@@ -257,7 +258,7 @@ public class PostsService {
             }
             newPost.setUser(new PostUserEntity(user.getId(), user.getName()));
 
-            repository.save(newPost);
+            postsRepository.save(newPost);
 
             postDataResponse.setResult(true);
         } else {
@@ -268,16 +269,37 @@ public class PostsService {
 
     public PostResponse getPostResponseModeration(int offset, int limit, String status, String userName) {
         if(status.equals("NEW")) {
-            return new PostResponse(repository.findPostsPageModerationNew(PageRequest.of(offset / limit, limit)));
+            return new PostResponse(postsRepository.findPostsPageModerationNew(PageRequest.of(offset / limit, limit)));
         }
         if(status.equals("ACCEPTED")) {
-            return new PostResponse(repository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
+            return new PostResponse(postsRepository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
                     ModerationStatus.ACCEPTED));
         }
         if(status.equals("DECLINED")) {
-            return new PostResponse(repository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
+            return new PostResponse(postsRepository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
                     ModerationStatus.DECLINED));
         }
         return new PostResponse();
+    }
+
+    public PostDataResponse moderationActivity(ModerationActivityRequest request, String authUserEmail) {
+        User moderator = userRepository.findByEmail(authUserEmail).get();
+        Optional<Post> postOptional = postsRepository.findById(request.getPostId());
+        if(postOptional.isEmpty()) {
+            return new PostDataResponse();
+        }
+        Post post = postOptional.get();
+
+        if(request.getDecision().equalsIgnoreCase("accept")) {
+            post.setModerationStatus(ModerationStatus.ACCEPTED);
+        }
+        if(request.getDecision().equalsIgnoreCase("decline")) {
+            post.setModerationStatus(ModerationStatus.DECLINED);
+        }
+        post.setModerator(moderator);
+
+        postsRepository.save(post);
+
+        return new PostDataResponse(true);
     }
 }
