@@ -15,12 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -266,5 +264,20 @@ public class PostsService {
             postDataResponse.setErrors(errors);
         }
         return postDataResponse;
+    }
+
+    public PostResponse getPostResponseModeration(int offset, int limit, String status, String userName) {
+        if(status.equals("NEW")) {
+            return new PostResponse(repository.findPostsPageModerationNew(PageRequest.of(offset / limit, limit)));
+        }
+        if(status.equals("ACCEPTED")) {
+            return new PostResponse(repository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
+                    ModerationStatus.ACCEPTED));
+        }
+        if(status.equals("DECLINED")) {
+            return new PostResponse(repository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
+                    ModerationStatus.DECLINED));
+        }
+        return new PostResponse();
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.Locale;
 
 @RestController
 public class ApiPostController {
@@ -150,6 +151,21 @@ public class ApiPostController {
             return ResponseEntity.ok(response.getResultDataString());
         }
     }
+
+    //TODO модерация: вывод постов для модерации, утверждение поста, отклонение поста, изменение настроек блога
+    //GET api/post/moderation page 11
+    //POST /api/moderation page 17
+
+    @GetMapping("/api/post/moderation")
+    @PreAuthorize("hasAuthority('user:moderate')")
+    public ResponseEntity<PostResponse> getPostsModeration(
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "status", required = false, defaultValue = "new") String status
+    ) {
+        return ResponseEntity.ok().body(postsService.getPostResponseModeration(offset, limit, status.toUpperCase(), authService.getAuthUserEmail()));
+    }
+
 /*
     @GetMapping(value = "/upload/{folder0}/{folder1}/{folder2}/{filename}")
     @PreAuthorize("hasAuthority('user:write')")
