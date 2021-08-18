@@ -8,6 +8,7 @@ import main.api.response.LoginResponse;
 import main.api.response.PostDataResponse;
 import main.api.response.UserLoginResponse;
 import main.model.entities.User;
+import main.model.repositories.PostsRepository;
 import main.model.repositories.UserRepository;
 import main.security.SecurityUser;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -41,6 +42,8 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PostsRepository postsRepository;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -145,10 +148,15 @@ public class AuthService {
         UserLoginResponse userLoginResponse = new UserLoginResponse();
         userLoginResponse.setEmail(currentUser.getEmail());
         userLoginResponse.setName(currentUser.getName());
-        userLoginResponse.setModeration(currentUser.getIsModerator() == 1);
+
         userLoginResponse.setId(currentUser.getId());
         userLoginResponse.setPhoto(currentUser.getPhoto());
-
+        if(currentUser.getIsModerator() == 1){
+            userLoginResponse.setModeration(true);
+            userLoginResponse.setModerationCount(postsRepository.getModerationCount());
+        }else{
+            userLoginResponse.setModeration(false);
+        }
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setResult(true);

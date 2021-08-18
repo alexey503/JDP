@@ -183,4 +183,10 @@ public interface PostsRepository
 	@Query("SELECT MIN(p.time) " +
 			"FROM Post p")
 	long firstPublicationTime();
+
+	@Query("SELECT COUNT(p.id) " +
+			"FROM Post p " +
+			"WHERE p.moderationStatus = 'NEW'" +
+			"		AND p.isActive = 1")
+	int getModerationCount();
 }
