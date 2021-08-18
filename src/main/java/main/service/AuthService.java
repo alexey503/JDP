@@ -111,10 +111,8 @@ public class AuthService {
     }
 
     public ResponseEntity<LoginResponse> check() {
-
         try {
-            SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            LoginResponse loginResponse = getLoginResponse(securityUser.getUsername());
+            LoginResponse loginResponse = getLoginResponse(getAuthUserEmail());
             return ResponseEntity.ok(loginResponse);
         }catch(UsernameNotFoundException ex){
             System.out.println("Пользователь не найден.");
