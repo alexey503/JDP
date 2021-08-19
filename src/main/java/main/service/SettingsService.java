@@ -14,6 +14,8 @@ import java.util.Optional;
 public class SettingsService {
 
     public static final String KEY_STATISTICS_IS_PUBLIC = "STATISTICS_IS_PUBLIC";
+    public static final String KEY_MULTIUSER_MODE = "MULTIUSER_MODE";
+    public static final String KEY_POST_PREMODERATION = "POST_PREMODERATION";
 
     private Map<String, Boolean> settings;
 
@@ -46,5 +48,13 @@ public class SettingsService {
             settingsRepository.save(newSetting);
         }
         return new PostDataResponse();
+    }
+
+    public boolean getSettingValue(String key){
+        if(this.settings != null) {
+            return this.settings.get(key);
+        }else{
+            return false;
+        }
     }
 }

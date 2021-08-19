@@ -52,9 +52,17 @@ public class AuthService {
     private CaptchaService captchaService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private SettingsService settingsService;
 
 
-    public PostDataResponse registration(RegisterRequest registerRequest){
+
+    public ResponseEntity<PostDataResponse> registration(RegisterRequest registerRequest){
+
+        if (!settingsService.getSettingValue(SettingsService.KEY_MULTIUSER_MODE) ||
+                registerRequest == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         Map<String, String> errors = new HashMap<>();
 
@@ -85,7 +93,7 @@ public class AuthService {
         if (errors.size() > 0) {
             response.setResult(false);
             response.setErrors(errors);
-            return response;
+            return ResponseEntity.ok(response);
         }
 
         main.model.entities.User newUser = new main.model.entities.User();
@@ -98,7 +106,7 @@ public class AuthService {
 
         response.setResult(true);
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     public LoginResponse login(LoginRequest loginRequest){

@@ -12,6 +12,7 @@ import main.service.AuthService;
 import main.service.CaptchaService;
 import java.util.Map;
 
+import main.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,6 @@ public class ApiAuthController {
     @Autowired
     private CaptchaService captchaService;
 
-
     @GetMapping("/check")
     public ResponseEntity<LoginResponse> check() {
         return authService.check();
@@ -38,7 +38,7 @@ public class ApiAuthController {
 
     @PostMapping("/register")
     public ResponseEntity<PostDataResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authService.registration(registerRequest));
+        return authService.registration(registerRequest);
     }
 
     @PostMapping("/login")
