@@ -1,10 +1,9 @@
 package main.model.repositories;
 
-import main.api.response.PostDto;
+import main.model.ModerationStatus;
 import main.model.entities.Post;
 import main.model.entities.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -39,6 +38,29 @@ public interface PostsRepository
 			"WHERE p.isActive = 1 AND p.moderationStatus = 'ACCEPTED' AND p.time <= UNIX_TIMESTAMP() " +
 			"GROUP BY p.id")
 	Page<Post> findPostsPage(Pageable pageable);
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"LEFT JOIN PostVote v ON p.id = v.post AND v.value = 1 " +
+			"LEFT JOIN PostComment c ON p.id = c.postId " +
+			"WHERE " +
+			"	p.isActive = 1 AND " +
+			"	p.moderationStatus = 'NEW' " +
+			"GROUP BY p.id")
+	Page<Post> findPostsPageModerationNew(Pageable pageable);
+
+	@Query("SELECT p " +
+			"FROM Post p " +
+			"LEFT JOIN PostVote v ON p.id = v.post AND v.value = 1 " +
+			"LEFT JOIN PostComment c ON p.id = c.postId " +
+			"WHERE " +
+			"	p.isActive = 1 " +
+			"		AND " +
+			"	p.moderator = :user " +
+			"		AND" +
+			"	p.moderationStatus = :status " +
+			"GROUP BY p.id")
+	Page<Post> findPostsPageModeration(Pageable pageable, User user, ModerationStatus status);
 
 	@Query("SELECT p " +
 			"FROM Post p " +
@@ -137,4 +159,34 @@ public interface PostsRepository
 			"	AND u = p.user"
 	)
 	Page<Post> findMyPostsPublished(Pageable pageable, String userName);
+
+	int countByUserId(int id);
+
+	@Query("SELECT SUM(p.viewCount) " +
+			"FROM Post p " +
+			"WHERE p.user.id = :userId")
+	Integer countUserViews(int userId);
+
+	@Query("SELECT MIN(p.time) " +
+			"FROM Post p " +
+			"WHERE p.user.id = :userId ")
+	Long countUsersFirstPublicationTime(int userId);
+
+	@Query("SELECT COUNT(p.id) " +
+			"FROM Post p")
+    int countAll();
+
+	@Query("SELECT SUM(p.viewCount) " +
+			"FROM Post p")
+	int countViews();
+
+	@Query("SELECT MIN(p.time) " +
+			"FROM Post p")
+	long firstPublicationTime();
+
+	@Query("SELECT COUNT(p.id) " +
+			"FROM Post p " +
+			"WHERE p.moderationStatus = 'NEW'" +
+			"		AND p.isActive = 1")
+	int getModerationCount();
 }

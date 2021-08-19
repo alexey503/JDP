@@ -29,7 +29,7 @@ public class TagsService {
                 if(tagRequest.length() == 0 || tag.getName().startsWith(tagRequest)) {
                     TagResponse tagResponse = new TagResponse();
                     tagResponse.setName(tag.getName());
-                    tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
+                    tagResponse.setWeight(getTagWeight(tag.getName()));
                     tagResponses.add(tagResponse);
                 }
             }
@@ -62,5 +62,28 @@ public class TagsService {
             return 0;
         }
         return tagsCount.get(tagName).doubleValue() / ((double)maxRatingTag);
+    }
+
+    public List<Tag> getTagsForPost(List<String> tags) {
+
+        List<Tag> tagList = new ArrayList<>();
+
+        for (String tag : tags) {
+
+            Optional<Tag> optionalTag = tagsRepository.findByName(tag);
+
+            Tag newTag = new Tag();
+            newTag.setName(tag);
+
+            if (optionalTag.isEmpty()) {
+                newTag.setId(tagsRepository.save(newTag).getId());
+            } else {
+                newTag.setId(optionalTag.get().getId());
+            }
+
+            tagList.add(newTag);
+        }
+
+        return tagList;
     }
 }
