@@ -29,7 +29,7 @@ public class TagsService {
                 if(tagRequest.length() == 0 || tag.getName().startsWith(tagRequest)) {
                     TagResponse tagResponse = new TagResponse();
                     tagResponse.setName(tag.getName());
-                    tagResponse.setWeight(String.format("%.2f", getTagWeight(tag.getName())));
+                    tagResponse.setWeight(getTagWeight(tag.getName()));
                     tagResponses.add(tagResponse);
                 }
             }

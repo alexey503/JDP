@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
@@ -134,7 +135,7 @@ public class PostsService {
         return postResponse;
     }
 
-    public PostExtendedDto getPostById(int id) {
+    public PostExtendedDto getPostById(int id, User user) {
         Optional<Post> optionalPost = postsRepository.findById(id);
         if( optionalPost.isEmpty()){
             return null;
@@ -150,6 +151,12 @@ public class PostsService {
             if (postVote.getValue() < 0) {
                 dislikeCount++;
             }
+        }
+
+        if(user != null && (user.getIsModerator() == 0) &&
+            post.getUser().getId() != user.getId()){
+            post.setViewCount(post.getViewCount() + 1);
+            postsRepository.save(post);
         }
 
         List<PostComment> postComments = commentsRepository.findByPostId(id);
@@ -308,5 +315,14 @@ public class PostsService {
         postsRepository.save(post);
 
         return new PostDataResponse(true);
+    }
+
+    public ResponseEntity<PostExtendedDto> getPostByIdRequest(int id, User authUser) {
+        PostExtendedDto postExtendedDto = getPostById(id, authUser);
+        if (postExtendedDto != null) {
+            return ResponseEntity.ok(postExtendedDto);
+        }
+        return ResponseEntity.notFound().build();
+
     }
 }

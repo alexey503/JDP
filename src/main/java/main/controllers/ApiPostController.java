@@ -130,11 +130,7 @@ public class ApiPostController {
 
     @GetMapping("/api/post/{id}")
     public ResponseEntity<PostExtendedDto> postGetById(@PathVariable int id) {
-        PostExtendedDto postExtendedDto = postsService.getPostById(id);
-        if (postExtendedDto != null) {
-            return ResponseEntity.ok(postExtendedDto);
-        }
-        return ResponseEntity.notFound().build();
+        return postsService.getPostByIdRequest(id, authService.getAuthUser());
     }
 
     @PostMapping(value = "/api/image",

@@ -139,9 +139,13 @@ public class AuthService {
     }
 
     public String getAuthUserEmail(){
-        org.springframework.security.core.userdetails.User userDetailsUser =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDetailsUser.getUsername();
+        try {
+            org.springframework.security.core.userdetails.User userDetailsUser =
+                    (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return userDetailsUser.getUsername();
+        }catch (Exception e){
+            return "";
+        }
     }
 
     public User getAuthUser(){

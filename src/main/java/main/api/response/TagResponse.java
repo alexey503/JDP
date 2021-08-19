@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TagResponse {
     private String name;
-    private String weight;
+    private double weight;
 }
