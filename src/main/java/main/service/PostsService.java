@@ -10,14 +10,12 @@ import main.model.entities.*;
 import main.model.repositories.PostCommentsRepository;
 import main.model.repositories.PostsRepository;
 import main.model.repositories.UserRepository;
-import main.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -39,6 +37,8 @@ public class PostsService {
     private UserRepository userRepository;
     @Autowired
     private TagsService tagsService;
+    @Autowired
+    private SettingsService settingsService;
 
 
     public PostResponse getPostResponse(int offset, int limit, String mode) {
@@ -206,19 +206,22 @@ public class PostsService {
         return new PostDataResponse(true);
     }
 
-    public PostDataResponse postNewPost(PostPostRequest postPostRequest){
-        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByEmail(securityUser.getUsername()).get();
-
-        return getPostDataResponseForPostEdit(postPostRequest, user, false, -1);
+    public PostDataResponse postNewPost(PostPostRequest postPostRequest, String userEmail){
+        Optional<User> optionalUser = userRepository.findByEmail(userEmail);
+        if(optionalUser.isEmpty()){
+            return new PostDataResponse();
+        }
+        return getPostDataResponseForPostEdit(postPostRequest, optionalUser.get(), false, -1);
     }
 
-    public PostDataResponse editPost(PostPostRequest postPostRequest, int id){
-        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByEmail(securityUser.getUsername()).get();
+    public PostDataResponse editPost(PostPostRequest postPostRequest, int id, String userEmail){
+        Optional<User> optionalUser = userRepository.findByEmail(userEmail);
+        if(optionalUser.isEmpty()){
+            return new PostDataResponse();
+        }
 
-        if(user.getIsModerator() == 1) {
-            return getPostDataResponseForPostEdit(postPostRequest, user, true, id);
+        if(optionalUser.get().getIsModerator() == 1) {
+            return getPostDataResponseForPostEdit(postPostRequest, optionalUser.get(), true, id);
         }
         return new PostDataResponse();
     }
@@ -253,8 +256,12 @@ public class PostsService {
             newPost.setTags(tagsService.getTagsForPost(postPostRequest.getTags()));
 
             newPost.setText(postPostRequest.getText());
-            if (!isModerator) {
+
+
+            if (!isModerator && settingsService.getSettingValue(SettingsService.KEY_POST_PREMODERATION)) {
                 newPost.setModerationStatus(ModerationStatus.NEW);
+            }else{
+                newPost.setModerationStatus(ModerationStatus.ACCEPTED);
             }
             newPost.setUser(new PostUserEntity(user.getId(), user.getName()));
 

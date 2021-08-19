@@ -57,13 +57,13 @@ public class ApiPostController {
     @PostMapping("/api/post")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postNewPost(@RequestBody PostPostRequest postPostRequest) {
-        return ResponseEntity.ok().body(postsService.postNewPost(postPostRequest));
+        return ResponseEntity.ok().body(postsService.postNewPost(postPostRequest, authService.getAuthUserEmail()));
     }
 
     @PutMapping("/api/post/{id}")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postEdit(@PathVariable int id, @RequestBody PostPostRequest postPostRequest) {
-        return ResponseEntity.ok().body(postsService.editPost(postPostRequest, id));
+        return ResponseEntity.ok().body(postsService.editPost(postPostRequest, id, authService.getAuthUserEmail()));
     }
 
     @PostMapping("/api/comment")
