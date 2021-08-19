@@ -165,12 +165,12 @@ public interface PostsRepository
 	@Query("SELECT SUM(p.viewCount) " +
 			"FROM Post p " +
 			"WHERE p.user.id = :userId")
-	int countUserViews(int userId);
+	Integer countUserViews(int userId);
 
 	@Query("SELECT MIN(p.time) " +
 			"FROM Post p " +
 			"WHERE p.user.id = :userId ")
-	long countUsersFirstPublicationTime(int userId);
+	Long countUsersFirstPublicationTime(int userId);
 
 	@Query("SELECT COUNT(p.id) " +
 			"FROM Post p")

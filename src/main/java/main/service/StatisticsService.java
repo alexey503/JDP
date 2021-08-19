@@ -21,12 +21,14 @@ public class StatisticsService {
 
 
     public StatisticsResponse getMyStatistics(int userId) {
+        Integer viewCount = postsRepository.countUserViews(userId);
+        Long firstPublicationTime = postsRepository.countUsersFirstPublicationTime(userId);
         return new StatisticsResponse(
                 postsRepository.countByUserId(userId),
                 votesRepository.getUserLikesCount(userId),
                 votesRepository.getUserDislikesCount(userId),
-                postsRepository.countUserViews(userId),
-                postsRepository.countUsersFirstPublicationTime(userId)
+                viewCount != null ? viewCount : 0,
+                firstPublicationTime != null ? firstPublicationTime : 0
         );
     }
 
