@@ -1,6 +1,7 @@
 /BlogEngine/target/*
 /BlogEngine/target/**/
 /upload/*
+/target/**/
 # Compiled class file
 *.class
 
