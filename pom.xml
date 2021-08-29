@@ -24,13 +24,12 @@
                 <version>2.2.4.RELEASE</version>
             </plugin>
 
-            <plugin>
+            <!--plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.3.5</version>
                 <configuration>
                     <propertyFile>src/main/resources/liquibase-changelog.properties</propertyFile>
-                    <!--propertyFile>src/main/resources/liquibase-diff.properties</propertyFile-->
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -49,7 +48,7 @@
                         <version>2.2.4.RELEASE</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin-->
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -127,11 +126,11 @@
             <version>2.3.0</version>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>4.3.5</version>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>com.github.cage</groupId>
