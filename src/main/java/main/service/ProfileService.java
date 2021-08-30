@@ -37,6 +37,9 @@ public class ProfileService {
     private final PasswordEncoder passwordEncoder;
     private StorageService storageService;
 
+    @Autowired
+    private LoadImageService loadImageService;
+
 
     @Autowired
     public ProfileService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -97,7 +100,16 @@ public class ProfileService {
             if(photo.getSize() > MAX_PHOTO_SIZE){
                 errors.put(PostDataResponse.ERR_TYPE_PHOTO, PostDataResponse.ERROR_AVATAR_OVER_SIZE);
             }else {
-                userProfile.setPhoto(savePhoto(photo));
+                try {
+                    String result = loadImageService.saveBufferedImage(getReducedImage(photo.getInputStream()));
+                    userProfile.setPhoto(result);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //String result = loadImageService.uploadImage(photo).getResultDataString();
+                //System.out.println("Photo saved as: " + result);
+
+                //userProfile.setPhoto(savePhoto(photo));
             }
         }
 
@@ -124,7 +136,6 @@ public class ProfileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return "img/" + outputFile.getName();
     }
 

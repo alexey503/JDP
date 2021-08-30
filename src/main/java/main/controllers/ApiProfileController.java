@@ -26,6 +26,7 @@ public class ApiProfileController {
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> updateMyProfile(@RequestBody ProfileDTO profileDTO, Principal principal) {
 
+        System.out.println("Update profile no photo");
         return ResponseEntity.ok(profileService.updateProfile(null, profileDTO.getRemovePhoto(), profileDTO.getName(), profileDTO.getEmail(), profileDTO.getPassword(), principal.getName()));
 
     }
@@ -44,6 +45,7 @@ public class ApiProfileController {
             Principal principal
     ) {
 
+        System.out.println("Update profile with photo");
         return ResponseEntity.ok(profileService.updateProfile(photo, removePhoto, name, email, password, principal.getName()));
     }
 }

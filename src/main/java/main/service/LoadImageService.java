@@ -4,6 +4,7 @@ import main.api.response.PostDataResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
 
 @Service
 public class LoadImageService {
@@ -60,14 +63,39 @@ public class LoadImageService {
                 e.printStackTrace();
             }
 
+            System.out.println("File saved as " + localFileName);
             response.setResult(true);
-            response.setResultDataString(localFileName);
+            response.setResultDataString("/" + localFileName);
         }else{
             response.setErrors(errors);
         }
         return response;
     }
 
+    public String saveBufferedImage(BufferedImage reducedImage){
+
+            String localFileName = "";
+
+            StringBuilder filePathBuilder = new StringBuilder("upload/");
+            for (int i = 0; i < 3; i++) {
+                filePathBuilder.append(RandomStringUtils.randomAlphabetic(2)).append("/");
+            }
+            Path filePath = Paths.get(filePathBuilder.toString());
+        try {
+            Files.createDirectories(filePath);
+            filePathBuilder.append(RandomStringUtils.randomNumeric(5)).append(".jpg");
+            localFileName = filePathBuilder.toString();
+            ImageIO.write(reducedImage, "jpg", new File(localFileName));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("BufferedImage saved as " + localFileName);
+            return "/" + localFileName;
+    }
+
+    /*
     public MultipartFile getMultipartImageFile(String fileName) {
         File file = new File(fileName);
         if(!file.exists()){
@@ -86,4 +114,6 @@ public class LoadImageService {
         }
         return null;
     }
+
+     */
 }
