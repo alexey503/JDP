@@ -3,19 +3,13 @@ package main.service;
 import main.api.response.PostDataResponse;
 import main.model.entities.User;
 import main.model.repositories.UserRepository;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -28,14 +22,9 @@ import java.util.regex.Pattern;
 public class ProfileService {
 
     private static final long MAX_PHOTO_SIZE = 1024 * 1024 * 5;
-    private static final String AVATAR_DIRECTORY = "/target/classes/img";
-            //"/resources/img";
-    private static final int AVATAR_WIDTH = 35;
-    private static final int AVATAR_HEIGHT = 35;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private StorageService storageService;
 
     @Autowired
     private LoadImageService loadImageService;
@@ -101,15 +90,11 @@ public class ProfileService {
                 errors.put(PostDataResponse.ERR_TYPE_PHOTO, PostDataResponse.ERROR_AVATAR_OVER_SIZE);
             }else {
                 try {
-                    String result = loadImageService.saveBufferedImage(getReducedImage(photo.getInputStream()));
+                    String result = loadImageService.saveAndResizeImage(photo.getInputStream());
                     userProfile.setPhoto(result);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //String result = loadImageService.uploadImage(photo).getResultDataString();
-                //System.out.println("Photo saved as: " + result);
-
-                //userProfile.setPhoto(savePhoto(photo));
             }
         }
 
@@ -122,36 +107,8 @@ public class ProfileService {
         return response;
     }
 
-    private String savePhoto(MultipartFile photo) {
-
-        File avaDir = new File(System.getProperty("user.dir") + AVATAR_DIRECTORY);
-        if (!avaDir.exists()){
-            avaDir.mkdirs();
-        }
-
-        String newFileName = RandomStringUtils.randomAlphanumeric(10) + ".jpg";
-        File outputFile = new File(System.getProperty("user.dir") + AVATAR_DIRECTORY, newFileName);
-        try {
-            ImageIO.write(getReducedImage(photo.getInputStream()), "jpg", outputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "img/" + outputFile.getName();
-    }
-
     private boolean isNameValid(String name) {
         Matcher matcher = Pattern.compile("^[a-zA-Zа-яА-Я_][a-zA-Zа-яА-Я0-9_]+").matcher(name);
         return matcher.find();
     }
-
-    private BufferedImage getReducedImage(InputStream inputStream) throws IOException {
-        Image scaledImage = ImageIO.read(inputStream)
-                .getScaledInstance(AVATAR_WIDTH, AVATAR_HEIGHT, BufferedImage.SCALE_SMOOTH);
-
-        BufferedImage bwImg = new BufferedImage(AVATAR_WIDTH, AVATAR_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = bwImg.createGraphics();
-        graphics.drawImage(scaledImage, 0, 0, null);
-        return bwImg;
-    }
-
 }

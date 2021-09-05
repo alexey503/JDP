@@ -1,11 +1,16 @@
 package main.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
+import com.cloudinary.utils.ObjectUtils;
 import main.api.response.PostDataResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,14 +19,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-
 @Service
 public class LoadImageService {
 
+    private Cloudinary cloudinary;
+
     public static final int MAX_UPLOAD_SIZE = 1024*1024*10;
+
+    public LoadImageService() {
+
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dcfikdwuh",
+                        "api_key",    "912693425934635",
+                        "api_secret", "m5nPPy3BGbPUSgVNHhbuzGuRNDA"));
+    }
 
     public PostDataResponse uploadImage(MultipartFile image) {
         PostDataResponse response = new PostDataResponse();
@@ -53,67 +64,61 @@ public class LoadImageService {
                 Path filePath = Paths.get(filePathBuilder.toString());
                 Files.createDirectories(filePath);
 
-                filePathBuilder.append(RandomStringUtils.randomNumeric(5)).append(".jpg");
+                filePathBuilder.append(RandomStringUtils.randomNumeric(5));
 
                 localFileName = filePathBuilder.toString();
 
                 Files.copy(inputStream, Paths.get(localFileName),
                         StandardCopyOption.REPLACE_EXISTING);
+
+                Map uploadResultMap = cloudinary.uploader().upload(new File(localFileName),
+                        ObjectUtils.asMap("public_id", localFileName));
+
+                response.setResult(true);
+                response.setResultDataString(uploadResultMap.get("url").toString());
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            System.out.println("File saved as " + localFileName);
-            response.setResult(true);
-            response.setResultDataString("/" + localFileName);
         }else{
             response.setErrors(errors);
         }
         return response;
     }
 
-    public String saveBufferedImage(BufferedImage reducedImage){
+    public String saveAndResizeImage(InputStream inputStream) {
 
-            String localFileName = "";
+        String localFileName = "";
+        try {
 
             StringBuilder filePathBuilder = new StringBuilder("upload/");
             for (int i = 0; i < 3; i++) {
                 filePathBuilder.append(RandomStringUtils.randomAlphabetic(2)).append("/");
             }
             Path filePath = Paths.get(filePathBuilder.toString());
-        try {
             Files.createDirectories(filePath);
-            filePathBuilder.append(RandomStringUtils.randomNumeric(5)).append(".jpg");
+
+            filePathBuilder.append(RandomStringUtils.randomNumeric(5));
+
             localFileName = filePathBuilder.toString();
-            ImageIO.write(reducedImage, "jpg", new File(localFileName));
+
+            Files.copy(inputStream, Paths.get(localFileName),
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            Map uploadResultMap = cloudinary.uploader().upload(new File(localFileName),
+                    ObjectUtils.asMap("public_id", localFileName,
+                            "transformation",
+//                          new Transformation().width(36).height(36).crop("fill")));
+                            new Transformation()
+                                    .gravity("face").crop("crop").chain()
+                                    .radius("max").chain()
+                                    .width(36).height(36).crop("scale")));
+
+            return uploadResultMap.get("url").toString();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("BufferedImage saved as " + localFileName);
-            return "/" + localFileName;
+        return "Save awatar error";
     }
-
-    /*
-    public MultipartFile getMultipartImageFile(String fileName) {
-        File file = new File(fileName);
-        if(!file.exists()){
-            System.out.println("File not found: " + fileName);
-        }else {
-            System.out.println("File exists " + fileName);
-            InputStream is = null;
-            try {
-                is = new FileInputStream(file);
-                //MultipartFile multipartFile = new MockMultipartFile(fileName, is);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-     */
 }

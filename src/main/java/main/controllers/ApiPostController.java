@@ -147,35 +147,4 @@ public class ApiPostController {
             return ResponseEntity.ok(response.getResultDataString());
         }
     }
-
-/*
-    @GetMapping(value = "/upload/{folder0}/{folder1}/{folder2}/{filename}")
-    @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<Resource> requestImage(
-            @PathVariable String folder0,
-            @PathVariable String folder1,
-            @PathVariable String folder2,
-            @PathVariable String filename) {
-
-        String fileName = "upload/" + folder0 + "/" + folder1 + "/" + folder2 + "/" + filename;
-
-        Resource file = storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-
-/*
-        MultipartFile multipartFile = loadImageService.getMultipartImageFile(fileName);
-
-        System.out.println("Orig name " + multipartFile.getOriginalFilename());
-        System.out.println("Name " + multipartFile.getName());
-        System.out.println("Contenttype " + multipartFile.getContentType());
-        if(multipartFile.isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }else{
-            return ResponseEntity.ok(multipartFile);
-        }
-
-    }
-
- */
 }
