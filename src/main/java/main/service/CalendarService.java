@@ -19,6 +19,8 @@ public class CalendarService {
         CalendarDto result = new CalendarDto();
         List<String> dateAndPostCount = repository.findCountPostsByDateForYear(Integer.parseInt(year));
 
+        dateAndPostCount.stream().forEach(System.out::println);
+
         result.setPosts(
                 dateAndPostCount.stream()
                         .map(s -> {

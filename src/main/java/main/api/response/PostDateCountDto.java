@@ -11,8 +11,4 @@ public class PostDateCountDto {
         this.date = date;
         this.count = count;
     }
-
-    public String getDate() {
-        return date;
-    }
 }
