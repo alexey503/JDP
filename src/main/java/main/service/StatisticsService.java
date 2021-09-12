@@ -18,8 +18,6 @@ public class StatisticsService {
     private SettingsRepository settingsRepository;
 
 
-
-
     public StatisticsResponse getMyStatistics(int userId) {
         Integer viewCount = postsRepository.countUserViews(userId);
         Long firstPublicationTime = postsRepository.countUsersFirstPublicationTime(userId);
@@ -28,8 +26,7 @@ public class StatisticsService {
                 votesRepository.getUserLikesCount(userId),
                 votesRepository.getUserDislikesCount(userId),
                 viewCount != null ? viewCount : 0,
-                firstPublicationTime != null ? firstPublicationTime : 0
-        );
+                firstPublicationTime != null ? firstPublicationTime : 0);
     }
 
     public StatisticsResponse getAllStatistics() {
@@ -39,8 +36,6 @@ public class StatisticsService {
                 votesRepository.countLikes(),
                 votesRepository.countDislikes(),
                 postsRepository.countViews(),
-                postsRepository.firstPublicationTime()
-        );
-
+                postsRepository.firstPublicationTime());
     }
 }

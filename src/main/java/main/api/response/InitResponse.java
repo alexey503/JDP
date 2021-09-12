@@ -21,5 +21,4 @@ public class InitResponse {
     private String copyright;
     @Value("${blogNew.copyrightFrom}")
     private String copyrightFrom;
-
 }

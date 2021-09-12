@@ -1,8 +1,6 @@
 package main.api.request;
 
 import lombok.Data;
-import main.model.entities.Tag;
-
 import java.util.List;
 
 @Data

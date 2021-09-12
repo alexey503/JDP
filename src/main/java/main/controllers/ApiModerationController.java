@@ -19,26 +19,18 @@ public class ApiModerationController {
     @Autowired
     private AuthService authService;
 
-    //TODO модерация:
-    // + вывод постов для модерации,
-    // + утверждение поста, отклонение поста,
-    // изменение настроек блога
-
     @GetMapping("/api/post/moderation")
     @PreAuthorize("hasAuthority('user:moderate')")
     public ResponseEntity<PostResponse> getPostsModeration(
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
-            @RequestParam(name = "status", required = false, defaultValue = "new") String status
-    ) {
+            @RequestParam(name = "status", required = false, defaultValue = "new") String status) {
         return ResponseEntity.ok().body(postsService.getPostResponseModeration(offset, limit, status.toUpperCase(), authService.getAuthUserEmail()));
     }
 
     @PostMapping("/api/moderation")
     @PreAuthorize("hasAuthority('user:moderate')")
-    public ResponseEntity<PostDataResponse> postModerationActivity(@RequestBody ModerationActivityRequest request){
-
+    public ResponseEntity<PostDataResponse> postModerationActivity(@RequestBody ModerationActivityRequest request) {
         return ResponseEntity.ok().body(postsService.moderationActivity(request, authService.getAuthUserEmail()));
     }
-
 }

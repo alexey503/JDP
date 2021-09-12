@@ -57,7 +57,7 @@ public class ProfileService {
                 errors.put(PostDataResponse.ERR_TYPE_NAME, PostDataResponse.ERROR_WRONG_NAME);
             }
         }
-        if (newEmail != null && !userEmail.equals(newEmail)){
+        if (newEmail != null && !userEmail.equals(newEmail)) {
             if (userRepository.findByEmail(newEmail).isEmpty()) {
                 userProfile.setEmail(newEmail);
                 SecurityContextHolder.clearContext();
@@ -66,17 +66,17 @@ public class ProfileService {
                         PostDataResponse.ERROR_EMAIL_ENGAGED);
             }
         }
-        if (password != null){
+        if (password != null) {
             if (password.length() >= 6) {
                 userProfile.setPassword(passwordEncoder.encode(password));
-            }else {
+            } else {
                 errors.put(PostDataResponse.ERR_TYPE_PASSWORD,
                         PostDataResponse.ERROR_SHORT_PASSWORD);
             }
         }
-        if(removePhoto != null && removePhoto == 1){
+        if (removePhoto != null && removePhoto == 1) {
             try {
-                if(userProfile.getPhoto() != null) {
+                if (userProfile.getPhoto() != null) {
                     Files.deleteIfExists(Paths.get(userProfile.getPhoto()));
                 }
             } catch (IOException e) {
@@ -85,10 +85,10 @@ public class ProfileService {
             userProfile.setPhoto("");
         }
 
-        if(photo != null && !photo.isEmpty()) {
-            if(photo.getSize() > MAX_PHOTO_SIZE){
+        if (photo != null && !photo.isEmpty()) {
+            if (photo.getSize() > MAX_PHOTO_SIZE) {
                 errors.put(PostDataResponse.ERR_TYPE_PHOTO, PostDataResponse.ERROR_AVATAR_OVER_SIZE);
-            }else {
+            } else {
                 try {
                     String result = loadImageService.saveAndResizeImage(photo.getInputStream());
                     userProfile.setPhoto(result);
@@ -98,10 +98,10 @@ public class ProfileService {
             }
         }
 
-        if(errors.isEmpty()){
+        if (errors.isEmpty()) {
             userRepository.save(userProfile);
             response.setResult(true);
-        }else{
+        } else {
             response.setErrors(errors);
         }
         return response;

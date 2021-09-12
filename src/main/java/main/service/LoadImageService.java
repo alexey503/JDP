@@ -24,21 +24,21 @@ public class LoadImageService {
 
     private Cloudinary cloudinary;
 
-    public static final int MAX_UPLOAD_SIZE = 1024*1024*10;
+    public static final int MAX_UPLOAD_SIZE = 1024 * 1024 * 10;
 
     public LoadImageService() {
 
         cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "dcfikdwuh",
-                        "api_key",    "912693425934635",
-                        "api_secret", "m5nPPy3BGbPUSgVNHhbuzGuRNDA"));
+                "api_key", "912693425934635",
+                "api_secret", "m5nPPy3BGbPUSgVNHhbuzGuRNDA"));
     }
 
     public PostDataResponse uploadImage(MultipartFile image) {
         PostDataResponse response = new PostDataResponse();
         Map<String, String> errors = new HashMap<>();
 
-        if(image == null || image.isEmpty() || image.getOriginalFilename() == null){
+        if (image == null || image.isEmpty() || image.getOriginalFilename() == null) {
             errors.put(PostDataResponse.ERR_TYPE_IMAGE, PostDataResponse.ERROR_UPLOAD_FILE);
             response.setErrors(errors);
             return response;
@@ -49,11 +49,11 @@ public class LoadImageService {
         }
 
         Pattern formatImagePattern = Pattern.compile("^(.*)(.)(png|jpe?g)$");
-        if(!formatImagePattern.matcher(image.getOriginalFilename()).matches()){
+        if (!formatImagePattern.matcher(image.getOriginalFilename()).matches()) {
             errors.put(PostDataResponse.ERR_TYPE_IMAGE, PostDataResponse.ERROR_UPLOAD_FILE_WRONG_FORMAT);
         }
 
-        if(errors.isEmpty()){
+        if (errors.isEmpty()) {
             String localFileName = "";
             try (InputStream inputStream = image.getInputStream()) {
 
@@ -80,7 +80,7 @@ public class LoadImageService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             response.setErrors(errors);
         }
         return response;
@@ -90,7 +90,6 @@ public class LoadImageService {
 
         String localFileName = "";
         try {
-
             StringBuilder filePathBuilder = new StringBuilder("upload/");
             for (int i = 0; i < 3; i++) {
                 filePathBuilder.append(RandomStringUtils.randomAlphabetic(2)).append("/");
@@ -108,7 +107,6 @@ public class LoadImageService {
             Map uploadResultMap = cloudinary.uploader().upload(new File(localFileName),
                     ObjectUtils.asMap("public_id", localFileName,
                             "transformation",
-//                          new Transformation().width(36).height(36).crop("fill")));
                             new Transformation()
                                     .gravity("face").crop("crop").chain()
                                     .radius("max").chain()

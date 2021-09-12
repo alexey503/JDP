@@ -34,9 +34,9 @@ public class PostExtendedDto {
                 this.likeCount = likeCount;
                 this.dislikeCount = dislikeCount;
                 this.viewCount = viewCount;
-                if(comments != null) {
+                if (comments != null) {
                         this.comments = comments;
-                }else{
+                } else {
                         this.comments = new ArrayList<>();
                 }
                 this.tags = tags;

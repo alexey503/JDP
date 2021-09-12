@@ -42,9 +42,7 @@ public class ApiProfileController {
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "email", required = false) String email,
             @RequestParam(name = "password", required = false) String password,
-            Principal principal
-    ) {
-
+            Principal principal) {
         System.out.println("Update profile with photo");
         return ResponseEntity.ok(profileService.updateProfile(photo, removePhoto, name, email, password, principal.getName()));
     }

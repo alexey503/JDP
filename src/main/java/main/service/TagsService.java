@@ -20,13 +20,13 @@ public class TagsService {
     @Autowired
     private Tag2PostRepository tag2PostRepository;
 
-    public List<TagResponse> getTags(String tagRequest){
+    public List<TagResponse> getTags(String tagRequest) {
 
-        if(tagResponses == null){
+        if (tagResponses == null) {
             tagResponses = new ArrayList<>();
             Iterable<Tag> tagIterable = tagsRepository.findAll();
             for (Tag tag : tagIterable) {
-                if(tagRequest.length() == 0 || tag.getName().startsWith(tagRequest)) {
+                if (tagRequest.length() == 0 || tag.getName().startsWith(tagRequest)) {
                     TagResponse tagResponse = new TagResponse();
                     tagResponse.setName(tag.getName());
                     tagResponse.setWeight(getTagWeight(tag.getName()));
@@ -37,7 +37,7 @@ public class TagsService {
         return tagResponses;
     }
 
-    private double getTagWeight(String tagName){
+    private double getTagWeight(String tagName) {
 
         Map<String, Long> tagsCount = new HashMap<>();
 
@@ -47,21 +47,21 @@ public class TagsService {
             if (tagsCount.containsKey(tag2Post.getTag().getName())) {
                 tagsCount.put(tag2Post.getTag().getName(),
                         tagsCount.get(tag2Post.getTag().getName()) + 1);
-            }else{
+            } else {
                 tagsCount.put(tag2Post.getTag().getName(), 1L);
             }
         }
 
         long maxRatingTag = 0;
         for (Map.Entry<String, Long> entry : tagsCount.entrySet()) {
-            if(entry.getValue() > maxRatingTag){
+            if (entry.getValue() > maxRatingTag) {
                 maxRatingTag = entry.getValue();
             }
         }
-        if(maxRatingTag == 0 || !tagsCount.containsKey(tagName)){
+        if (maxRatingTag == 0 || !tagsCount.containsKey(tagName)) {
             return 0;
         }
-        return tagsCount.get(tagName).doubleValue() / ((double)maxRatingTag);
+        return tagsCount.get(tagName).doubleValue() / ((double) maxRatingTag);
     }
 
     public List<Tag> getTagsForPost(List<String> tags) {

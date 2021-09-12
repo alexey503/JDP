@@ -44,13 +44,13 @@ public class PostsService {
 
     public PostResponse getPostResponse(int offset, int limit, String mode) {
 
-        switch (mode){
+        switch (mode) {
             case ApiPostController.MODE_RECENT:
                 return new PostResponse(postsRepository.findPostsPage(PageRequest.of(offset / limit, limit,
-                                Sort.by("time").descending())));
+                        Sort.by("time").descending())));
             case ApiPostController.MODE_EARLY:
                 return new PostResponse(postsRepository.findPostsPage(PageRequest.of(offset / limit, limit,
-                                Sort.by("time").ascending())));
+                        Sort.by("time").ascending())));
             case ApiPostController.MODE_BEST://сортировать по убыванию количества лайков
                 return new PostResponse(
                         postsRepository.findPostsPageSortedByLikesCount(PageRequest.of(offset / limit, limit)));
@@ -109,7 +109,6 @@ public class PostsService {
         Page<Post> postPage = postsRepository.postSearchByTag(tag, pageable);
 
         return getPostResponse(postPage);
-
     }
 
     private PostResponse getPostResponse(Page<Post> postPage) {
@@ -137,7 +136,7 @@ public class PostsService {
 
     public PostExtendedDto getPostById(int id, User user) {
         Optional<Post> optionalPost = postsRepository.findById(id);
-        if( optionalPost.isEmpty()){
+        if (optionalPost.isEmpty()) {
             return null;
         }
         Post post = optionalPost.get();
@@ -153,8 +152,8 @@ public class PostsService {
             }
         }
 
-        if(user != null && (user.getIsModerator() == 0) &&
-            post.getUser().getId() != user.getId()){
+        if (user != null && (user.getIsModerator() == 0) &&
+                post.getUser().getId() != user.getId()) {
             post.setViewCount(post.getViewCount() + 1);
             postsRepository.save(post);
         }
@@ -176,7 +175,7 @@ public class PostsService {
     }
 
     public PostResponse getMyPosts(int offset, int limit, String status, Principal principal) {
-        switch (status){
+        switch (status) {
             case ApiPostController.STATUS_INACTIVE:
                 return new PostResponse(
                         postsRepository.findMyPostsInactive(PageRequest.of(offset / limit, limit), principal.getName()));
@@ -194,40 +193,40 @@ public class PostsService {
         }
     }
 
-    public PostDataResponse addComment(PostPostCommentRequest postPostCommentRequest, String userName){
+    public PostDataResponse addComment(PostPostCommentRequest postPostCommentRequest, String userName) {
         PostComment newComment = new PostComment();
 
         Optional<User> user = userRepository.findByEmail(userName);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             newComment.setUser(user.get());
-        }else{
+        } else {
             return new PostDataResponse();
         }
 
         newComment.setText(postPostCommentRequest.getText());
         newComment.setPostId(postPostCommentRequest.getPostId());
         newComment.setParent(postsRepository.findById(postPostCommentRequest.getParentId()).orElse(null));
-        newComment.setTime(new Date().getTime()/1000);
+        newComment.setTime(new Date().getTime() / 1000);
 
         commentsRepository.save(newComment);
         return new PostDataResponse(true);
     }
 
-    public PostDataResponse postNewPost(PostPostRequest postPostRequest, String userEmail){
+    public PostDataResponse postNewPost(PostPostRequest postPostRequest, String userEmail) {
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
-        if(optionalUser.isEmpty()){
+        if (optionalUser.isEmpty()) {
             return new PostDataResponse();
         }
         return getPostDataResponseForPostEdit(postPostRequest, optionalUser.get(), false, -1);
     }
 
-    public PostDataResponse editPost(PostPostRequest postPostRequest, int id, String userEmail){
+    public PostDataResponse editPost(PostPostRequest postPostRequest, int id, String userEmail) {
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
-        if(optionalUser.isEmpty()){
+        if (optionalUser.isEmpty()) {
             return new PostDataResponse();
         }
 
-        if(optionalUser.get().getIsModerator() == 1) {
+        if (optionalUser.get().getIsModerator() == 1) {
             return getPostDataResponseForPostEdit(postPostRequest, optionalUser.get(), true, id);
         }
         return new PostDataResponse();
@@ -267,7 +266,7 @@ public class PostsService {
 
             if (!isModerator && settingsService.getSettingValue(SettingsService.KEY_POST_PREMODERATION)) {
                 newPost.setModerationStatus(ModerationStatus.NEW);
-            }else{
+            } else {
                 newPost.setModerationStatus(ModerationStatus.ACCEPTED);
             }
             newPost.setUser(new PostUserEntity(user.getId(), user.getName()));
@@ -282,14 +281,14 @@ public class PostsService {
     }
 
     public PostResponse getPostResponseModeration(int offset, int limit, String status, String userName) {
-        if(status.equals("NEW")) {
+        if (status.equals("NEW")) {
             return new PostResponse(postsRepository.findPostsPageModerationNew(PageRequest.of(offset / limit, limit)));
         }
-        if(status.equals("ACCEPTED")) {
+        if (status.equals("ACCEPTED")) {
             return new PostResponse(postsRepository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
                     ModerationStatus.ACCEPTED));
         }
-        if(status.equals("DECLINED")) {
+        if (status.equals("DECLINED")) {
             return new PostResponse(postsRepository.findPostsPageModeration(PageRequest.of(offset / limit, limit), userRepository.findByEmail(userName).get(),
                     ModerationStatus.DECLINED));
         }
@@ -299,15 +298,15 @@ public class PostsService {
     public PostDataResponse moderationActivity(ModerationActivityRequest request, String authUserEmail) {
         User moderator = userRepository.findByEmail(authUserEmail).get();
         Optional<Post> postOptional = postsRepository.findById(request.getPostId());
-        if(postOptional.isEmpty()) {
+        if (postOptional.isEmpty()) {
             return new PostDataResponse();
         }
         Post post = postOptional.get();
 
-        if(request.getDecision().equalsIgnoreCase("accept")) {
+        if (request.getDecision().equalsIgnoreCase("accept")) {
             post.setModerationStatus(ModerationStatus.ACCEPTED);
         }
-        if(request.getDecision().equalsIgnoreCase("decline")) {
+        if (request.getDecision().equalsIgnoreCase("decline")) {
             post.setModerationStatus(ModerationStatus.DECLINED);
         }
         post.setModerator(moderator);
@@ -323,6 +322,5 @@ public class PostsService {
             return ResponseEntity.ok(postExtendedDto);
         }
         return ResponseEntity.notFound().build();
-
     }
 }

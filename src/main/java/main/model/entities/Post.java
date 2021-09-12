@@ -2,11 +2,10 @@ package main.model.entities;
 
 import lombok.Data;
 import main.api.response.PostUserEntity;
-import main.model.*;
+import main.model.ModerationStatus;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -69,7 +68,10 @@ public class Post {
     public Post() {
     }
 
-    public Post(int id, byte isActive, ModerationStatus moderationStatus, User moderator, PostUserEntity user, long time, String title, String text, int viewCount, List<PostComment> postComments, List<PostVote> postVotes, List<Tag> tags) {
+    public Post(int id, byte isActive, ModerationStatus moderationStatus, User moderator, PostUserEntity user,
+                long time, String title, String text, int viewCount, List<PostComment> postComments,
+                List<PostVote> postVotes, List<Tag> tags) {
+
         this.id = id;
         this.isActive = isActive;
         this.moderationStatus = moderationStatus;

@@ -7,16 +7,15 @@ import main.model.Role;
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Data
-public class User
-{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @JsonIgnore
-    @Column(name="is_moderator", nullable = false)
+    @Column(name = "is_moderator", nullable = false)
     private byte isModerator;
 
     @JsonIgnore
@@ -37,11 +36,10 @@ public class User
     @JsonIgnore
     private String code;
 
-    @Column(length = 65535,columnDefinition="Text")
+    @Column(length = 65535, columnDefinition = "Text")
     private String photo;
 
-    public Role getRole(){
+    public Role getRole() {
         return isModerator == 1 ? Role.MODERATOR : Role.USER;
     }
-
 }

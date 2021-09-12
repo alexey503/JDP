@@ -13,5 +13,4 @@ public class UserRegisterResponse {
         this.result = result;
         this.errors = errors;
     }
-
 }

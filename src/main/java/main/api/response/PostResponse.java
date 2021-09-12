@@ -18,8 +18,7 @@ public class PostResponse {
         for (Post post : posts) {
             this.posts.add(
                     new PostDto(post,
-                            post.getPostVotes().stream().filter(postVote -> postVote.getValue() > 0).count(),
-                            post.getPostComments().size())
+                            post.getPostVotes().stream().filter(postVote -> postVote.getValue() > 0).count())
             );
         }
         this.count = posts.getTotalElements();

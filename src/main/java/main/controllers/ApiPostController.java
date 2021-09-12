@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Locale;
 
 @RestController
 public class ApiPostController {
@@ -75,13 +74,13 @@ public class ApiPostController {
     @PostMapping("/api/post/like")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postLike(@RequestBody PostVoteRequest postVoteRequest) {
-        return ResponseEntity.ok().body(voteService.putVote(postVoteRequest.getPostId(), (byte)1));
+        return ResponseEntity.ok().body(voteService.putVote(postVoteRequest.getPostId(), (byte) 1));
     }
 
     @PostMapping("/api/post/dislike")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<PostDataResponse> postDislike(@RequestBody PostVoteRequest postVoteRequest) {
-        return ResponseEntity.ok().body(voteService.putVote(postVoteRequest.getPostId(), (byte)-1));
+        return ResponseEntity.ok().body(voteService.putVote(postVoteRequest.getPostId(), (byte) -1));
     }
 
 

@@ -10,7 +10,6 @@ import main.api.response.UserLoginResponse;
 import main.model.entities.User;
 import main.model.repositories.PostsRepository;
 import main.model.repositories.UserRepository;
-import main.security.SecurityUser;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +22,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,8 +54,7 @@ public class AuthService {
     private SettingsService settingsService;
 
 
-
-    public ResponseEntity<PostDataResponse> registration(RegisterRequest registerRequest){
+    public ResponseEntity<PostDataResponse> registration(RegisterRequest registerRequest) {
 
         if (!settingsService.getSettingValue(SettingsService.KEY_MULTIUSER_MODE) ||
                 registerRequest == null) {
@@ -100,7 +97,7 @@ public class AuthService {
         newUser.setEmail(registerRequest.getEmail());
         newUser.setName(registerRequest.getName());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        newUser.setReg_time(new Date().getTime()/1000);
+        newUser.setReg_time(new Date().getTime() / 1000);
 
         this.userRepository.save(newUser);
 
@@ -109,13 +106,12 @@ public class AuthService {
         return ResponseEntity.ok(response);
     }
 
-    public LoginResponse login(LoginRequest loginRequest){
+    public LoginResponse login(LoginRequest loginRequest) {
 
         Authentication auth = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                loginRequest.getEmail(),
-                                loginRequest.getPassword()
-                        ));
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(auth);
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         return getLoginResponse(user.getUsername());
@@ -125,9 +121,9 @@ public class AuthService {
         try {
             LoginResponse loginResponse = getLoginResponse(getAuthUserEmail());
             return ResponseEntity.ok(loginResponse);
-        }catch(UsernameNotFoundException ex){
+        } catch (UsernameNotFoundException ex) {
             System.out.println("Пользователь не найден.");
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Пользователь не авторизован.");
         }
         return ResponseEntity.ok(new LoginResponse());
@@ -138,22 +134,21 @@ public class AuthService {
         return new AuthCheckResponse(true);
     }
 
-    public String getAuthUserEmail(){
+    public String getAuthUserEmail() {
         try {
             org.springframework.security.core.userdetails.User userDetailsUser =
                     (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             return userDetailsUser.getUsername();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
 
-    public User getAuthUser(){
-        //return userRepository.findByEmail(getAuthUserEmail()).orElse(new User());
+    public User getAuthUser() {
         return userRepository.findByEmail(getAuthUserEmail()).orElse(null);
     }
 
-    private LoginResponse getLoginResponse(String email) throws UsernameNotFoundException{
+    private LoginResponse getLoginResponse(String email) throws UsernameNotFoundException {
         main.model.entities.User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
 
@@ -163,10 +158,10 @@ public class AuthService {
 
         userLoginResponse.setId(currentUser.getId());
         userLoginResponse.setPhoto(currentUser.getPhoto());
-        if(currentUser.getIsModerator() == 1){
+        if (currentUser.getIsModerator() == 1) {
             userLoginResponse.setModeration(true);
             userLoginResponse.setModerationCount(postsRepository.getModerationCount());
-        }else{
+        } else {
             userLoginResponse.setModeration(false);
         }
 
@@ -178,12 +173,12 @@ public class AuthService {
 
     public PostDataResponse restore(Map<String, String> requestMap) {
 
-        if(requestMap == null){
+        if (requestMap == null) {
             return new PostDataResponse();
         }
         String email = requestMap.get("email");
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             String code = RandomStringUtils.randomAlphanumeric(45);
 
             try {
@@ -202,10 +197,9 @@ public class AuthService {
             userRepository.save(user);
 
             return new PostDataResponse(true);
-        }else{
+        } else {
             return new PostDataResponse();
         }
-
     }
 
     public PostDataResponse changePassword(ChangePasswordRequest changePasswordRequest) {
@@ -213,7 +207,7 @@ public class AuthService {
         Map<String, String> errors = new HashMap<>();
         User user = userRepository.findByCode(changePasswordRequest.getCode()).orElse(null);
 
-        if(user == null){
+        if (user == null) {
             errors.put(PostDataResponse.ERR_TYPE_CODE,
                     PostDataResponse.ERROR_ARH_CODE);
         }

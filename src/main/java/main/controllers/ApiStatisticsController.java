@@ -23,8 +23,6 @@ public class ApiStatisticsController {
     @Autowired
     private SettingsService settingsService;
 
-
-
     @GetMapping("/my")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<StatisticsResponse> getMyStat() {
@@ -34,11 +32,11 @@ public class ApiStatisticsController {
     @GetMapping("/all")
     public ResponseEntity<StatisticsResponse> getStatAll() {
 
-        if((settingsService.getGlobalSettings().containsKey(SettingsService.KEY_STATISTICS_IS_PUBLIC) &&
+        if ((settingsService.getGlobalSettings().containsKey(SettingsService.KEY_STATISTICS_IS_PUBLIC) &&
                 settingsService.getGlobalSettings().get(SettingsService.KEY_STATISTICS_IS_PUBLIC)) ||
-                (authService.getAuthUser() != null && authService.getAuthUser().getIsModerator() == 1)){
+                (authService.getAuthUser() != null && authService.getAuthUser().getIsModerator() == 1)) {
             return ResponseEntity.ok(statisticsService.getAllStatistics());
-        }else{
+        } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }

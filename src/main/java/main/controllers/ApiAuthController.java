@@ -10,12 +10,11 @@ import main.api.response.LoginResponse;
 import main.api.response.PostDataResponse;
 import main.service.AuthService;
 import main.service.CaptchaService;
-import java.util.Map;
-
-import main.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")

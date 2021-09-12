@@ -26,32 +26,32 @@ public class VoteService {
     private AuthService authService;
 
 
-    public PostDataResponse putVote(int postId, byte voteValue){
+    public PostDataResponse putVote(int postId, byte voteValue) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         Post post;
-        if(optionalPost.isPresent()) {
+        if (optionalPost.isPresent()) {
             post = optionalPost.get();
-        }else{
+        } else {
             return new PostDataResponse();
         }
 
         User user = userRepository.findByEmail(authService.getAuthUserEmail()).get();
 
         Optional<User> optionalUser = userRepository.findById(user.getId());
-        if(optionalPost.isPresent()){
+        if (optionalPost.isPresent()) {
             user = optionalUser.get();
-        }else {
+        } else {
             return new PostDataResponse();
         }
 
         PostVote postVote = votesRepository.findByPostAndByUser(post, user).orElse(new PostVote());
 
-        if(postVote.getValue() == voteValue){
-            return new PostDataResponse();//result = false
+        if (postVote.getValue() == voteValue) {
+            return new PostDataResponse();
         }
         postVote.setUser(user);
         postVote.setPost(post);
-        postVote.setTime(new Date().getTime()/1000);
+        postVote.setTime(new Date().getTime() / 1000);
         postVote.setValue(voteValue);
 
         votesRepository.save(postVote);
@@ -60,5 +60,4 @@ public class VoteService {
         response.setResult(true);
         return response;
     }
-
 }

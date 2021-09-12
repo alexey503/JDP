@@ -1,7 +1,6 @@
 package main.api.response;
 
 import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -9,5 +8,4 @@ import java.util.Map;
 public class CalendarDto {
     private ArrayList<String> years;
     private Map<String, Integer> posts;
-
 }

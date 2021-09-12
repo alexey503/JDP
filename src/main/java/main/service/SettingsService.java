@@ -22,8 +22,8 @@ public class SettingsService {
     @Autowired
     private SettingsRepository settingsRepository;
 
-    public Map<String, Boolean> getGlobalSettings(){
-        if(settings == null){
+    public Map<String, Boolean> getGlobalSettings() {
+        if (settings == null) {
             settings = new HashMap<>();
             Iterable<GlobalSetting> settingsIterable = settingsRepository.findAll();
             for (GlobalSetting setting : settingsIterable) {
@@ -38,10 +38,10 @@ public class SettingsService {
         for (String key : settings.keySet()) {
             Optional<GlobalSetting> optionalSetting = settingsRepository.findByCode(key);
             GlobalSetting newSetting;
-            if(optionalSetting.isEmpty()){
+            if (optionalSetting.isEmpty()) {
                 newSetting = new GlobalSetting();
                 newSetting.setCode(key);
-            }else{
+            } else {
                 newSetting = optionalSetting.get();
             }
             newSetting.setValue(settings.get(key) ? "YES" : "NO");
@@ -50,10 +50,10 @@ public class SettingsService {
         return new PostDataResponse();
     }
 
-    public boolean getSettingValue(String key){
-        if(this.settings != null) {
+    public boolean getSettingValue(String key) {
+        if (this.settings != null) {
             return this.settings.get(key);
-        }else{
+        } else {
             return false;
         }
     }
