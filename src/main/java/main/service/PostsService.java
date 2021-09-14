@@ -67,7 +67,7 @@ public class PostsService {
         String textWithOutTags = Pattern.compile("(<[^>]*>)")
                 .matcher(text)
                 .replaceAll("");
-        if (text.length() > 150) {
+        if (textWithOutTags.length() > 150) {
             return textWithOutTags.substring(0, 150) + "...";
         } else {
             return textWithOutTags;
